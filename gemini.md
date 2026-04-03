@@ -1,5 +1,19 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 12: Implementación US-PLCS-03 (Explorar Ecohoteles)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Modelos y Migraciones: Se extrajo a `Ecohotel.php` sin funciones fantasma problemáticas junto a sus pivotes y migraciones fundacionales para operar de modo nativo.
+- Controladores Backend: `EcohotelController.php` fue restaurado focalizando sus respuestas en métodos de solo visualización (`index` y `show`).
+- Endpoints: Se inyectaron en `routes/api.php` las 3 rutas públicas exigidas, delegando astutamente `ecohotels/{id}/reviews` al `ReviewController`.
+- Frontend React: Se extrajo el macrocomponente de interfaces de usuario ubicados bajo `resources/js/react/ecohotels` y se ajustaron estéticamente a React Router a través del core `main.jsx`.
+**Integración y Aislamiento (Mutilación):**
+- Reservas de Ecohoteles (ReviewForm): El layout `resources/js/react/ecohotels/detail/page.jsx` silencia radicalmente los callbacks o inyecciones POST del formulario de nuevas reseñas priorizando una navegación aséptica al aislar todo efecto secundario.
+- Rehabilitación del Menú: Se rehabilitó limpiamente la redirección top-bar a "Ecohoteles" en el layout nativo de `Header.jsx` y `Header2.jsx`.
+**Estado de la Tarea:** Terminada. El ecosistema visual que da fin al Módulo 3 está 100% operativo y asilado. Listo para su `git commit`.
+
+---
+
 ## Commit 11: Implementación US-PLCS-02 (Ver Detalle de Lugar)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**

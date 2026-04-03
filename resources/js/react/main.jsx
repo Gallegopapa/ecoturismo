@@ -16,6 +16,8 @@ import ParquesYMas from "./places2/parquesYMas/page.jsx";
 import TerritoriosDelCafe from "./places2/territoriosDelCafe/page.jsx";
 import PlaceDetailPage from "./places/detail/page.jsx";
 import MapPage from "./map/page.jsx";
+import EcohotelsPage from "./ecohotels/page.jsx";
+import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -88,6 +90,14 @@ const router = createBrowserRouter([
   {
     path: "/mapa",
     element: <MapPage />,
+  },
+  {
+    path: "/ecohoteles",
+    element: <EcohotelsPage />,
+  },
+  {
+    path: "/ecohoteles/:id",
+    element: <EcohotelDetailPage />,
   }
 ]);
 

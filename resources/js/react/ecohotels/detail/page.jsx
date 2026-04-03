@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReviewForm from "../../components/ReviewForm/ReviewForm";
+// import ReviewForm from "../../components/ReviewForm/ReviewForm"; // Mutilado: POST review pertenece a sprint futuro
 import { reviewsService } from "../../services/api";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -186,12 +186,14 @@ const EcohotelDetailPage = () => {
                   ) : (
                     <div style={{ color: '#888', fontStyle: 'italic' }}>Aún no hay reseñas para este ecohotel.</div>
                   )}
+                  {/* Mutilado: Formulario de nueva reseña postergado
                   <ReviewForm
                     ecohotelId={id}
                     user={user}
                     isAuthenticated={isAuthenticated}
                     onReviewAdded={loadReviews}
                   />
+                  */}
                   {/* Lista de reseñas */}
                   {reviews.length > 0 && (
                     <div style={{ marginTop: 24 }}>

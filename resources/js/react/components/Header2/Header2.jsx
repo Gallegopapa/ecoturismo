@@ -158,6 +158,7 @@ const Header2 = () => {
             )}
           </div>
 
+          <Link to="/ecohoteles" className="nav-link" onClick={handleLinkClick}>Ecohoteles</Link>
           <Link to="/mapa" className="nav-link" onClick={handleLinkClick}>Mapa</Link>
 
           {/* Menú desplegable de Usuario */}

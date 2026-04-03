@@ -50,6 +50,7 @@ const Header = () => {
                         className={`navbar ${mobileMenuOpen ? "mobile-open" : ""}`}
                     >
                         <Link to="/lugares" onClick={closeMobileMenu}>Lugares</Link>
+                        <Link to="/ecohoteles" onClick={closeMobileMenu}>Ecohoteles</Link>
                         <Link to="/mapa" onClick={closeMobileMenu}>Mapa</Link>
                         <Link
                             to="/login"

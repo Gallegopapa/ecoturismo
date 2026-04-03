@@ -65,4 +65,11 @@ Route::get('/places/{place}/available-schedules', [\App\Http\Controllers\API\Pla
 Route::get('/places/{place}/schedules', [\App\Http\Controllers\API\PlaceScheduleController::class, 'index']);
 Route::get('/places/{id}/reviews', function($id, \Illuminate\Http\Request $request) {
     return app(\App\Http\Controllers\API\ReviewController::class)->index($request, 'place', $id);
+});
+
+// US-PLCS-03: Explorar Ecohoteles
+Route::get('/ecohotels', [\App\Http\Controllers\API\EcohotelController::class, 'index']);
+Route::get('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'show']);
+Route::get('/ecohotels/{id}/reviews', function($id, \Illuminate\Http\Request $request) {
+    return app(\App\Http\Controllers\API\ReviewController::class)->index($request, 'ecohotel', $id);
 });
