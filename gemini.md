@@ -1,5 +1,16 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 5: Implementación US-AUTH-05 (Verificación de Token)
+**Fecha:** 03 Abril 2026
+**Archivos de Backend extraídos y restaurados:**
+- Endpoints: Se inyectaron `GET /api/user` y `GET /api/verify-token` en `routes/api.php` bajo el middleware `auth:sanctum`.
+- Controladores: Se restauraron los métodos `me()` y `verifyToken()` en el `AuthController.php`. Se aisló el código comentando las referencias al módulo de reservas en `me()` (`$user->load('reservations')` y el conteo de reservas) previniendo que el sistema requiera instancias que aún no existen en la rama.
+**Archivos de React:** 
+- Contexto Frontend: Se revisó y validó que la función nativa que verifica el token en el inicio de la app (`verifyToken` vía `loadUser`) en `AuthContext.jsx` ya estuviera habilitada orgánicamente para proteger sesiones inactivas, en congruencia con la lógica original de develop.
+**Estado de la Tarea:** Terminada. El ciclo de verificación de sesión se ha integrado aislando los módulos inexistentes. Listo para el `git commit`.
+
+---
+
 ## Commit 4: Implementación US-AUTH-04 (Recuperación de Contraseña)
 **Fecha:** 03 Abril 2026
 **Archivos extraídos y montados:**

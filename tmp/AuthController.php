@@ -253,6 +253,7 @@ class AuthController extends Controller
         ]);
     }
 
+
     /**
      * LOGOUT TODOS
      */
@@ -266,6 +267,7 @@ class AuthController extends Controller
         ]);
     }
 
+
     /**
      * USUARIO ACTUAL
      */
@@ -273,7 +275,7 @@ class AuthController extends Controller
     {
 
         $user = $request->user();
-        // $user->load('reservations'); // Módulo de reservas aún no existe
+        $user->load('reservations');
 
         return response()->json([
 
@@ -286,13 +288,14 @@ class AuthController extends Controller
                 'fecha_registro' => $user->fecha_registro,
                 'is_admin' => $user->is_admin,
                 'tipo_usuario' => $user->tipo_usuario,
-                // 'reservations_count' => $user->reservations->count()
+                'reservations_count' => $user->reservations->count()
             ],
 
-            // 'reservations' => $user->reservations
+            'reservations' => $user->reservations
 
         ]);
     }
+
 
     /**
      * VERIFICAR TOKEN
@@ -327,4 +330,5 @@ class AuthController extends Controller
 
         ]);
     }
+
 }
