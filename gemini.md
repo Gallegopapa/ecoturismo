@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 3: Implementación US-AUTH-03 (Logout)
+**Fecha:** 03 Abril 2026
+**Archivos de Backend restaurados:**
+- Endpoints: Se reinstauraron los endpoints de terminación de sesión `POST /api/logout` y `POST /api/logout-all` en `routes/api.php` bajo el middleware `auth:sanctum`.
+- Controladores: Se inyectaron nuevamente los métodos `logout()` y `logoutAll()` en `AuthController` utilizando las herramientas de Laravel Sanctum para aniquilar tokens actuales y globales.
+**Archivos de React:** 
+- Aislamiento en UI de Usuarios Autenticados: Se inspeccionó el componente dinámico `Header2.jsx` (UI de cabecera post-login) y se purgó de su navegación todo contenido futuro (reservas, ecohoteles, lugares, admin panel, perfiles), limitándolo exclusivamente a ofrecer la funcionalidad de **Cerrar Sesión**.
+- Lógica Frontend: La función nativa `logout` se mantiene intacta en `AuthContext.jsx` despachando la petición, eliminando atributos del `localStorage` y redirigiendo agresivamente a la ruta pública (`/`).
+**Estado de la Tarea:** Terminada. El ciclo de autenticación cerrado funciona atómicamente. Todo listo para el `git commit`.
+
+---
+
 ## Commit 2: Implementación US-AUTH-02 (Login de Usuarios)
 **Fecha:** 03 Abril 2026
 **Archivos de Backend restaurados:**

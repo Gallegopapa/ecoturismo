@@ -18,5 +18,9 @@ Route::post('/login', [AuthController::class, 'login']);
 // RUTAS PROTEGIDAS (requieren autenticación con Sanctum)
 // ============================================
 Route::middleware('auth:sanctum')->group(function () {
-    // Espacio para rutas protegidas en el futuro
+    
+    // US-AUTH-03: Logout de Usuarios
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout-all', [AuthController::class, 'logoutAll']);
+
 });

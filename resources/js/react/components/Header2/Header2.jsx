@@ -115,80 +115,7 @@ const Header2 = () => {
         </button>
 
         <nav className={`navbar ${mobileMenuOpen ? "mobile-open" : ""}`}>
-          <Link 
-            to="/comentarios2" 
-            className="nav-link"
-            onClick={handleLinkClick}
-          >
-            Reseñas
-          </Link>
-
-          {/* Menú desplegable de Lugares */}
-          <div className="dropdown" ref={placesDropdownRef}>
-            <button
-              className="dropdown-btn"
-              onClick={togglePlacesMenu}
-              aria-expanded={openPlacesMenu}
-              aria-haspopup="true"
-            >
-              Lugares <span className="arrow">{openPlacesMenu ? "▲" : "▼"}</span>
-            </button>
-
-            {openPlacesMenu && (
-              <ul className="dropdown-menu" role="menu">
-                <li>
-                  <Link 
-                    to="/paraisosAcuaticos" 
-                    role="menuitem"
-                    onClick={handleLinkClick}
-                  >
-                    Lugares Acuáticos
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/lugaresMontanosos" 
-                    role="menuitem"
-                    onClick={handleLinkClick}
-                  >
-                    Lugares Montañosos
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/parquesYMas" 
-                    role="menuitem"
-                    onClick={handleLinkClick}
-                  >
-                    Parques y Más
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/lugares" 
-                    role="menuitem"
-                    onClick={handleLinkClick}
-                  >
-                    Todos los Lugares
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </div>
-
-          <Link to="/ecohoteles" className="nav-link">Ecohoteles</Link>
-          <Link to="/contacto" className="nav-link">Contacto</Link>
-
-          {/* Botón especial para usuarios empresa */}
-          {isCompanyUser && (
-            <Link
-              to="/company/dashboard"
-              className="nav-link company-dashboard-btn"
-              onClick={handleLinkClick}
-            >
-              🧭 Panel de Empresa
-            </Link>
-          )}
+          {/* Enlaces de navegación vaciados para la etapa de Auth pura */}
 
           {/* Menú desplegable de Usuario */}
           <div className="dropdown user-dropdown" ref={userDropdownRef}>
@@ -212,48 +139,7 @@ const Header2 = () => {
 
             {openUserMenu && (
               <ul className="dropdown-menu user-menu" role="menu">
-                <li>
-                  <Link 
-                    to="/perfil" 
-                    role="menuitem"
-                    onClick={handleLinkClick}
-                  >
-                    Mi Perfil
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/reservas" 
-                    role="menuitem"
-                    onClick={handleLinkClick}
-                  >
-                    Mis Reservas
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/favoritos" 
-                    role="menuitem"
-                    onClick={handleLinkClick}
-                  >
-                    Mis Favoritos
-                  </Link>
-                </li>
-                {isAdmin && (
-                  <>
-                    <li className="menu-divider"></li>
-                    <li>
-                      <Link 
-                        to="/admin/panel" 
-                        role="menuitem"
-                        onClick={handleLinkClick}
-                        className="admin-link"
-                      >
-                        Panel de Admin
-                      </Link>
-                    </li>
-                  </>
-                )}
+                {/* Otros enlaces de usuario desactivados por ahora */}
                 <li className="menu-divider"></li>
                 <li>
                   <button

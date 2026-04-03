@@ -239,4 +239,30 @@ class AuthController extends Controller
 
         ], 200);
     }
+
+    /**
+     * LOGOUT
+     */
+    public function logout(Request $request): JsonResponse
+    {
+
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Sesión cerrada correctamente'
+        ]);
+    }
+
+    /**
+     * LOGOUT TODOS
+     */
+    public function logoutAll(Request $request): JsonResponse
+    {
+
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => 'Todas las sesiones cerradas'
+        ]);
+    }
 }
