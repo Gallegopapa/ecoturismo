@@ -6,12 +6,85 @@ use App\Http\Controllers\Controller;
 use App\Rules\NoProfanity;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
+use App\Models\CompanyReservation;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Place;
 
 class ReservationController extends Controller
 {
-    // Metodos getAll, index, backfill bloqueados para aislar el alcance del sprint actual
+    /**
+     * Obtener todas las reservas del usuario autenticado
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $reservations = Reservation::where('user_id', $user->id)
+            ->with(['place', 'usuario:id,name,email,foto_perfil'])
+            ->orderBy('fecha_visita', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($reservations);
+    }
+
+    /**
+     * Obtener todas las reservas (solo para administradores en el futuro)
+     * Por ahora, solo devuelve las del usuario autenticado
+     */
+    public function all(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        
+        // Solo admin puede ver todas las reservas
+        if (!$user->is_admin) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+        
+        $this->backfillCompanyReservations();
+
+        $reservations = Reservation::with(['place', 'usuario', 'companyReservation.rejectionReason'])
+            ->orderBy('fecha_visita', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($reservations);
+    }
+
+    private function backfillCompanyReservations(): void
+    {
+        $missingReservations = Reservation::whereDoesntHave('companyReservation')->get();
+
+        if ($missingReservations->isEmpty()) {
+            return;
+        }
+
+        $placeIds = $missingReservations->pluck('place_id')->unique()->values()->all();
+        $places = Place::with('companyUsers')->whereIn('id', $placeIds)->get()->keyBy('id');
+
+        foreach ($missingReservations as $reservation) {
+            $place = $places->get($reservation->place_id);
+            if (!$place) {
+                continue;
+            }
+
+            $principalUser = $place->getPrincipalCompanyUser();
+            if (!$principalUser) {
+                $principalUser = $place->companyUsers()->first();
+            }
+
+            if (!$principalUser) {
+                continue;
+            }
+
+            CompanyReservation::create([
+                'reservation_id' => $reservation->id,
+                'company_user_id' => $principalUser->id,
+                'place_id' => $reservation->place_id,
+                'estado' => 'pendiente',
+            ]);
+        }
+    }
 
     /**
      * Crear una nueva reserva
@@ -33,24 +106,24 @@ class ReservationController extends Controller
             'place_id.required' => 'El lugar es requerido.',
             'place_id.exists' => 'El lugar seleccionado no existe.',
             'fecha_visita.required' => 'La fecha de visita es requerida.',
-            'fecha_visita.date' => 'La fecha de visita debe ser una fecha válida.',
+            'fecha_visita.date' => 'La fecha de visita debe ser una fecha v??lida.',
             'fecha_visita.after_or_equal' => 'La fecha de visita debe ser hoy o una fecha futura.',
             'hora_visita.required' => 'La hora de visita es requerida.',
             'hora_visita.date_format' => 'La hora debe tener el formato HH:mm.',
-            'personas.required' => 'El número de personas es requerido.',
-            'personas.integer' => 'El número de personas debe ser un número entero.',
+            'personas.required' => 'El n??mero de personas es requerido.',
+            'personas.integer' => 'El n??mero de personas debe ser un n??mero entero.',
             'personas.min' => 'Debe haber al menos 1 persona.',
-            'personas.max' => 'No puede haber más de 50 personas.',
-            'telefono_contacto.max' => 'El teléfono no puede exceder 20 caracteres.',
+            'personas.max' => 'No puede haber m??s de 50 personas.',
+            'telefono_contacto.max' => 'El tel??fono no puede exceder 20 caracteres.',
             'comentarios.max' => 'Los comentarios no pueden exceder 1000 caracteres.',
-            'precio_total.numeric' => 'El precio debe ser un número.',
+            'precio_total.numeric' => 'El precio debe ser un n??mero.',
             'precio_total.min' => 'El precio no puede ser negativo.',
         ]);
 
         // Obtener el lugar
-        $place = Place::findOrFail($data['place_id']);
+        $place = \App\Models\Place::findOrFail($data['place_id']);
 
-        // Validar que el día esté disponible (verificar horarios del lugar)
+        // Validar que el d??a est?? disponible (verificar horarios del lugar)
         $dayOfWeek = strtolower(date('l', strtotime($data['fecha_visita'])));
         $diasSemana = [
             'monday' => 'lunes',
@@ -69,15 +142,15 @@ class ReservationController extends Controller
 
         if ($daySchedules->isEmpty()) {
             return response()->json([
-                'message' => 'El lugar está cerrado el día seleccionado.',
+                'message' => 'El lugar est?? cerrado el d??a seleccionado.',
                 'errors' => [
-                    'fecha_visita' => ['El lugar está cerrado el ' . ucfirst($diaSemana) . '. Por favor, selecciona otro día.']
+                    'fecha_visita' => ['El lugar est?? cerrado el ' . ucfirst($diaSemana) . '. Por favor, selecciona otro d??a.']
                 ],
                 'suggestions' => []
             ], 422);
         }
 
-        // Validar que la hora esté dentro de los horarios disponibles del día
+        // Validar que la hora est?? dentro de los horarios disponibles del d??a
         $horaValida = false;
         foreach ($daySchedules as $schedule) {
             if ($data['hora_visita'] >= $schedule->hora_inicio && $data['hora_visita'] < $schedule->hora_fin) {
@@ -92,9 +165,9 @@ class ReservationController extends Controller
             })->implode(', ');
             
             return response()->json([
-                'message' => 'La hora seleccionada no está dentro del horario de atención del lugar.',
+                'message' => 'La hora seleccionada no est?? dentro del horario de atenci??n del lugar.',
                 'errors' => [
-                    'hora_visita' => ['La hora seleccionada no está disponible. Horarios disponibles: ' . $horariosDisponibles]
+                    'hora_visita' => ['La hora seleccionada no est?? disponible. Horarios disponibles: ' . $horariosDisponibles]
                 ],
                 'suggestions' => []
             ], 422);
@@ -128,13 +201,13 @@ class ReservationController extends Controller
             $horaExistenteStr = substr($conflictingReservation->hora_visita, 0, 5);
             $horaExistente = \Carbon\Carbon::createFromFormat('H:i', $horaExistenteStr);
             
-            // Generar sugerencias: 2 horas antes y 2 horas después
+            // Generar sugerencias: 2 horas antes y 2 horas despu??s
             $sugerenciaAntes = $horaExistente->copy()->subHours(2);
             $sugerenciaDespues = $horaExistente->copy()->addHours(2);
             
             $suggestions = [];
             
-            // Verificar que las sugerencias estén dentro de los horarios del lugar
+            // Verificar que las sugerencias est??n dentro de los horarios del lugar
             foreach ($daySchedules as $schedule) {
                 // Normalizar formato de hora (tomar solo HH:MM)
                 $horaInicioScheduleStr = substr($schedule->hora_inicio, 0, 5);
@@ -151,17 +224,17 @@ class ReservationController extends Controller
                     ];
                 }
                 
-                // Sugerencia 2 horas después
+                // Sugerencia 2 horas despu??s
                 if ($sugerenciaDespues->gte($horaInicioSchedule) && 
                     $sugerenciaDespues->copy()->addHours(2)->lte($horaFinSchedule)) {
                     $suggestions[] = [
                         'hora' => $sugerenciaDespues->format('H:i'),
-                        'descripcion' => '2 horas después de la reserva existente'
+                        'descripcion' => '2 horas despu??s de la reserva existente'
                     ];
                 }
             }
 
-            $mensajeError = 'Ya existe una reserva que se solapa con el horario seleccionado. Cada reserva tiene una duración de 2 horas.';
+            $mensajeError = 'Ya existe una reserva que se solapa con el horario seleccionado. Cada reserva tiene una duraci??n de 2 horas.';
             if (count($suggestions) > 0) {
                 $mensajeError .= ' Horarios sugeridos: ' . implode(', ', array_map(function($s) {
                     return $s['hora'] . ' (' . $s['descripcion'] . ')';
@@ -201,6 +274,84 @@ class ReservationController extends Controller
     }
 
     /**
+     * Obtener una reserva espec??fica
+     */
+    public function show(Request $request, Reservation $reservation): JsonResponse
+    {
+        $user = $request->user();
+
+        // Verificar que la reserva pertenece al usuario autenticado
+        if ($reservation->user_id !== $user->id) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $reservation->load(['place', 'usuario']);
+
+        return response()->json($reservation);
+    }
+
+    /**
+     * Actualizar una reserva
+     */
+    public function update(Request $request, Reservation $reservation): JsonResponse
+    {
+        $user = $request->user();
+
+        // Verificar que la reserva pertenece al usuario autenticado O que el usuario es admin
+        if ($reservation->user_id !== $user->id && !$user->is_admin) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $data = $request->validate([
+            'fecha_visita' => 'sometimes|date',
+            'hora_visita' => 'nullable|date_format:H:i',
+            'personas' => 'sometimes|integer|min:1|max:50',
+            'telefono_contacto' => ['nullable', 'string', 'max:20', new NoProfanity()],
+            'comentarios' => ['nullable', 'string', 'max:1000', new NoProfanity()],
+            'precio_total' => 'nullable|numeric|min:0',
+            'estado' => 'sometimes|string|in:pendiente,confirmada,cancelada,completada,rechazada,aceptada',
+        ], [
+            'fecha_visita.date' => 'La fecha de visita debe ser una fecha v??lida.',
+            'fecha_visita.after_or_equal' => 'La fecha de visita debe ser hoy o una fecha futura.',
+            'hora_visita.date_format' => 'La hora debe tener el formato HH:mm.',
+            'personas.integer' => 'El n??mero de personas debe ser un n??mero entero.',
+            'personas.min' => 'Debe haber al menos 1 persona.',
+            'personas.max' => 'No puede haber m??s de 50 personas.',
+            'telefono_contacto.max' => 'El tel??fono no puede exceder 20 caracteres.',
+            'comentarios.max' => 'Los comentarios no pueden exceder 1000 caracteres.',
+            'precio_total.numeric' => 'El precio debe ser un n??mero.',
+            'precio_total.min' => 'El precio no puede ser negativo.',
+        ]);
+
+        // Si se actualiza fecha_visita, tambi??n actualizar fecha para compatibilidad
+        if (isset($data['fecha_visita'])) {
+            $data['fecha'] = $data['fecha_visita'];
+        }
+
+        $reservation->update($data);
+        $reservation->load(['place', 'usuario']);
+
+        return response()->json($reservation);
+    }
+
+    /**
+     * Eliminar una reserva
+     */
+    public function destroy(Request $request, Reservation $reservation): JsonResponse
+    {
+        $user = $request->user();
+
+        // Verificar que la reserva pertenece al usuario autenticado O que el usuario es admin
+        if ($reservation->user_id !== $user->id && !$user->is_admin) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $reservation->delete();
+
+        return response()->json(['message' => 'Reserva eliminada correctamente'], 200);
+    }
+
+    /**
      * Obtener reservas del usuario autenticado
      */
     public function myReservations(Request $request): JsonResponse
@@ -214,6 +365,4 @@ class ReservationController extends Controller
 
         return response()->json($reservations);
     }
-
-    // Metodos show, update, destroy bloqueados para aislar el alcance del sprint futuro
 }

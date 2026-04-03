@@ -1,5 +1,16 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 14: Implementación US-RES-02 (Ver Mis Reservas)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReservationController.php` (se habilitó estrictamente el método `myReservations()`) y `routes/api.php` (se agregó el endpoint `/api/reservations/my` bajo middleware auth:sanctum).
+- Frontend React: `main.jsx` (recuperación de ruta `/reservas`), `Header2.jsx` (re-inserción de link "Mis Reservas" en el dropdown del estado usuario) y `reservations/page.jsx` (componente principal de lecturas activado).
+**Integración y Aislamiento (Mutilación):**
+- Cancelación de Reservas: En `reservations/page.jsx` el botón y método `handleDelete()` fue bloqueado para evitar solapar con las entregas de US-RES-03 de cancelación, mostrando a cambio un pop-up que avisa el alcance actual del módulo.
+**Estado de la Tarea:** Terminada y validada en su respectiva UI y servidor. Listo para su `git commit`.
+
+---
+
 ## Commit 13: Implementación US-RES-01 (Creación de Reserva)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**

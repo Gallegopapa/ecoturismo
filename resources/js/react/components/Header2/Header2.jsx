@@ -188,6 +188,11 @@ const Header2 = () => {
                     Mi Perfil
                   </Link>
                 </li>
+                <li>
+                  <Link to="/reservas" className="menu-link" role="menuitem" onClick={handleLinkClick}>
+                    Mis Reservas
+                  </Link>
+                </li>
                 <li className="menu-divider"></li>
                 <li>
                   <button

@@ -18,6 +18,7 @@ import PlaceDetailPage from "./places/detail/page.jsx";
 import MapPage from "./map/page.jsx";
 import EcohotelsPage from "./ecohotels/page.jsx";
 import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
+import ReservationsPage from "./reservations/page.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: "/perfil",
     element: <PerfilPage />,
+  },
+  {
+    path: "/reservas",
+    element: <ReservationsPage />,
   },
   {
     path: "/lugares",
