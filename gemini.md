@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 8: Implementación US-PROF-03 (Cambiar Contraseña)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ProfileController.php` (método `changePassword()` certificado intacto).
+- Frontend: Vista `perfil/page.jsx` ajustada y servicio `profileService.changePassword` en `api.js`.
+**Integración y Aislamiento:**
+- Endpoints: Se validó que la ruta `PUT /api/profile/password` se encuentra funcional bajo el paraguas seguro del middleware `auth:sanctum` en `routes/api.php`.
+- React UI: Puesto que el bloque de cambio de contraseña fue removido/olvidado inadvertidamente en la rama develop durante el último rebase, se inyectó el sub-formulario nativo de "Cambio de Contraseña" mapeándolo fielmente al endpoint y a los estados pre-existentes sin arrastrar dependencias foráneas.
+**Estado de la Tarea:** Terminada. El ciclo de vida de credenciales del perfil está completo. Todo está listo para su `git commit`.
+
+---
+
 ## Commit 7: Implementación US-PROF-02 (Actualización de Perfil)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**
