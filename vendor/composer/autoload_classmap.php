@@ -7,9 +7,11 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Http\\Controllers\\API\\AuthController' => $baseDir . '/app/Http/Controllers/API/AuthController.php',
+    'App\\Http\\Controllers\\API\\PasswordResetController' => $baseDir . '/app/Http/Controllers/API/PasswordResetController.php',
     'App\\Http\\Middleware\\EnsureUserIsAdmin' => $baseDir . '/app/Http/Middleware/EnsureUserIsAdmin.php',
     'App\\Http\\Middleware\\HandleCors' => $baseDir . '/app/Http/Middleware/HandleCors.php',
     'App\\Models\\Usuarios' => $baseDir . '/app/Models/Usuarios.php',
+    'App\\Notifications\\ResetPasswordNotification' => $baseDir . '/app/Notifications/ResetPasswordNotification.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
     'App\\Rules\\AllowedEmailDomain' => $baseDir . '/app/Rules/AllowedEmailDomain.php',

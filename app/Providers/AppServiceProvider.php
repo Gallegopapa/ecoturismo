@@ -27,7 +27,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         // Registrar observers
-        Reservation::observe(ReservationObserver::class);
+        // Mantenemos esto comentado porque el módulo de Reservas aún no existe en esta fase
+        // Reservation::observe(ReservationObserver::class);
     }
 }
 

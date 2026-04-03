@@ -558,9 +558,11 @@ class ComposerStaticInitcfca910000f45589ffe96fd6cdb07109
 
     public static $classMap = array (
         'App\\Http\\Controllers\\API\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/AuthController.php',
+        'App\\Http\\Controllers\\API\\PasswordResetController' => __DIR__ . '/../..' . '/app/Http/Controllers/API/PasswordResetController.php',
         'App\\Http\\Middleware\\EnsureUserIsAdmin' => __DIR__ . '/../..' . '/app/Http/Middleware/EnsureUserIsAdmin.php',
         'App\\Http\\Middleware\\HandleCors' => __DIR__ . '/../..' . '/app/Http/Middleware/HandleCors.php',
         'App\\Models\\Usuarios' => __DIR__ . '/../..' . '/app/Models/Usuarios.php',
+        'App\\Notifications\\ResetPasswordNotification' => __DIR__ . '/../..' . '/app/Notifications/ResetPasswordNotification.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Rules\\AllowedEmailDomain' => __DIR__ . '/../..' . '/app/Rules/AllowedEmailDomain.php',
