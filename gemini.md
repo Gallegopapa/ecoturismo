@@ -1,5 +1,18 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 13: Implementación US-RES-01 (Creación de Reserva)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Modelos y Migraciones: Se extrajeron pasivamente los modelos y migraciones de `Reservation.php` y `CompanyReservation.php` preservando así la integridad de la base de datos para la funcionalidad base y las interacciones cruzadas automáticas exigidas en el AC5.
+- Controladores Backend: Se importó `ReservationController.php` donde todas sus lógicas externas de lectura global (ej. Ver Mis Reservas e indexación administrativa) fueron mutiladas para acotar la funcionalidad al único objetivo de persistir (método `store`). También se habilitaron las consultas de lógicas subyacentes relacionadas con horarios en el `PlaceController.php` (métodos `show` y `getAvailableSchedules`).
+- Endpoints: Se inyectó en `routes/api.php` bajo la validación de `auth:sanctum` el endpoint clave `POST /api/reservations`.
+- Frontend React: Se extrajo exitosamente el `<ReservationModal />` con sus estilos; inyectando orgánicamente y liberando sus hooks de despliegue sobre `resources/js/react/places/detail/page.jsx`.
+**Integración y Aislamiento (Mutilación):**
+- Reservas de Usuarios: Se deshabilitó conscientemente el botón de 'Ver mis reservas' o cualquier iteración visual de las mismas con el fin de evitar colisiones con el módulo siguiente: US-RES-02.
+**Estado de la Tarea:** Terminada. El visitante puede observar lógicamente las reservaciones activas al evaluar el Detail y, los usuarios autenticados, interactuar para lanzar la inserción de DB con POST y su confirmación. Listo para su `git commit`.
+
+---
+
 ## Commit 12: Implementación US-PLCS-03 (Explorar Ecohoteles)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**

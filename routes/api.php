@@ -53,6 +53,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // US-PROF-04: Eliminar Cuenta
     Route::delete('/profile', [\App\Http\Controllers\API\ProfileController::class, 'destroy']); // Eliminar cuenta
+
+    // US-RES-01: Crear una Reserva
+    Route::post('/reservations', [\App\Http\Controllers\API\ReservationController::class, 'store']);
 });
 
 // US-PLCS-01: Explorar Lugares

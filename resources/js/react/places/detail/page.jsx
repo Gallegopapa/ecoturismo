@@ -5,7 +5,7 @@ import { placesService, favoritesService, reviewsService } from '@/react/service
 import Header from '@/react/components/Header/Header';
 import Header2 from '@/react/components/Header2/Header2';
 import Footer from '@/react/components/Footer/Footer';
-// import ReservationModal from '@/react/components/ReservationModal'; // Mutilado para US-PLCS-02
+import ReservationModal from '@/react/components/ReservationModal';
 import ReviewForm from '@/react/components/ReviewForm/ReviewForm';
 import usuarioImg from '@/react/components/imagenes/usuario.jpg';
 import { resolvePlaceImage, getLocalFallbackImage } from '@/react/utils/imageUtils';
@@ -644,9 +644,7 @@ const PlaceDetailPage = () => {
                 <button 
                   onClick={() => {
                     if (isAuthenticated) {
-                      // setReservationModal({ isOpen: true, place: place }); // Mutilado a futuro
-                      setMessage('📅 La creación de reservas se habilitará en el próximo módulo.');
-                      setTimeout(() => setMessage(''), 3000);
+                      setReservationModal({ isOpen: true, place: place });
                     } else {
                       setMessage('Debes iniciar sesión para reservar');
                       setTimeout(() => navigate('/login'), 1500);
@@ -891,7 +889,6 @@ const PlaceDetailPage = () => {
         </div>
       </div>
 
-      {/* Modal de Reserva (Mutilado para US-PLCS-02)
       {reservationModal.isOpen && reservationModal.place && (
         <ReservationModal
           place={reservationModal.place}
@@ -904,7 +901,6 @@ const PlaceDetailPage = () => {
           }}
         />
       )}
-      */}
 
       <Footer />
     </div>

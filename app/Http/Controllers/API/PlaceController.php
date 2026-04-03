@@ -90,8 +90,15 @@ class PlaceController extends Controller
             ->orderBy('hora_inicio')
             ->get();
 
-        // Obtener reservas existentes para esa fecha (Mutilado a futuro: bloqueado retorno de clase inexistente Reservation)
-        $reservasExistentes = []; // \App\Models\Reservation::where('place_id', $place->id)...
+        // Obtener reservas existentes para esa fecha
+        $reservasExistentes = \App\Models\Reservation::where('place_id', $place->id)
+            ->whereDate('fecha_visita', $fecha)
+            ->where('estado', '!=', 'cancelada')
+            ->pluck('hora_visita')
+            ->map(function($hora) {
+                return is_string($hora) && strlen($hora) > 5 ? substr($hora, 0, 5) : $hora;
+            })
+            ->toArray();
 
         $horariosDisponibles = [];
         foreach ($schedules as $schedule) {
@@ -228,8 +235,31 @@ class PlaceController extends Controller
         $averageRating = $place->reviews->avg('rating') ?? 0;
         $reviewsCount = $place->reviews->count();
 
-        // Cargar TODAS las reservas futuras del lugar (Mutilado para US-PLCS-02)
-        $futureReservations = []; // Módulo futuro
+        // Cargar TODAS las reservas futuras del lugar para mostrar horarios ocupados (público)
+        $futureReservations = \App\Models\Reservation::where('place_id', $place->id)
+            ->where('fecha_visita', '>=', now()->toDateString())
+            ->where('estado', '!=', 'cancelada')
+            ->orderBy('fecha_visita')
+            ->orderBy('hora_visita')
+            ->get()
+            ->map(function($reservation) {
+                // Asegurar que hora_visita sea un string en formato H:i
+                $horaVisita = $reservation->hora_visita;
+                if ($horaVisita instanceof \Carbon\Carbon) {
+                    $horaVisita = $horaVisita->format('H:i');
+                } elseif (is_string($horaVisita) && strlen($horaVisita) > 5) {
+                    // Si viene como "HH:MM:SS", tomar solo "HH:MM"
+                    $horaVisita = substr($horaVisita, 0, 5);
+                }
+
+                return [
+                    'id' => $reservation->id,
+                    'fecha_visita' => $reservation->fecha_visita->format('Y-m-d'),
+                    'hora_visita' => $horaVisita,
+                    'personas' => $reservation->personas,
+                    'estado' => $reservation->estado,
+                ];
+            });
 
         return response()->json([
             'place' => $place,
