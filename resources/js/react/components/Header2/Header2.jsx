@@ -140,6 +140,11 @@ const Header2 = () => {
             {openUserMenu && (
               <ul className="dropdown-menu user-menu" role="menu">
                 {/* Otros enlaces de usuario desactivados por ahora */}
+                <li>
+                  <Link to="/perfil" className="menu-link" role="menuitem" onClick={handleLinkClick}>
+                    Mi Perfil
+                  </Link>
+                </li>
                 <li className="menu-divider"></li>
                 <li>
                   <button

@@ -18,6 +18,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/password/forgot', [\App\Http\Controllers\API\PasswordResetController::class, 'sendResetLink']);
 Route::post('/password/reset', [\App\Http\Controllers\API\PasswordResetController::class, 'resetPassword']);
 
+// US-PROF-01: Ver Perfil (Públicas)
+Route::get('/profile/photo/stream', [\App\Http\Controllers\API\ProfileController::class, 'photoByQuery']);
+Route::get('/profile/photo/{filename}', [\App\Http\Controllers\API\ProfileController::class, 'photo'])->where('filename', '.*');
+
 // ============================================
 // RUTAS PROTEGIDAS (requieren autenticación con Sanctum)
 // ============================================
@@ -30,5 +34,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // US-AUTH-05: Token Verification
     Route::get('/user', [AuthController::class, 'me']);
     Route::get('/verify-token', [AuthController::class, 'verifyToken']);
+
+    // US-PROF-01: Perfil de usuario
+    Route::get('/profile', [\App\Http\Controllers\API\ProfileController::class, 'show']);
+    Route::post('/profile', [\App\Http\Controllers\API\ProfileController::class, 'update']); // POST para FormData con imagen
+    Route::put('/profile', [\App\Http\Controllers\API\ProfileController::class, 'update']); // PUT para JSON sin imagen
+    Route::put('/profile/password', [\App\Http\Controllers\API\ProfileController::class, 'changePassword']);
+    Route::delete('/profile', [\App\Http\Controllers\API\ProfileController::class, 'destroy']); // Eliminar cuenta
 
 });

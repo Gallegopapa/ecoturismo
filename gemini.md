@@ -1,5 +1,18 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 6: Implementación US-PROF-01 (Ver Perfil Propio)
+**Fecha:** 03 Abril 2026
+**Archivos extraídos y montados:**
+- Backend: `ProfileController.php` (métodos de lectura y despliegue de imagen).
+- Frontend: `perfil/page.jsx` y `perfil/page.css`.
+**Integración:**
+- Endpoints: Se anclaron las rutas protegidas para ver el `profile` personal, así como las rutas públicas para servir `photo/{filename}` en `routes/api.php`, ignorando módulos ajenos.
+- React Router: Se mapeó la ruta `/perfil` integrando `PerfilPage` al árbol en `main.jsx`.
+- Menú Navegación: En `Header2.jsx` se rehabilitó quirúrgicamente y de manera aislada el `<Link to="/perfil">`, manteniendo bloqueados los accesos a los demás módulos de la aplicación.
+**Estado de la Tarea:** Terminada. Todo está listo para su `git commit`.
+
+---
+
 ## Commit 5: Implementación US-AUTH-05 (Verificación de Token)
 **Fecha:** 03 Abril 2026
 **Archivos de Backend extraídos y restaurados:**

@@ -8,6 +8,7 @@ import PagLogueados from "./pagLogueados.jsx";
 import ForgotPasswordPage from "./forgot-password/page.jsx";
 import ForgotPasswordSentPage from "./forgot-password/sent.jsx";
 import ResetPasswordPage from "./reset-password/page.jsx";
+import PerfilPage from "./perfil/page.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPasswordPage />,
+  },
+  {
+    path: "/perfil",
+    element: <PerfilPage />,
   }
 ]);
 
