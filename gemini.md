@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 9: Implementación US-PROF-04 (Eliminar Cuenta)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ProfileController.php` (método `destroy()` restaurado eliminando el usuario y sus tokens explícitamente), y `routes/api.php` validada para incluir la ruta de borrado (`DELETE /api/profile`).
+- Frontend: Vista `perfil/page.jsx` validada con el activador "Eliminar cuenta" (Zona Peligrosa), su modal de confirmación, purga de localStorage vía logout y redireccionamiento forzoso. La lógica en `api.js` incluye la función `deleteAccount`.
+**Integración y Aislamiento:**
+- Mutilación de Código Futuro: Se aseguró que el proceso de borrado en `ProfileController.php` solo elimine el usuario y revoque tokens de acceso actuales de Sanctum, evitando referencias inexistentes (como el borrado en cascada para reservas o reseñas que aún no están definidos en la rama o que no deben mezclarse ahora).
+- React UI: Los llamados de API desde la interfaz gráfica despachan las respuestas satisfactorias, purgan la sesión visualmente con los hooks definidos y redireccionan sin colisiones.
+**Estado de la Tarea:** Terminada. Todo está listo para su `git commit`.
+
+---
+
 ## Commit 8: Implementación US-PROF-03 (Cambiar Contraseña)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**

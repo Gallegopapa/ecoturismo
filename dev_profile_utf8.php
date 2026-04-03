@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers\API;
 
@@ -17,7 +17,7 @@ use Illuminate\Validation\Rules\Password;
 class ProfileController extends Controller
 {
     /**
-     * Servir foto vía Query Parameter (Evasión 404 estático de Proxies).
+     * Servir foto v├¡a Query Parameter (Evasi├│n 404 est├ítico de Proxies).
      */
     public function photoByQuery(Request $request)
     {
@@ -71,21 +71,13 @@ class ProfileController extends Controller
     public function destroy(Request $request): JsonResponse
     {
         $user = $request->user();
-        
-        // Revocar los tokens de la sesión
-        $user->tokens()->delete();
-
-        // Mutilación de módulos que aún no implementamos (ej. reservas en cascada)
-        // $user->reservations()->delete(); 
-
         $user->delete();
-
         return response()->json([
             'message' => 'Cuenta eliminada exitosamente.'
         ]);
     }
     /**
-     * Obtener información del perfil del usuario autenticado
+     * Obtener informaci├│n del perfil del usuario autenticado
      */
     public function show(Request $request): JsonResponse
     {
@@ -105,7 +97,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Actualizar información del perfil
+     * Actualizar informaci├│n del perfil
      */
     public function update(Request $request): JsonResponse
     {
@@ -122,7 +114,7 @@ class ProfileController extends Controller
 
         if ($request->hasFile('foto_perfil')) {
             $file = $request->file('foto_perfil');
-            Log::info('Foto recibida y válida', [
+            Log::info('Foto recibida y v├ílida', [
                 'name' => $file->getClientOriginalName(),
                 'mime' => $file->getMimeType(),
                 'size' => $file->getSize(),
@@ -137,7 +129,7 @@ class ProfileController extends Controller
                     'error_code' => $fileObj->getError(),
                 ]);
                 return response()->json([
-                    'message' => "La imagen no se pudo subir. Probablemente exceda el límite de tamaño del servidor (upload_max_filesize en Docker). Detalle: {$errorMsg}"
+                    'message' => "La imagen no se pudo subir. Probablemente exceda el l├¡mite de tama├▒o del servidor (upload_max_filesize en Docker). Detalle: {$errorMsg}"
                 ], 422);
             }
         }
@@ -145,7 +137,7 @@ class ProfileController extends Controller
         $emailRules = ['nullable', 'email', 'max:255', 'unique:usuarios,email,' . $user->id];
         $nameRules = ['nullable', 'string', 'max:255'];
 
-        // Solo aplicar validaciones estrictas de name si se envía y es diferente
+        // Solo aplicar validaciones estrictas de name si se env├¡a y es diferente
         $incomingName = $request->input('name');
         if ($incomingName !== null && !empty(trim((string) $incomingName))) {
             $normalizedIncomingName = trim((string) $incomingName);
@@ -174,11 +166,11 @@ class ProfileController extends Controller
         $validated = $request->validate($rules, [
             'name.required' => 'El nombre de usuario es requerido.',
             'name.min' => 'El nombre de usuario debe tener al menos 3 caracteres.',
-            'name.unique' => 'Este nombre de usuario ya está en uso.',
-            'name.regex' => 'El nombre de usuario solo puede contener letras, números y guiones bajos.',
-            'email.email' => 'El correo electrónico debe ser válido.',
-            'email.unique' => 'Este correo electrónico ya está en uso.',
-            'telefono.max' => 'El teléfono no puede exceder 20 caracteres.',
+            'name.unique' => 'Este nombre de usuario ya est├í en uso.',
+            'name.regex' => 'El nombre de usuario solo puede contener letras, n├║meros y guiones bajos.',
+            'email.email' => 'El correo electr├│nico debe ser v├ílido.',
+            'email.unique' => 'Este correo electr├│nico ya est├í en uso.',
+            'telefono.max' => 'El tel├®fono no puede exceder 20 caracteres.',
             'foto_perfil.image' => 'El archivo debe ser una imagen.',
             'foto_perfil.max' => 'La imagen no puede exceder 5MB.',
         ]);
@@ -281,7 +273,7 @@ class ProfileController extends Controller
                 }
 
                 if (!$storedPath) {
-                    throw new \RuntimeException('No se pudo almacenar la imagen. Falló file_put_contents. Detalles: ' . implode(' | ', $storageErrors));
+                    throw new \RuntimeException('No se pudo almacenar la imagen. Fall├│ file_put_contents. Detalles: ' . implode(' | ', $storageErrors));
                 }
                 
                 Log::info('Foto guardada exitosamente', [
@@ -301,7 +293,7 @@ class ProfileController extends Controller
                 ], 500);
             }
         } else {
-            // Si no se envía nueva foto, mantener la existente
+            // Si no se env├¡a nueva foto, mantener la existente
             unset($validated['foto_perfil']);
         }
 
@@ -323,7 +315,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Cambiar contraseña del usuario
+     * Cambiar contrase├▒a del usuario
      */
     public function changePassword(Request $request): JsonResponse
     {
@@ -333,34 +325,34 @@ class ProfileController extends Controller
             'current_password' => ['required', 'string'],
             'new_password' => ['required', 'string', 'min:6', 'max:20', 'confirmed'],
         ], [
-            'current_password.required' => 'La contraseña actual es requerida.',
-            'new_password.required' => 'La nueva contraseña es requerida.',
-            'new_password.min' => 'La nueva contraseña debe tener al menos 6 caracteres.',
-            'new_password.max' => 'La nueva contraseña no puede tener más de 20 caracteres.',
-            'new_password.confirmed' => 'Las contraseñas no coinciden.',
+            'current_password.required' => 'La contrase├▒a actual es requerida.',
+            'new_password.required' => 'La nueva contrase├▒a es requerida.',
+            'new_password.min' => 'La nueva contrase├▒a debe tener al menos 6 caracteres.',
+            'new_password.max' => 'La nueva contrase├▒a no puede tener m├ís de 20 caracteres.',
+            'new_password.confirmed' => 'Las contrase├▒as no coinciden.',
         ]);
 
-        // Verificar que la contraseña actual sea correcta
+        // Verificar que la contrase├▒a actual sea correcta
         if (!Hash::check($validated['current_password'], $user->password)) {
             return response()->json([
-                'message' => 'La contraseña actual es incorrecta.'
+                'message' => 'La contrase├▒a actual es incorrecta.'
             ], 422);
         }
 
-        // Verificar que la nueva contraseña sea diferente
+        // Verificar que la nueva contrase├▒a sea diferente
         if (Hash::check($validated['new_password'], $user->password)) {
             return response()->json([
-                'message' => 'La nueva contraseña debe ser diferente a la actual.'
+                'message' => 'La nueva contrase├▒a debe ser diferente a la actual.'
             ], 422);
         }
 
-        // Actualizar la contraseña
+        // Actualizar la contrase├▒a
         $user->update([
             'password' => Hash::make($validated['new_password'])
         ]);
 
         return response()->json([
-            'message' => 'Contraseña actualizada correctamente.'
+            'message' => 'Contrase├▒a actualizada correctamente.'
         ]);
     }
 }
