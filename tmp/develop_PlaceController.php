@@ -46,16 +46,16 @@ class PlaceController extends Controller
         
         // IMPORTANTE: Seleccionar explícitamente TODOS los campos incluyendo description
         $places = $query->select(['id', 'name', 'description', 'location', 'image', 'latitude', 'longitude', 'telefono', 'email', 'sitio_web', 'created_at', 'updated_at'])
-            ->with(['categories' /* , 'reviews.usuario:id,name,foto_perfil' */])
+            ->with(['categories', 'reviews.usuario:id,name,foto_perfil'])
             ->orderBy('name', 'asc')
             ->get();
         
-        // Agregar información de rating a cada lugar (Mutilado a futuro)
-        /* $places->transform(function($place) {
+        // Agregar información de rating a cada lugar
+        $places->transform(function($place) {
             $place->average_rating = round($place->reviews->avg('rating') ?? 0, 1);
             $place->reviews_count = $place->reviews->count();
             return $place;
-        }); */
+        });
         
         return response()->json($places);
     }
@@ -90,8 +90,11 @@ class PlaceController extends Controller
             ->orderBy('hora_inicio')
             ->get();
 
-        // Obtener reservas existentes para esa fecha (Mutilado a futuro: bloqueado retorno de clase inexistente Reservation)
-        $reservasExistentes = []; // \App\Models\Reservation::where('place_id', $place->id)...
+        // Obtener reservas existentes para esa fecha
+        $reservasExistentes = \App\Models\Reservation::where('place_id', $place->id)
+            ->where('fecha_visita', $fecha)
+            ->pluck('hora_visita')
+            ->toArray();
 
         $horariosDisponibles = [];
         foreach ($schedules as $schedule) {
@@ -206,7 +209,7 @@ class PlaceController extends Controller
         $place->load([
             'reviews.usuario:id,name,foto_perfil',
             'categories',
-            // 'ecohoteles.reviews', // Mutilado para US-PLCS-02
+            'ecohoteles.reviews',
             'schedules' => function($query) {
                 $query->where('activo', true)
                       ->orderByRaw("
@@ -223,20 +226,60 @@ class PlaceController extends Controller
                       ->orderBy('hora_inicio');
             }
         ]);
-        
+        // Agregar promedio y cantidad de reseñas a cada ecohotel relacionado
+        if ($place->ecohoteles) {
+            $place->ecohoteles->transform(function($ecohotel) {
+                $ecohotel->average_rating = round($ecohotel->reviews->avg('rating') ?? 0, 1);
+                $ecohotel->reviews_count = $ecohotel->reviews->count();
+                return $ecohotel;
+            });
+        }
+
         // Calcular rating promedio
         $averageRating = $place->reviews->avg('rating') ?? 0;
         $reviewsCount = $place->reviews->count();
 
-        // Cargar TODAS las reservas futuras del lugar (Mutilado para US-PLCS-02)
-        $futureReservations = []; // Módulo futuro
+        // Cargar TODAS las reservas futuras del lugar para mostrar horarios ocupados (público)
+        $futureReservations = \App\Models\Reservation::where('place_id', $place->id)
+            ->where('fecha_visita', '>=', now()->toDateString())
+            ->where('estado', '!=', 'cancelada')
+            ->orderBy('fecha_visita')
+            ->orderBy('hora_visita')
+            ->get()
+            ->map(function($reservation) {
+                // Asegurar que hora_visita sea un string en formato H:i
+                $horaVisita = $reservation->hora_visita;
+                if ($horaVisita instanceof \Carbon\Carbon) {
+                    $horaVisita = $horaVisita->format('H:i');
+                } elseif (is_string($horaVisita) && strlen($horaVisita) > 5) {
+                    // Si viene como "HH:MM:SS", tomar solo "HH:MM"
+                    $horaVisita = substr($horaVisita, 0, 5);
+                }
 
+                return [
+                    'id' => $reservation->id,
+                    'fecha_visita' => $reservation->fecha_visita->format('Y-m-d'),
+                    'hora_visita' => $horaVisita,
+                    'personas' => $reservation->personas,
+                    'estado' => $reservation->estado,
+                ];
+            });
+
+        $place->load(['ecohoteles.reviews']);
+        // Enriquecer ecohoteles relacionados con promedio y cantidad de reseñas
+        if ($place->ecohoteles) {
+            $place->ecohoteles->transform(function($ecohotel) {
+                $ecohotel->average_rating = round($ecohotel->reviews->avg('rating') ?? 0, 1);
+                $ecohotel->reviews_count = $ecohotel->reviews->count();
+                return $ecohotel;
+            });
+        }
         return response()->json([
             'place' => $place,
             'average_rating' => round($averageRating, 1),
             'reviews_count' => $reviewsCount,
             'future_reservations' => $futureReservations,
-            'ecohotels' => [], // Módulo futuro
+            'ecohotels' => $place->ecohoteles,
         ]);
     }
 

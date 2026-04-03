@@ -53,5 +53,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // US-PROF-04: Eliminar Cuenta
     Route::delete('/profile', [\App\Http\Controllers\API\ProfileController::class, 'destroy']); // Eliminar cuenta
+});
 
+// US-PLCS-01: Explorar Lugares
+Route::get('/places', [\App\Http\Controllers\API\PlaceController::class, 'index']);
+Route::get('/places/options', [\App\Http\Controllers\API\PlaceController::class, 'options']);
+
+// US-PLCS-02: Ver Detalle de Lugar
+Route::get('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'show']);
+Route::get('/places/{place}/available-schedules', [\App\Http\Controllers\API\PlaceController::class, 'getAvailableSchedules']);
+Route::get('/places/{place}/schedules', [\App\Http\Controllers\API\PlaceScheduleController::class, 'index']);
+Route::get('/places/{id}/reviews', function($id, \Illuminate\Http\Request $request) {
+    return app(\App\Http\Controllers\API\ReviewController::class)->index($request, 'place', $id);
 });

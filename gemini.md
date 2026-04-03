@@ -1,5 +1,19 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 11: Implementación US-PLCS-02 (Ver Detalle de Lugar)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Modelos y Migraciones: Extracción pasiva de `Review.php` y `PlaceSchedule.php` junto con sus tablas para sustentar el detalle de lecturas.
+- Controladores Backend: `PlaceController.php` (habilitados `show` y `getAvailableSchedules`), además de integrar orgánicamente los Controladores `PlaceScheduleController.php` y `ReviewController.php`.
+- Endpoints: Registro en `routes/api.php` de los 4 accesos estipulados para lugares, horarios y reseñas.
+- Frontend React: `resources/js/react/places/detail/page.jsx` introducido globalizando la UI para el detalle de lugar.
+**Integración y Aislamiento (Mutilación):**
+- Reservas: El backend bloqueó consultas a la clase inexistente `Reservation` y la UI transformó los botones de "Reservar" a "Próximamente" para usuarios autenticados, evitando caídas 500 y encadenamientos de interfaz incorrectos. El Componente `<ReservationModal />` fue desvinculado visual y funcionalmente.
+- Favoritos: Igualmente, bloqueados a nivel de Frontend para atajarse posteriormente.
+**Estado de la Tarea:** Terminada. El visitante y el usuario final pueden disfrutar visualmente la exploración de detalles y horarios, en un modo "sólo visualización". Todo listo para su `git commit`.
+
+---
+
 ## Commit 10: Implementación US-PLCS-01 (Módulo de Exploración y Mapa)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**
