@@ -1,0 +1,260 @@
+/* ============================================
+   ACCESIBILIDAD - ESTILOS LIMPIOS Y SEGUROS
+   ============================================
+   
+   IMPORTANTE: Estos estilos SOLO se aplican
+   cuando el usuario activa opciones en el panel.
+   
+   Las clases se agregan/quitan dinámicamente:
+   - font-large
+   - font-extra-large  
+   - high-contrast
+   - underline-links
+   - grayscale-mode
+   - line-spacing-relaxed
+   - reduce-motion
+*/
+
+/* ============== TAMAÑO DE TEXTO ============== */
+
+/* Aumento sutil: +1% */
+/* Aumento moderado: +4% */
+body.font-large {
+  font-size: 104% !important;
+}
+
+/* Aumento mayor moderado: +8% */
+body.font-extra-large {
+  font-size: 108% !important;
+}
+
+/* Restablecer crecimiento selectivo para elementos interactivos y contenido
+   (botones, enlaces, filtros, tarjetas) pero sin tocar los títulos del header
+   o los H1 principales. */
+body.font-large button,
+body.font-large .btn,
+body.font-large a,
+body.font-large .navbar a,
+body.font-large .filtro-btn,
+body.font-large .ubicacion,
+body.font-large .lugar-info h3,
+body.font-large .lugar-info p,
+body.font-large .lugar-card h3,
+body.font-large .lugar-card p,
+body.font-large .category-tag {
+  font-size: 1.02em !important;
+}
+
+body.font-extra-large button,
+body.font-extra-large .btn,
+body.font-extra-large a,
+body.font-extra-large .navbar a,
+body.font-extra-large .filtro-btn,
+body.font-extra-large .ubicacion,
+body.font-extra-large .lugar-info h3,
+body.font-extra-large .lugar-info p,
+body.font-extra-large .lugar-card h3,
+body.font-extra-large .lugar-card p,
+body.font-extra-large .category-tag {
+  font-size: 1.04em !important;
+}
+
+/* Hacer que elementos del header escalen también (enlaces, título breve) */
+body.font-large .titulos h2,
+body.font-large .navbar a,
+body.font-large .nav-link {
+  font-size: 1.04em !important;
+}
+
+body.font-extra-large .titulos h2,
+body.font-extra-large .navbar a,
+body.font-extra-large .nav-link {
+  font-size: 1.08em !important;
+}
+
+@media (max-width: 768px) {
+  body.font-large .titulos h2,
+  body.font-extra-large .titulos h2 {
+    font-size: 1.04em !important;
+  }
+
+  body.font-large .navbar a,
+  body.font-extra-large .navbar a,
+  body.font-large .nav-link,
+  body.font-extra-large .nav-link {
+    font-size: 1.04em !important;
+  }
+}
+
+/* No excepciones forzadas aquí — dejar que las reglas de página controlen títulos
+   Esto preserva el layout original y aplica un aumento moderado global. */
+
+/* Asegurar que el título del header y links de navegación no se reduzcan
+   y que el título principal de detalle aumente ligeramente */
+body.font-large .titulos h2,
+body.font-extra-large .titulos h2 {
+  font-size: 18px !important;
+}
+
+body.font-large .navbar a,
+body.font-extra-large .navbar a {
+  font-size: 16px !important;
+}
+
+body.font-large .detail-header h1 {
+  font-size: 2.6rem !important;
+}
+
+body.font-extra-large .detail-header h1 {
+  font-size: 2.7rem !important;
+}
+
+/* ============== ALTO CONTRASTE ============== */
+
+body.high-contrast {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+body.high-contrast * {
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+body.high-contrast a {
+  color: #0000cc !important;
+  text-decoration: underline !important;
+}
+
+body.high-contrast button,
+body.high-contrast input[type="button"],
+body.high-contrast input[type="submit"],
+body.high-contrast .btn {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+body.high-contrast input,
+body.high-contrast textarea,
+body.high-contrast select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+/* 🔒 PROTEGER PANEL DE ACCESIBILIDAD DEL ALTO CONTRASTE */
+body.high-contrast .accessibility-panel,
+body.high-contrast .accessibility-panel * {
+  background-color: #f0f0f0 !important;
+  color: #333333 !important;
+}
+
+body.high-contrast .accessibility-panel button,
+body.high-contrast .accessibility-panel input,
+body.high-contrast .accessibility-panel textarea,
+body.high-contrast .accessibility-panel select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #cccccc !important;
+}
+
+body.high-contrast .accessibility-panel h2,
+body.high-contrast .accessibility-panel h3 {
+  color: #333333 !important;
+}
+
+body.high-contrast .accessibility-floating-button {
+  background-color: #27ae60 !important;
+  color: #ffffff !important;
+}
+
+/* ============== SUBRAYAR ENLACES ============== */
+
+body.underline-links a {
+  text-decoration: underline !important;
+}
+
+/* ============== ESCALA DE GRISES ============== */
+
+/* IMPORTANTE: NO aplicar a body para no romper position: fixed */
+/* En su lugar, aplicar a elementos de contenido específicos */
+
+body.grayscale-mode main {
+  filter: grayscale(100%) !important;
+}
+
+body.grayscale-mode article {
+  filter: grayscale(100%) !important;
+}
+
+body.grayscale-mode section {
+  filter: grayscale(100%) !important;
+}
+
+body.grayscale-mode .card {
+  filter: grayscale(100%) !important;
+}
+
+body.grayscale-mode .container {
+  filter: grayscale(100%) !important;
+}
+
+body.grayscale-mode img {
+  filter: grayscale(100%) !important;
+}
+
+body.grayscale-mode video {
+  filter: grayscale(100%) !important;
+}
+
+/* EXCEPCIONES: NUNCA tendrán grayscale */
+body.grayscale-mode .accessibility-floating-button,
+body.grayscale-mode .accessibility-floating-button * {
+  filter: grayscale(0%) !important;
+}
+
+body.grayscale-mode .accessibility-panel,
+body.grayscale-mode .accessibility-panel * {
+  filter: grayscale(0%) !important;
+}
+
+body.grayscale-mode .accessibility-overlay {
+  filter: grayscale(0%) !important;
+}
+
+body.grayscale-mode .favorito,
+body.grayscale-mode .favorito * {
+  filter: grayscale(0%) !important;
+}
+
+body.grayscale-mode .chatbot-widget,
+body.grayscale-mode .chatbot-widget * {
+  filter: grayscale(0%) !important;
+}
+
+/* ============== ESPACIADO DE LÍNEAS ============== */
+
+body.line-spacing-relaxed {
+  line-height: 1.75 !important;
+}
+
+body.line-spacing-relaxed * {
+  line-height: 1.75 !important;
+}
+
+body.line-spacing-very-relaxed {
+  line-height: 2 !important;
+}
+
+body.line-spacing-very-relaxed * {
+  line-height: 2 !important;
+}
+
+/* ============== REDUCIR MOVIMIENTO ============== */
+
+body.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}

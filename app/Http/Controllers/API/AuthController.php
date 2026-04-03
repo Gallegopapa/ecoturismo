@@ -1,0 +1,144 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\Usuarios;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use App\Rules\AllowedEmailDomain;
+
+class AuthController extends Controller
+{
+
+    /**
+     * REGISTRO DE USUARIO
+     */
+    public function register(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                'regex:/^[a-zA-Z0-9_]+$/',
+                Rule::unique('usuarios', 'name')
+            ],
+
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                new AllowedEmailDomain(),
+                Rule::unique('usuarios', 'email')
+            ],
+
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:15',
+                'confirmed'
+            ]
+
+        ], [
+
+            'name.required' => 'El nombre de usuario es requerido.',
+            'name.min' => 'El nombre debe tener mínimo 3 caracteres.',
+            'name.unique' => 'Este nombre ya está en uso.',
+            'name.regex' => 'Solo se permiten letras, números y guiones bajos.',
+
+            'email.required' => 'El correo es obligatorio.',
+            'email.email' => 'El correo debe ser válido.',
+            'email.unique' => 'Este correo ya está registrado.',
+
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.max' => 'La contraseña no puede tener más de 15 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.'
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $data = $validator->validated();
+
+        try {
+            [$user, $token] = DB::transaction(function () use ($data) {
+                $normalizedName = trim($data['name']);
+                $normalizedEmail = strtolower(trim($data['email']));
+
+                $user = Usuarios::create([
+                    'name' => $normalizedName,
+                    'email' => $normalizedEmail,
+                    'password' => Hash::make($data['password']),
+                    'fecha_registro' => now(),
+                ]);
+
+                // En algunos entornos el ID puede no venir inmediatamente en la instancia creada.
+                $user = $user->fresh() ?? Usuarios::query()->where('email', $normalizedEmail)->first();
+
+                if (!$user || !$user->id) {
+                    throw ValidationException::withMessages([
+                        'register' => ['No se pudo confirmar el ID del usuario creado.'],
+                    ]);
+                }
+
+                $token = $user->createToken('api-token')->plainTextToken;
+
+                return [$user, $token];
+            });
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Error al registrar usuario',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Throwable $e) {
+            Log::error('Fallo en registro de usuario', [
+                'message' => $e->getMessage(),
+                'db_connection' => config('database.default'),
+                'exception' => get_class($e),
+            ]);
+
+            return response()->json([
+                'message' => 'No fue posible registrar el usuario en este momento.',
+            ], 500);
+        }
+
+        return response()->json([
+
+            'message' => 'Usuario registrado exitosamente',
+
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'telefono' => $user->telefono,
+                'foto_perfil' => $user->foto_perfil,
+                'fecha_registro' => $user->fecha_registro,
+                'is_admin' => $user->is_admin,
+                'tipo_usuario' => $user->tipo_usuario
+            ],
+
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'expires_in' => 60 * 60 * 24 * 30
+
+        ], 201);
+    }
+
+
+}

@@ -1,0 +1,6 @@
+/* Dislexia: fuente OpenDyslexic (puedes cambiar por otra si prefieres) */
+
+body.font-dyslexia, body.font-dyslexia * {
+  font-family: 'OpenDyslexic', 'Arial', sans-serif !important;
+  letter-spacing: 0.03em !important;
+}

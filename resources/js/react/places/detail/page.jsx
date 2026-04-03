@@ -1,0 +1,921 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '@/react/context/AuthContext';
+import { placesService, favoritesService, reviewsService } from '@/react/services/api';
+import Header from '@/react/components/Header/Header';
+import Header2 from '@/react/components/Header2/Header2';
+import Footer from '@/react/components/Footer/Footer';
+import ReservationModal from '@/react/components/ReservationModal';
+import ReviewForm from '@/react/components/ReviewForm/ReviewForm';
+import usuarioImg from '@/react/components/imagenes/usuario.jpg';
+import { resolvePlaceImage, getLocalFallbackImage } from '@/react/utils/imageUtils';
+import './page.css';
+
+const PlaceDetailPage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
+  const [place, setPlace] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [reviewStats, setReviewStats] = useState({ average: null, count: 0 });
+  const [schedules, setSchedules] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [reservationModal, setReservationModal] = useState({ isOpen: false, place: null });
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editForm, setEditForm] = useState({ rating: 5, comment: '' });
+  const [submittingEdit, setSubmittingEdit] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      loadPlace();
+      if (isAuthenticated) {
+        checkFavorite();
+      }
+    }
+  }, [id, isAuthenticated]);
+
+  const loadPlace = async (skipSchedules = false) => {
+    try {
+      setLoading(true);
+      setError('');
+      const response = await placesService.getById(id);
+      // El API puede devolver { place: {...} } o directamente el lugar
+      let placeData = response.place || response;
+
+      // Si la respuesta trae ecohotels enriquecidos, sobrescribir en el objeto place
+      if (response.ecohotels) {
+        placeData.ecohoteles = response.ecohotels;
+      }
+
+      // Si hay reservas futuras en la respuesta, cargarlas
+      if (response.future_reservations) {
+        setReservations(response.future_reservations);
+      }
+
+      // Resolver imagen usando la misma lógica centralizada que la página de lista
+      const imagenResuelta = resolvePlaceImage(placeData);
+
+      placeData = {
+        ...placeData,
+        imagen: imagenResuelta,
+        image: placeData.image || null,
+      };
+
+      setPlace(placeData);
+      await loadReviews(placeData.id);
+      
+      if (!skipSchedules) {
+        // Cargar horarios (pueden venir en placeData.schedules o en response.place.schedules)
+        const schedulesData = placeData.schedules || (response.place && response.place.schedules) || [];
+        console.log('Schedules data:', schedulesData);
+        
+        if (Array.isArray(schedulesData) && schedulesData.length > 0) {
+          const activeSchedules = schedulesData.filter(s => s.activo !== false && s.activo !== 0);
+          console.log('Active schedules found:', activeSchedules);
+          setSchedules(activeSchedules);
+        } else {
+          console.log('No schedules in response, trying to load from API');
+          // Si no vienen en la respuesta, intentar cargarlos desde la API de admin
+          await loadSchedules(placeData.id);
+        }
+      }
+      
+      // Cargar reservas futuras si vienen en la respuesta (siempre vienen ahora)
+      if (response.future_reservations) {
+        console.log('Future reservations from API:', response.future_reservations);
+        setReservations(response.future_reservations);
+      } else {
+        // Fallback: intentar cargar desde otro endpoint
+        await loadReservations(placeData.id);
+      }
+    } catch (err) {
+      console.error('Error al cargar lugar:', err);
+      setError('No se pudo cargar la información del lugar.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadSchedules = async (placeId) => {
+    try {
+      // Usar endpoint público para obtener horarios
+      const response = await fetch(`/api/places/${placeId}/schedules`, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const activeSchedules = Array.isArray(data) ? data : [];
+        console.log('Schedules loaded from API:', activeSchedules);
+        setSchedules(activeSchedules);
+      } else {
+        console.error('Error loading schedules:', response.status);
+      }
+    } catch (err) {
+      console.error('Error al cargar horarios:', err);
+      // Si falla, no es crítico, simplemente no se mostrarán horarios
+    }
+  };
+
+  const loadReservations = async (placeId) => {
+    try {
+      // Intentar cargar todas las reservas futuras del lugar desde un endpoint público
+      // Por ahora, las reservas vienen en la respuesta del lugar, así que este es un fallback
+      const response = await fetch(`/api/places/${placeId}`, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.future_reservations) {
+          setReservations(data.future_reservations);
+        }
+      }
+    } catch (err) {
+      console.error('Error al cargar reservas:', err);
+    }
+  };
+
+  const loadReviews = async (placeId) => {
+    try {
+      const data = await reviewsService.getByPlace(placeId);
+      setReviews(Array.isArray(data.reviews) ? data.reviews : []);
+      setReviewStats({ average: data.average, count: data.count });
+    } catch (err) {
+      console.error('Error al cargar reseñas:', err);
+      setReviewStats({ average: null, count: 0 });
+    }
+  };
+
+  const checkFavorite = async () => {
+    try {
+      const favorite = await favoritesService.check(id);
+      setIsFavorite(favorite);
+    } catch (err) {
+      console.error('Error al verificar favorito:', err);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      await reviewsService.delete(reviewId);
+      setMessage('✅ Reseña eliminada correctamente');
+      await loadReviews(id);
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      console.error('Error al eliminar reseña:', err);
+      setMessage('❌ Error al eliminar la reseña');
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
+  const renderStars = (rating) => {
+    return [1, 2, 3, 4, 5].map((n) => (
+      <i key={n} style={{ color: n <= rating ? '#ffc107' : '#ddd', fontSize: '1.5rem', marginRight: '4px' }}>
+        ★
+      </i>
+    ));
+  };
+
+  const startEditReview = (review) => {
+    setEditingReviewId(review.id);
+    setEditForm({
+      rating: review.rating || 5,
+      comment: review.comment || ''
+    });
+  };
+
+  const cancelEditReview = () => {
+    setEditingReviewId(null);
+    setEditForm({ rating: 5, comment: '' });
+  };
+
+  const handleEditReviewChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({
+      ...prev,
+      [name]: name === 'rating' ? parseInt(value) : value
+    }));
+  };
+
+  const submitEditReview = async (reviewId) => {
+    if (!editForm.comment.trim()) {
+      setMessage('❌ El comentario no puede estar vacío');
+      return;
+    }
+
+    setSubmittingEdit(true);
+    try {
+      await reviewsService.update(reviewId, {
+        place_id: place.id,
+        rating: editForm.rating,
+        comment: editForm.comment
+      });
+      setMessage('✅ Reseña actualizada correctamente');
+      setEditingReviewId(null);
+      await loadReviews(id);
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      console.error('Error al actualizar reseña:', err);
+      setMessage('❌ Error al actualizar la reseña');
+      setTimeout(() => setMessage(''), 3000);
+    } finally {
+      setSubmittingEdit(false);
+    }
+  };
+
+  const toggleFavorite = async () => {
+    if (!isAuthenticated) {
+      setMessage('Debes iniciar sesión para agregar a favoritos');
+      setTimeout(() => navigate('/login'), 1500);
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        await favoritesService.remove(id);
+        setIsFavorite(false);
+        setMessage('Eliminado de favoritos');
+      } else {
+        await favoritesService.add(id);
+        setIsFavorite(true);
+        setMessage('Agregado a favoritos');
+      }
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      console.error('Error al actualizar favorito:', err);
+      setMessage('Error al actualizar favorito');
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="page-layout">
+        {isAuthenticated && user ? <Header2 /> : <Header />}
+        <div className="page-content" style={{ 
+          marginTop: '100px',
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          flexDirection: 'column',
+          gap: '20px'
+        }}>
+          <div className="loading-spinner"></div>
+          <p>Cargando información del lugar...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !place) {
+    return (
+      <div className="page-layout">
+        {isAuthenticated && user ? <Header2 /> : <Header />}
+        <div className="page-content" style={{ marginTop: '100px' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            gap: '20px',
+            padding: '20px'
+          }}>
+            <p style={{ color: '#e74c3c', fontSize: '18px' }}>
+              {error || 'Lugar no encontrado'}
+            </p>
+            <Link
+              to="/lugares"
+              style={{
+                padding: '10px 20px',
+                background: '#2ecc71',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '6px',
+                fontSize: '16px'
+              }}
+            >
+              Volver a Lugares
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-layout">
+      {isAuthenticated && user ? <Header2 /> : <Header />}
+      <div className="page-content place-detail-container" style={{ marginTop: '100px' }}>
+        {message && (
+          <div className={`detail-message ${message.includes('Error') ? 'error' : 'success'}`}>
+            {message}
+          </div>
+        )}
+
+        <div className="place-detail-header">
+          <Link to="/lugares" className="back-button">
+            ← Explorar más Lugares
+          </Link>
+          <div className="place-header-actions">
+            {isAuthenticated && (
+              <button 
+                onClick={toggleFavorite}
+                className={`favorite-button ${isFavorite ? 'active' : ''}`}
+                title={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+              >
+                {isFavorite ? '❤️' : '🤍'} {isFavorite ? 'En Favoritos' : 'Agregar a Favoritos'}
+              </button>
+            )}
+            {place.latitude && place.longitude && (
+              <a 
+                href="/mapa"
+                className="map-link-button"
+              >
+                🗺️ Ver en Mapa Interactivo
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div className="place-detail-content">
+          <div className="place-detail-main">
+            <div className="place-image-section">
+              <img 
+                src={place.imagen || place.image || '/imagenes/placeholder.svg'} 
+                alt={place.name}
+                className="place-main-image"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = getLocalFallbackImage(place.name) || '/imagenes/placeholder.svg';
+                }}
+              />
+            </div>
+
+            <div className="place-info-section">
+              <h1 className="place-title">{place.name}</h1>
+              
+
+              {place.location && (
+                <div className="place-location">
+                  <span className="location-icon">📍</span>
+                  <span>{place.location}</span>
+                </div>
+              )}
+
+              {/* Bloque de reseñas debajo de ubicación */}
+              <div className="place-reviews-summary" style={{ margin: '12px 0 8px 0', fontSize: '1.05em', color: '#888', textAlign: 'left', paddingLeft: 0 }}>
+                {reviewStats.count > 0 ? (
+                  <span style={{ cursor: 'pointer', display: 'inline-block' }}
+                    onClick={() => {
+                      const section = document.getElementById('place-reviews-section');
+                      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }}
+                    title="Ver reseñas"
+                  >
+                    <span style={{ color: '#ffc107', fontWeight: 'bold', marginRight: 2 }}>★</span>
+                    <span style={{ color: '#222', fontWeight: 'bold', fontSize: '1.15em' }}>{reviewStats.average?.toFixed(1)}</span>
+                    {" "}
+                    <span style={{ fontSize: '0.95em', color: '#888' }}>({reviewStats.count} reseña{reviewStats.count === 1 ? '' : 's'})</span>
+                  </span>
+                ) : (
+                  <span>Sin reseñas</span>
+                )}
+              </div>
+
+              {place.categories && place.categories.length > 0 && (
+                <div className="place-categories">
+                  {place.categories.map(cat => (
+                    <span key={cat.id} className="category-badge">
+                      {cat.name}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {place.description && (
+                <div className="place-description">
+                  <h2>Descripción</h2>
+                  <p>{place.description}</p>
+                </div>
+              )}
+
+              {/* Sección de Ecohoteles Cercanos */}
+              <div className="related-ecohotels-section" style={{ margin: '32px 0 0 0' }}>
+                <h2 style={{ color: '#1c1c1a', marginBottom: 18, borderBottom: '2px solid #24a148', paddingBottom: 8 }}>
+                  🏨 Ecohoteles cercanos
+                </h2>
+                {(place.ecohoteles && place.ecohoteles.length > 0) ? (
+                  <div className="related-cards-grid">
+                    {place.ecohoteles.map(ecohotel => (
+                      <Link
+                        to={`/ecohoteles/${ecohotel.id}`}
+                        key={ecohotel.id}
+                        className="related-card"
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                      >
+                        <div className="related-card-image-wrapper">
+                          <img
+                            src={ecohotel.image || '/imagenes/placeholder.svg'}
+                            alt={ecohotel.name}
+                            className="related-card-image"
+                            onError={e => { e.target.src = '/imagenes/placeholder.svg'; }}
+                          />
+                        </div>
+                        <div className="related-card-title">{ecohotel.name}</div>
+                        <div style={{ fontSize: '0.95em', color: '#888', margin: '4px 0 8px 16px', textAlign: 'left', width: 'auto' }}>
+                          {typeof ecohotel.average_rating !== 'undefined' && typeof ecohotel.reviews_count !== 'undefined' ? (
+                            ecohotel.reviews_count === 0 || ecohotel.average_rating === 0 || ecohotel.average_rating === null ? (
+                              <span>Sin reseñas</span>
+                            ) : (
+                              <span>
+                                <span style={{ color: '#ffc107', fontWeight: 'bold', marginRight: 2 }}>★</span>
+                                <span style={{ color: '#222', fontWeight: 'bold' }}>{parseFloat(ecohotel.average_rating).toFixed(1)}</span>
+                                {" "}
+                                <span style={{ fontSize: '0.95em', color: '#888' }}>({ecohotel.reviews_count} reseña{ecohotel.reviews_count === 1 ? '' : 's'})</span>
+                              </span>
+                            )
+                          ) : (
+                            <span>Sin reseñas</span>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ color: '#888', fontSize: '1.1em', padding: '18px 0' }}>
+                    No hay ecohoteles cercanos registrados hasta el momento.
+                  </div>
+                )}
+              </div>
+
+              {/* Información de Contacto */}
+              {(place.telefono || place.email || place.sitio_web) && (
+                <div className="place-contact" style={{ marginTop: '25px', padding: '20px', background: '#f9f9f9', borderRadius: '10px' }}>
+                  <h2 style={{ marginTop: 0, marginBottom: '15px', color: '#1c1c1a' }}>📞 Información de Contacto</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {place.telefono && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <strong>Teléfono:</strong>
+                        <a href={`tel:${place.telefono}`} style={{ color: '#24a148', textDecoration: 'none' }}>
+                          {place.telefono}
+                        </a>
+                      </div>
+                    )}
+                    {place.email && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <strong>Email:</strong>
+                        <a href={`mailto:${place.email}`} style={{ color: '#24a148', textDecoration: 'none' }}>
+                          {place.email}
+                        </a>
+                      </div>
+                    )}
+                    {place.sitio_web && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <strong>Sitio Web:</strong>
+                        <a href={place.sitio_web} target="_blank" rel="noopener noreferrer" style={{ color: '#24a148', textDecoration: 'none' }}>
+                          {place.sitio_web}
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Horarios y Disponibilidad - SIEMPRE VISIBLE */}
+              <div className="place-schedules" style={{ marginTop: '25px', padding: '25px', background: '#fff', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+                <h2 style={{ marginTop: 0, color: '#1c1c1a', borderBottom: '2px solid #24a148', paddingBottom: '10px' }}>
+                  📅 Horarios y Disponibilidad
+                </h2>
+                
+                {schedules && schedules.length > 0 ? (
+                  <>
+                    <div style={{ marginBottom: '30px' }}>
+                      <h3 style={{ color: '#24a148', marginBottom: '15px' }}>Horarios de Atención</h3>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
+                        {['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'].map(dia => {
+                          const horariosDelDia = schedules.filter(s => s.dia_semana === dia);
+                          return (
+                            <div 
+                              key={dia}
+                              style={{
+                                padding: '15px',
+                                background: horariosDelDia.length > 0 ? '#f0f9f4' : '#f9f9f9',
+                                borderRadius: '8px',
+                                borderLeft: `4px solid ${horariosDelDia.length > 0 ? '#24a148' : '#ccc'}`
+                              }}
+                            >
+                              <strong style={{ textTransform: 'capitalize', color: horariosDelDia.length > 0 ? '#1c1c1a' : '#999', display: 'block', marginBottom: '8px' }}>
+                                {dia.charAt(0).toUpperCase() + dia.slice(1)}
+                              </strong>
+                              {horariosDelDia.length > 0 ? (
+                                horariosDelDia.map((schedule, idx) => {
+                                  const horaInicio = schedule.hora_inicio ? schedule.hora_inicio.substring(0, 5) : '';
+                                  const horaFin = schedule.hora_fin ? schedule.hora_fin.substring(0, 5) : '';
+                                  const formatTime = (time) => {
+                                    if (!time) return '';
+                                    const [hours, minutes] = time.split(':');
+                                    const hour = parseInt(hours);
+                                    const period = hour >= 12 ? 'PM' : 'AM';
+                                    const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+                                    return `${displayHour}:${minutes} ${period}`;
+                                  };
+                                  return (
+                                    <div key={idx} style={{ color: '#2d5016', fontSize: '0.95em', margin: '5px 0', fontWeight: '500' }}>
+                                      🕐 {formatTime(horaInicio)} - {formatTime(horaFin)}
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <div style={{ color: '#999', fontSize: '0.9em' }}>Cerrado</div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {reservations && reservations.length > 0 ? (
+                      <div style={{ marginTop: '30px', paddingTop: '25px', borderTop: '2px solid #ececec' }}>
+                        <h3 style={{ color: '#d7263d', marginBottom: '15px' }}>⚠️ Horarios Ocupados (Próximas Reservas)</h3>
+                        <div style={{ display: 'grid', gap: '12px' }}>
+                          {Object.entries(
+                            reservations.reduce((acc, res) => {
+                              const fecha = res.fecha_visita;
+                              if (!acc[fecha]) acc[fecha] = [];
+                              acc[fecha].push(res);
+                              return acc;
+                            }, {})
+                          ).map(([fecha, reservasDelDia]) => {
+                            // Crear fecha en hora local para evitar problemas de zona horaria
+                            // Formato: "YYYY-MM-DD" -> new Date(year, month-1, day) usa hora local
+                            const [year, month, day] = fecha.split('-').map(Number);
+                            const fechaObj = new Date(year, month - 1, day);
+                            const diasSemana = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+                            const diaSemana = diasSemana[fechaObj.getDay()];
+                            return (
+                              <div key={fecha} style={{ padding: '15px', background: '#fff5f5', borderRadius: '8px', borderLeft: '4px solid #d7263d' }}>
+                                <strong style={{ color: '#1c1c1a', display: 'block', marginBottom: '10px' }}>
+                                  📅 {diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1)}, {fechaObj.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                </strong>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                                  {reservasDelDia.map((reservation, idx) => {
+                                    const formatTime = (time) => {
+                                      if (!time) return 'Sin hora';
+                                      const [hours, minutes] = time.split(':');
+                                      const hour = parseInt(hours);
+                                      const period = hour >= 12 ? 'PM' : 'AM';
+                                      const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+                                      return `${displayHour}:${minutes} ${period}`;
+                                    };
+                                    return (
+                                      <div key={idx} style={{ padding: '8px 12px', background: '#fff', border: '1px solid #d7263d', borderRadius: '6px', fontSize: '0.9em' }}>
+                                        <span style={{ color: '#d7263d', fontWeight: '600' }}>
+                                          🕐 {formatTime(reservation.hora_visita)}
+                                        </span>
+                                        {reservation.personas && (
+                                          <span style={{ color: '#6c6c68', marginLeft: '8px' }}>
+                                            ({reservation.personas} {reservation.personas === 1 ? 'persona' : 'personas'})
+                                          </span>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <p style={{ marginTop: '15px', color: '#6c6c68', fontSize: '0.9em', fontStyle: 'italic' }}>
+                          💡 Estos horarios ya están reservados. Selecciona otro horario disponible al hacer tu reserva.
+                        </p>
+                      </div>
+                    ) : (
+                      <div style={{ marginTop: '30px', padding: '15px', background: '#e8f5e9', borderRadius: '8px', borderLeft: '4px solid #24a148' }}>
+                        <p style={{ margin: 0, color: '#2d5016', fontWeight: '500' }}>
+                          ✅ No hay reservas programadas. Todos los horarios están disponibles.
+                        </p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div style={{ padding: '20px', background: '#fff3cd', borderRadius: '8px', borderLeft: '4px solid #ffc107' }}>
+                    <p style={{ margin: 0, color: '#856404', fontWeight: '500' }}>
+                      ⚠️ No hay horarios configurados para este lugar.
+                    </p>
+                    <p style={{ margin: '10px 0 0 0', color: '#856404', fontSize: '0.9em' }}>
+                      Los administradores pueden configurar los horarios desde el panel de administración.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Mapa y botón Cómo llegar - debajo de horarios y disponibilidad */}
+              {place.latitude && place.longitude && (
+                <div className="place-map-section" style={{ margin: '28px 0 0 0' }}>
+                  <div style={{ borderRadius: 10, overflow: 'hidden', boxShadow: '0 2px 8px rgba(44,95,45,0.08)', marginBottom: 10 }}>
+                    <iframe
+                      src={`https://www.google.com/maps?q=${place.latitude},${place.longitude}&z=15&output=embed`}
+                      width="100%"
+                      height="260"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Mapa del lugar"
+                    />
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="map-link-button"
+                    style={{ display: 'inline-block', background: '#24a148', color: '#fff', padding: '10px 22px', borderRadius: 8, fontWeight: 600, textDecoration: 'none', marginTop: 2 }}
+                  >
+                    🚗 Cómo llegar
+                  </a>
+                </div>
+              )}
+
+              <div className="place-actions">
+                <button 
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      setReservationModal({ isOpen: true, place: place });
+                    } else {
+                      setMessage('Debes iniciar sesión para reservar');
+                      setTimeout(() => navigate('/login'), 1500);
+                    }
+                  }}
+                  className="reserve-button"
+                >
+                  📅 Reservar Visita
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Formulario para agregar reseña */}
+          <div id="review-form-section">
+            <ReviewForm
+              placeId={place.id}
+              user={user}
+              isAuthenticated={isAuthenticated}
+              onReviewAdded={() => loadReviews(place.id)}
+            />
+          </div>
+
+          {/* Sección de Reseñas */}
+          <div className="place-reviews-section" id="place-reviews-section">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18 }}>
+              {reviewStats.count > 0 && (
+                <div style={{ fontSize: '2.7em', fontWeight: 700, color: '#222', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: '#ffc107', fontSize: '1.1em', marginRight: 6 }}>★</span>
+                  {reviewStats.average?.toFixed(1)}
+                </div>
+              )}
+              <h2 style={{ margin: 0 }}>Reseñas y Comentarios</h2>
+            </div>
+            {reviews.length === 0 ? (
+              <div className="no-reviews">
+                <p>No hay reseñas aún. ¡Sé el primero en comentar!</p>
+                {isAuthenticated && (
+                  <button
+                    className="add-review-link"
+                    onClick={() => {
+                      const form = document.getElementById('review-form-section');
+                      if (form) {
+                        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        form.querySelector('textarea, input, select')?.focus();
+                      }
+                    }}
+                    style={{
+                      backgroundColor: '#24a148',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '6px',
+                      padding: '10px 20px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      marginTop: '10px'
+                    }}
+                  >
+                    Agregar Reseña
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="reviews-list">
+                {reviews.slice(0, 5).map(review => (
+                  <div key={review.id} className="review-card">
+                    <div className="review-header">
+                      <img 
+                        src={review.usuario?.foto_perfil || usuarioImg} 
+                        alt={review.usuario?.name || 'Usuario'}
+                        className="review-avatar"
+                        onError={(e) => {
+                          e.target.src = usuarioImg;
+                        }}
+                      />
+                      <div className="review-user-info">
+                        <h4>{review.usuario?.name || 'Usuario Anónimo'}</h4>
+                        <div className="review-rating">
+                          {renderStars(review.rating || 0)}
+                        </div>
+                        {review.fecha_comentario && (
+                          <span className="review-date">
+                            {new Date(review.fecha_comentario).toLocaleDateString('es-ES', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="review-comment">{review.comment}</p>
+                    
+                    {/* Formulario de edición inline */}
+                    {editingReviewId === review.id ? (
+                      <div style={{ marginTop: '15px', padding: '15px', background: '#f9f9f9', borderRadius: '8px', borderLeft: '4px solid #3498db' }}>
+                        <h4 style={{ marginTop: 0, color: '#2c3e50' }}>Editar tu reseña</h4>
+                        
+                        {/* Estrellas */}
+                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '8px', color: '#2c3e50' }}>
+                          Calificación *
+                        </label>
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', alignItems: 'center' }}>
+                          {[1, 2, 3, 4, 5].map(n => (
+                            <button
+                              key={n}
+                              type="button"
+                              onClick={() => setEditForm(prev => ({ ...prev, rating: n }))}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '1.5rem',
+                                color: editForm.rating >= n ? '#ffc107' : '#ddd',
+                                padding: '0',
+                                marginRight: '4px',
+                                transition: 'color 0.2s'
+                              }}
+                            >
+                              ★
+                            </button>
+                          ))}
+                        </div>
+                        
+                        {/* Comentario */}
+                        <label style={{ display: 'block', fontWeight: 600, marginBottom: '8px', color: '#2c3e50' }}>
+                          Comentario *
+                        </label>
+                        <textarea
+                          name="comment"
+                          value={editForm.comment}
+                          onChange={handleEditReviewChange}
+                          maxLength={500}
+                          rows={3}
+                          style={{
+                            width: '100%',
+                            padding: '10px',
+                            border: '2px solid #e0e0e0',
+                            borderRadius: '6px',
+                            fontFamily: 'inherit',
+                            fontSize: '0.95rem',
+                            marginBottom: '8px',
+                            boxSizing: 'border-box'
+                          }}
+                        />
+                        <div style={{ textAlign: 'right', fontSize: '0.85rem', color: '#999', marginBottom: '12px' }}>
+                          {editForm.comment.length}/500 caracteres
+                        </div>
+                        
+                        {/* Botones */}
+                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                          <button
+                            onClick={() => submitEditReview(review.id)}
+                            disabled={submittingEdit}
+                            style={{
+                              padding: '10px 20px',
+                              background: '#27ae60',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              fontWeight: 600,
+                              opacity: submittingEdit ? 0.6 : 1
+                            }}
+                          >
+                            Guardar cambios
+                          </button>
+                          <button
+                            onClick={cancelEditReview}
+                            disabled={submittingEdit}
+                            style={{
+                              padding: '10px 20px',
+                              background: '#95a5a6',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              fontWeight: 600
+                            }}
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Botones de editar y eliminar */}
+                        {isAuthenticated && user && (user.id === review.usuario?.id || user.is_admin) && (
+                          <div style={{ marginTop: '12px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                            {user.id === review.usuario?.id && (
+                              <button
+                                onClick={() => startEditReview(review)}
+                                style={{
+                                  padding: '8px 16px',
+                                  background: '#3498db',
+                                  color: 'white',
+                                  border: 'none',
+                                  borderRadius: '6px',
+                                  fontSize: '0.9rem',
+                                  fontWeight: 600,
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                Editar
+                              </button>
+                            )}
+                            {(user.id === review.usuario?.id || user.is_admin) && (
+                              <button
+                                onClick={() => {
+                                  if (window.confirm('¿Estás seguro de eliminar esta reseña?')) {
+                                    handleDeleteReview(review.id);
+                                  }
+                                }}
+                                style={{
+                                  padding: '8px 16px',
+                                  background: '#e74c3c',
+                                  color: 'white',
+                                  border: 'none',
+                                  borderRadius: '6px',
+                                  fontSize: '0.9rem',
+                                  fontWeight: '600',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                Eliminar
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
+                {reviews.length > 5 && (
+                  <Link to="/comentarios2" className="view-all-reviews">
+                    Ver todas las reseñas ({reviews.length})
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Modal de Reserva */}
+      {reservationModal.isOpen && reservationModal.place && (
+        <ReservationModal
+          place={reservationModal.place}
+          isOpen={reservationModal.isOpen}
+          onClose={() => setReservationModal({ isOpen: false, place: null })}
+          onSuccess={async () => {
+            // Recargar las reservas después de crear una nueva
+            if (place && place.id) {
+              // Recargar el lugar completo para obtener las reservas actualizadas
+              await loadPlace(true); // skipSchedules = true para no recargar horarios
+            }
+          }}
+        />
+      )}
+
+      <Footer />
+    </div>
+  );
+};
+
+export default PlaceDetailPage;
+

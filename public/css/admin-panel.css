@@ -1,0 +1,214 @@
+body {
+    font-family: system-ui, 'Segoe UI', Roboto, Arial;
+    margin: 0;
+    padding: 20px;
+    background: #f6f8fa;
+}
+
+body.high-contrast {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+body.high-contrast .container,
+body.high-contrast .admin-panel {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast h4,
+body.high-contrast h5,
+body.high-contrast h6,
+body.high-contrast p,
+body.high-contrast span,
+body.high-contrast a {
+    color: #000000 !important;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+label {
+    display: block;
+    margin-top: 8px;
+    font-weight: 600;
+    color: #1c1c1a;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 8px 12px;
+    margin-right: 6px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+button[type="submit"], #save, #user-save {
+    background: #24a148;
+    color: white;
+}
+
+button[type="submit"]:hover, #save:hover, #user-save:hover {
+    background: #1e8e3e;
+}
+
+#cancel, #user-cancel {
+    background: #6c6c68;
+    color: white;
+}
+
+#cancel:hover, #user-cancel:hover {
+    background: #5a5a56;
+}
+
+.edit, .user-edit {
+    background: #0078d4;
+    color: white;
+}
+
+.edit:hover, .user-edit:hover {
+    background: #006bb3;
+}
+
+.delete, .user-delete {
+    background: #d7263d;
+    color: white;
+}
+
+.delete:hover, .user-delete:hover {
+    background: #b81e32;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+td, th {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+th {
+    background: #f9f9f9;
+    font-weight: 600;
+    color: #6c6c68;
+}
+
+.thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.tabs {
+    margin-bottom: 12px;
+    display: flex;
+    gap: 10px;
+}
+
+.tabs button {
+    padding: 8px 12px;
+    margin-right: 6px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.tabs button.active {
+    background: #0078d4;
+    color: #fff;
+}
+
+.panel {
+    margin-top: 20px;
+}
+
+.status-message {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    display: none;
+}
+
+.status-message.success {
+    background: #d4edda;
+    color: #155724;
+    display: block;
+}
+
+.status-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        padding: 14px;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+    }
+
+    .actions {
+        flex-wrap: wrap;
+    }
+
+    table {
+        min-width: 640px;
+    }
+}
+

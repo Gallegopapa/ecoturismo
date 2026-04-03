@@ -1,0 +1,34 @@
+/* CARDS
+.contenedorcards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 90%;
+}
+
+.card {
+  flex: 1 1 300px;
+  max-width: 320px;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+}
+
+#bold {
+  font-weight: bold;
+} 
+

@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: #fff;
+    color: #333;
+    line-height: 1.6;
+}
+
+.contenedorTodo {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+}
+
+/* Estilos del encabezado */
+.middle-text {
+    text-align: center;
+    padding: 2rem 0;
+    margin-bottom: 3rem;
+}
+
+.middle-text h4 {
+    font-size: 2.5rem;
+    /* font-weight: 500; */
+    color: #2ecc71;
+    margin-bottom: 0.5rem;
+}
+
+.middle-text h2 {
+    font-size: 1.51rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Contenedor de reseñas */
+.review-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Tarjetas de reseñas */
+.box {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #eee;
+}
+
+.box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.box p {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Contenido interno de las tarjetas */
+.in-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bx-img img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #2ecc71;
+}
+
+.bxx-text h4 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 0.3rem;
+}
+
+.bxx-text h5 {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 400;
+}
+
+/* Estrellas de calificación */
+.ratings {
+    display: flex;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+}
+
+.ratings i {
+    color: gray;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+/* Sección de comentarios */
+.comentarios-form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-top: 3rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+}
+
+.input-container {
+    margin-bottom: 1.5rem;
+}
+
+.input {
+    width: 100%;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    color: #333;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 120px;
+    transition: all 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #2ecc71;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
+}
+
+.input::placeholder {
+    color: #999;
+}
+
+/* Botones */
+.btn, .boton-volver {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    background: #2ecc71;
+    color: #fff;
+}
+
+.btn:hover, .boton-volver:hover {
+    background: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
+.boton-volver {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contenedorTodo {
+        padding: 1rem;
+    }
+
+    .middle-text h2 {
+        font-size: 2rem;
+    }
+
+    .review-content {
+        grid-template-columns: 1fr;
+    }
+
+    .boton-volver {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .middle-text h2 {
+        font-size: 1.75rem;
+    }
+
+    .middle-text h4 {
+        font-size: 1rem;
+    }
+
+    .box {
+        padding: 1rem;
+    }
+
+    .btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    .boton-volver{
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+}
