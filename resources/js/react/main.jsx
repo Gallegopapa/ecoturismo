@@ -24,6 +24,10 @@ const router = createBrowserRouter([
     element: <Loginpage />,
   },
   {
+    path: "/registro",
+    element: <Loginpage />,
+  },
+  {
     path: "/pagLogueados",
     element: <PagLogueados />,
   }

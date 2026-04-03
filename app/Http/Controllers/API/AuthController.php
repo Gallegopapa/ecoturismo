@@ -140,5 +140,103 @@ class AuthController extends Controller
         ], 201);
     }
 
+    /**
+     * LOGIN
+     */
+    public function login(Request $request): JsonResponse
+    {
 
+        $validator = Validator::make($request->all(), [
+
+            'login' => 'nullable|string|max:255',
+            'email' => 'nullable|string|max:255',
+            'username' => 'nullable|string|max:255',
+            'password' => 'required|string'
+
+        ], [
+
+            'password.required' => 'La contraseña es requerida.'
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $rawLogin = $request->input('login')
+            ?? $request->input('email')
+            ?? $request->input('username');
+
+        $login = strtolower(trim((string) $rawLogin));
+
+        if ($login === '') {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => [
+                    'login' => ['El correo o usuario es requerido.']
+                ]
+            ], 422);
+        }
+
+        $password = $request->password;
+
+        $user = Usuarios::whereRaw('LOWER(email) = ?', [$login])
+            ->orWhereRaw('LOWER(name) = ?', [$login])
+            ->first();
+
+        if (!$user) {
+
+            Log::warning('Login fallido - usuario no encontrado', [
+                'login' => $login
+            ]);
+
+            return response()->json([
+                'message' => 'Credenciales incorrectas'
+            ], 401);
+        }
+
+        if (!Hash::check($password, $user->password)) {
+
+            Log::warning('Login fallido - contraseña incorrecta', [
+                'user_id' => $user->id
+            ]);
+
+            return response()->json([
+                'message' => 'Credenciales incorrectas'
+            ], 401);
+        }
+
+        // eliminar tokens anteriores
+        $user->tokens()->delete();
+
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        Log::info('Login exitoso', [
+            'user_id' => $user->id
+        ]);
+
+        return response()->json([
+
+            'message' => 'Inicio de sesión exitoso',
+
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'telefono' => $user->telefono,
+                'foto_perfil' => $user->foto_perfil,
+                'fecha_registro' => $user->fecha_registro,
+                'is_admin' => $user->is_admin,
+                'tipo_usuario' => $user->tipo_usuario
+            ],
+
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'expires_in' => 60 * 60 * 24 * 30
+
+        ], 200);
+    }
 }

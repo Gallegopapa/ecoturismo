@@ -1,5 +1,18 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 2: Implementación US-AUTH-02 (Login de Usuarios)
+**Fecha:** 03 Abril 2026
+**Archivos de Backend restaurados:**
+- Endpoints: Se habilitó formalmente `POST /api/login` en `routes/api.php`.
+- Controladores: Se reintrodujo orgánicamente el método `login()` en `AuthController` utilizando la lógica que fue previamente encapsulada en develop.
+**Archivos de React:** 
+- La capa de Interfaz (`login/page.jsx`) y el Contexto (`AuthContext.jsx`) ya contaban previamente con la funcionalidad base estructurada, por lo cual se reactivaron plenamente.
+**Limpieza realizada:** 
+- Mantenimiento del aislamiento: Continúan censurados los métodos de sesión extendidos (`logout`, `me`, `verifyToken`) a la espera de sus respectivas OUS.
+**Estado de la Tarea:** Terminada. El login devuelve correctamente el Bearer Token y los atributos `tipo_usuario` / `is_admin`. Todo listo para el `git commit`.
+
+---
+
 ## Commit 1: Implementación US-AUTH-01 (Registro de Usuarios)
 **Fecha:** 03 Abril 2026
 **Archivos base extraídos e integrados:**
