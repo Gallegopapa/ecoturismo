@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 7: Implementación US-PROF-02 (Actualización de Perfil)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ProfileController.php` (método `update()` y dependencias pasivas `NoProfanity` / `AllowedEmailDomain`).
+- Frontend: Vista `perfil/page.jsx` y servicio de puente `profileService.update` en `api.js`.
+**Integración y Aislamiento:**
+- Endpoints: Se validó y categorizó semánticamente la disponibilidad de `PUT /api/profile` (para JSON) y `POST /api/profile` (con spoofing `_method=PUT` para `multipart/form-data`) en `routes/api.php` bajo `auth:sanctum`.
+- React UI: Los campos iterables del formulario de la interfaz gráfica y los estados nativos correspondientes a la carga de foto, nombre, email y teléfono se validaron y dejaron plenamente integrados como fue programado en develop originalmente, ya que no presentan ni invaden módulos futuros del monolito.
+**Estado de la Tarea:** Terminada. Todo está listo para su `git commit`.
+
+---
+
 ## Commit 6: Implementación US-PROF-01 (Ver Perfil Propio)
 **Fecha:** 03 Abril 2026
 **Archivos extraídos y montados:**

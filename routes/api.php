@@ -37,9 +37,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // US-PROF-01: Perfil de usuario
     Route::get('/profile', [\App\Http\Controllers\API\ProfileController::class, 'show']);
+
+    // US-PROF-02: Actualizar Perfil
     Route::post('/profile', [\App\Http\Controllers\API\ProfileController::class, 'update']); // POST para FormData con imagen
     Route::put('/profile', [\App\Http\Controllers\API\ProfileController::class, 'update']); // PUT para JSON sin imagen
+
+    // US-PROF-03: Cambiar Contraseña
     Route::put('/profile/password', [\App\Http\Controllers\API\ProfileController::class, 'changePassword']);
+
+    // US-PROF-04: Eliminar Cuenta
     Route::delete('/profile', [\App\Http\Controllers\API\ProfileController::class, 'destroy']); // Eliminar cuenta
 
 });
