@@ -215,5 +215,22 @@ class ReservationController extends Controller
         return response()->json($reservations);
     }
 
-    // Metodos show, update, destroy bloqueados para aislar el alcance del sprint futuro
+    /**
+     * Eliminar una reserva
+     */
+    public function destroy(Request $request, Reservation $reservation): JsonResponse
+    {
+        $user = $request->user();
+
+        // Verificar que la reserva pertenece al usuario autenticado O que el usuario es admin
+        if ($reservation->user_id !== $user->id && !$user->is_admin) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $reservation->delete();
+
+        return response()->json(['message' => 'Reserva eliminada correctamente'], 200);
+    }
+
+    // Metodos show, update bloqueados para aislar el alcance del sprint futuro
 }

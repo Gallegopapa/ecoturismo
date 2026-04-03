@@ -59,6 +59,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // US-RES-02: Ver Mis Reservas
     Route::get('/reservations/my', [\App\Http\Controllers\API\ReservationController::class, 'myReservations']);
+
+    // US-RES-03: Cancelar Reserva
+    Route::delete('/reservations/{reservation}', [\App\Http\Controllers\API\ReservationController::class, 'destroy']);
 });
 
 // US-PLCS-01: Explorar Lugares

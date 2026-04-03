@@ -40,10 +40,6 @@ const ReservationsPage = () => {
   };
 
   const handleDelete = async (id) => {
-    setMessage('❌ La funcionalidad de cancelar reservas corresponde al próximo módulo.');
-    setTimeout(() => setMessage(''), 3000);
-    return;
-    /* Mutilado para aislamiento US-RES-03
     if (!window.confirm('¿Estás seguro de cancelar esta reserva?')) {
       return;
     }
@@ -58,7 +54,6 @@ const ReservationsPage = () => {
       setMessage('❌ Error al cancelar la reserva');
       setTimeout(() => setMessage(''), 3000);
     }
-    */
   };
 
   const formatDate = (dateString) => {

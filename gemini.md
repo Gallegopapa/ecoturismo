@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 15: Implementación US-RES-03 (Cancelar una Reserva)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReservationController.php` (se restauró el método `destroy()` logrando atrapar por Inyección de Dependencias a la `Reservation` e invocando su borrado).
+- Endpoints: `routes/api.php` (se activó el endpoint `DELETE /api/reservations/{reservation}` para el frontend bajo autenticación Sanctum).
+- Frontend React: `reservations/page.jsx` (se revirtió la mutilación estratégica sobre `handleDelete()` reconectando el Prompt de validación del navegador nativo con la petición de Axios alojada en `reservationsService.delete(id)`).
+**Integración y Aislamiento (Mutilación):**
+- Cancelación de Reservas: El perimetral que impide que un administrador cruce estas rutas fue mantenido en los controladores (no está permitida la interacción sin `$user->is_admin === true` pero de momento el Admin se encuentra desactivado visualmente en flujos futuros).
+**Estado de la Tarea:** Terminada y validada en su respectiva UI y servidor. Listo para su `git commit`.
+
+---
+
 ## Commit 14: Implementación US-RES-02 (Ver Mis Reservas)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**
