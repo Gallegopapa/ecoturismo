@@ -14,6 +14,10 @@ Route::post('/register', [AuthController::class, 'register']);
 // US-AUTH-02: Login de Usuarios
 Route::post('/login', [AuthController::class, 'login']);
 
+// US-AUTH-04: Recuperación de Contraseña
+Route::post('/password/forgot', [\App\Http\Controllers\API\PasswordResetController::class, 'sendResetLink']);
+Route::post('/password/reset', [\App\Http\Controllers\API\PasswordResetController::class, 'resetPassword']);
+
 // ============================================
 // RUTAS PROTEGIDAS (requieren autenticación con Sanctum)
 // ============================================

@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 4: Implementación US-AUTH-04 (Recuperación de Contraseña)
+**Fecha:** 03 Abril 2026
+**Archivos extraídos y montados:**
+- Backend: `PasswordResetController.php`, `ResetPasswordNotification.php` y la migración `2026_02_06_000001_create_password_reset_tokens_table.php`.
+- Frontend: Módulos completos en React `forgot-password/page.jsx`, `forgot-password/sent.jsx`, y `reset-password/page.jsx`.
+**Integración:**
+- Endpoints: Se inyectaron `POST /api/password/forgot` y `POST /api/password/reset` en `routes/api.php` bajo la zona pública.
+- React Router: Se anclaron las tres nuevas vistas de recuperación a `main.jsx` (`/forgot-password`, `/forgot-password/sent`, `/reset-password`).
+**Estado de la Tarea:** Terminada. El ciclo de recuperación de contraseña está ensamblado y aislado. Listo para el `git commit`.
+
+---
+
 ## Commit 3: Implementación US-AUTH-03 (Logout)
 **Fecha:** 03 Abril 2026
 **Archivos de Backend restaurados:**

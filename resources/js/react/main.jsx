@@ -5,7 +5,9 @@ import "./styles/accessibility-clean.css"; // Estilos limpios de accesibilidad
 import App from "./App.jsx";
 import Loginpage from "./login/page.jsx";
 import PagLogueados from "./pagLogueados.jsx";
-
+import ForgotPasswordPage from "./forgot-password/page.jsx";
+import ForgotPasswordSentPage from "./forgot-password/sent.jsx";
+import ResetPasswordPage from "./reset-password/page.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -30,6 +32,18 @@ const router = createBrowserRouter([
   {
     path: "/pagLogueados",
     element: <PagLogueados />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: "/forgot-password/sent",
+    element: <ForgotPasswordSentPage />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage />,
   }
 ]);
 
