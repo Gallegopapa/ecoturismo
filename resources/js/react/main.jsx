@@ -9,6 +9,13 @@ import ForgotPasswordPage from "./forgot-password/page.jsx";
 import ForgotPasswordSentPage from "./forgot-password/sent.jsx";
 import ResetPasswordPage from "./reset-password/page.jsx";
 import PerfilPage from "./perfil/page.jsx";
+import PlacesPage from "./places/page.jsx";
+import ParaisosAcuaticos from "./places2/paraisosAcuaticos/page.jsx";
+import LugaresMontanosos from "./places2/lugaresMontanosos/page.jsx";
+import ParquesYMas from "./places2/parquesYMas/page.jsx";
+import TerritoriosDelCafe from "./places2/territoriosDelCafe/page.jsx";
+import PlaceDetailPage from "./places/detail/page.jsx";
+import MapPage from "./map/page.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -49,6 +56,38 @@ const router = createBrowserRouter([
   {
     path: "/perfil",
     element: <PerfilPage />,
+  },
+  {
+    path: "/lugares",
+    element: <PlacesPage />,
+  },
+  {
+    path: "/places",
+    element: <PlacesPage />,
+  },
+  {
+    path: "/lugares/:id",
+    element: <PlaceDetailPage />,
+  },
+  {
+    path: "/paraisosAcuaticos",
+    element: <ParaisosAcuaticos />,
+  },
+  {
+    path: "/lugaresMontanosos",
+    element: <LugaresMontanosos />,
+  },
+  {
+    path: "/parquesYMas",
+    element: <ParquesYMas />,
+  },
+  {
+    path: "/territoriosDelCafe",
+    element: <TerritoriosDelCafe />,
+  },
+  {
+    path: "/mapa",
+    element: <MapPage />,
   }
 ]);
 

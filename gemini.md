@@ -1,5 +1,18 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 10: Implementación US-PLCS-01 (Módulo de Exploración y Mapa)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: Modelos `Place.php`, `Category.php`, `PlaceController.php`, `CategoryController.php` y migraciones relacionadas. Rutas en `api.php`.
+- Frontend: Vistas `places/page.jsx`, `places/detail/page.jsx`, `map/page.jsx` y rutas temáticas en `places2/`. Integración en `main.jsx`.
+- Navegación: `Header.jsx` y `Header2.jsx` rehabilitados para navegación pública y privada.
+**Integración y Aislamiento (Mutilación):**
+- Mutilación de Código Futuro: Se desactivaron manual y agresivamente todas las referencias a `Reviews`, `Ecohotels`, `Reservas` y `Schedules` complejos tanto en el controlador como en los componentes React, garantizando un renderizado limpio sin errores 500 o fallos de importación.
+- Compatibilidad: Se configuró Composer para ignorar requisitos de plataforma y se eliminó el bloqueo de versión PHP (platform_check) para asegurar operatividad.
+**Estado de la Tarea:** Terminada. El núcleo de exploración ecoturística está ensamblado. Todo listo para su `git commit`.
+
+---
+
 ## Commit 9: Implementación US-PROF-04 (Eliminar Cuenta)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**

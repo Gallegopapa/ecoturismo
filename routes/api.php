@@ -22,6 +22,12 @@ Route::post('/password/reset', [\App\Http\Controllers\API\PasswordResetControlle
 Route::get('/profile/photo/stream', [\App\Http\Controllers\API\ProfileController::class, 'photoByQuery']);
 Route::get('/profile/photo/{filename}', [\App\Http\Controllers\API\ProfileController::class, 'photo'])->where('filename', '.*');
 
+// US-PLCS-01: Explorar Lugares Ecoturísticos (Públicas)
+Route::get('/places', [\App\Http\Controllers\API\PlaceController::class, 'index']);
+Route::get('/places/options', [\App\Http\Controllers\API\PlaceController::class, 'options']);
+Route::get('/categories', [\App\Http\Controllers\API\CategoryController::class, 'index']);
+Route::get('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'show']);
+
 // ============================================
 // RUTAS PROTEGIDAS (requieren autenticación con Sanctum)
 // ============================================

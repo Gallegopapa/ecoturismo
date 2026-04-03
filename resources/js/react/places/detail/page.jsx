@@ -5,8 +5,8 @@ import { placesService, favoritesService, reviewsService } from '@/react/service
 import Header from '@/react/components/Header/Header';
 import Header2 from '@/react/components/Header2/Header2';
 import Footer from '@/react/components/Footer/Footer';
-import ReservationModal from '@/react/components/ReservationModal';
-import ReviewForm from '@/react/components/ReviewForm/ReviewForm';
+// import ReservationModal from '@/react/components/ReservationModal';
+// import ReviewForm from '@/react/components/ReviewForm/ReviewForm';
 import usuarioImg from '@/react/components/imagenes/usuario.jpg';
 import { resolvePlaceImage, getLocalFallbackImage } from '@/react/utils/imageUtils';
 import './page.css';
@@ -410,8 +410,8 @@ const PlaceDetailPage = () => {
                 </div>
               )}
 
-              {/* Sección de Ecohoteles Cercanos */}
-              <div className="related-ecohotels-section" style={{ margin: '32px 0 0 0' }}>
+              {/* Sección de Ecohoteles Cercanos (MUTILADO: No se renderiza en rama actual) */}
+              { false && <div className="related-ecohotels-section" style={{ margin: '32px 0 0 0' }}>
                 <h2 style={{ color: '#1c1c1a', marginBottom: 18, borderBottom: '2px solid #24a148', paddingBottom: 8 }}>
                   🏨 Ecohoteles cercanos
                 </h2>
@@ -457,7 +457,7 @@ const PlaceDetailPage = () => {
                     No hay ecohoteles cercanos registrados hasta el momento.
                   </div>
                 )}
-              </div>
+              </div> }
 
               {/* Información de Contacto */}
               {(place.telefono || place.email || place.sitio_web) && (
@@ -665,15 +665,15 @@ const PlaceDetailPage = () => {
             </div>
           </div>
 
-          {/* Formulario para agregar reseña */}
-          <div id="review-form-section">
+          {/* Formulario para agregar reseña (MUTILADO) */}
+          { false && <div id="review-form-section">
             <ReviewForm
               placeId={place.id}
               user={user}
               isAuthenticated={isAuthenticated}
               onReviewAdded={() => loadReviews(place.id)}
             />
-          </div>
+          </div> }
 
           {/* Sección de Reseñas */}
           <div className="place-reviews-section" id="place-reviews-section">
@@ -896,8 +896,8 @@ const PlaceDetailPage = () => {
         </div>
       </div>
 
-      {/* Modal de Reserva */}
-      {reservationModal.isOpen && reservationModal.place && (
+      {/* Modal de Reserva (MUTILADO NO IMPORTADO) */}
+      {false && reservationModal.isOpen && reservationModal.place && (
         <ReservationModal
           place={reservationModal.place}
           isOpen={reservationModal.isOpen}

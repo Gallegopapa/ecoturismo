@@ -4,7 +4,7 @@ import Header2 from "@/react/components/Header2/Header2";
 import Footer from "@/react/components/Footer/Footer";
 import { useAuth } from "@/react/context/AuthContext";
 import { favoritesService, placesService } from "@/react/services/api";
-import ReservationModal from "@/react/components/ReservationModal";
+// import ReservationModal from "@/react/components/ReservationModal";
 import { resolvePlaceImage, getLocalFallbackImage } from "@/react/utils/imageUtils";
 import "./lugares.css";
 
@@ -294,8 +294,8 @@ export default function LugaresMontanososPage() {
           </div>
         </div>
 
-        {/* Modal de reserva */}
-        {reservationModal.isOpen && reservationModal.place && (
+        {/* Modal de reserva (MUTILADO NO IMPORTADO) */}
+        {false && reservationModal.isOpen && reservationModal.place && (
           <ReservationModal
             place={reservationModal.place}
             isOpen={reservationModal.isOpen}

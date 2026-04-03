@@ -49,6 +49,8 @@ const Header = () => {
                     <nav
                         className={`navbar ${mobileMenuOpen ? "mobile-open" : ""}`}
                     >
+                        <Link to="/lugares" onClick={closeMobileMenu}>Lugares</Link>
+                        <Link to="/mapa" onClick={closeMobileMenu}>Mapa</Link>
                         <Link
                             to="/login"
                             onClick={closeMobileMenu}

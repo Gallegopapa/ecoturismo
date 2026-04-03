@@ -1,0 +1,2 @@
+public/imagenes/mapa2.svg
+resources/js/react/main.jsx

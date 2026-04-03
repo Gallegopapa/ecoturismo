@@ -115,7 +115,50 @@ const Header2 = () => {
         </button>
 
         <nav className={`navbar ${mobileMenuOpen ? "mobile-open" : ""}`}>
-          {/* Enlaces de navegación vaciados para la etapa de Auth pura */}
+          {/* Menú desplegable de Lugares */}
+          <div className="dropdown" ref={placesDropdownRef}>
+            <button
+              className="dropdown-btn"
+              onClick={togglePlacesMenu}
+              aria-expanded={openPlacesMenu}
+              aria-haspopup="true"
+            >
+              Lugares <span className="arrow">{openPlacesMenu ? "▲" : "▼"}</span>
+            </button>
+
+            {openPlacesMenu && (
+              <ul className="dropdown-menu" role="menu">
+                <li>
+                  <Link to="/paraisosAcuaticos" role="menuitem" onClick={handleLinkClick}>
+                    Lugares Acuáticos
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/lugaresMontanosos" role="menuitem" onClick={handleLinkClick}>
+                    Lugares Montañosos
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/parquesYMas" role="menuitem" onClick={handleLinkClick}>
+                    Parques y Más
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/territoriosDelCafe" role="menuitem" onClick={handleLinkClick}>
+                    Territorios del Café
+                  </Link>
+                </li>
+                <li className="menu-divider"></li>
+                <li>
+                  <Link to="/lugares" role="menuitem" onClick={handleLinkClick}>
+                    Todos los Lugares
+                  </Link>
+                </li>
+              </ul>
+            )}
+          </div>
+
+          <Link to="/mapa" className="nav-link" onClick={handleLinkClick}>Mapa</Link>
 
           {/* Menú desplegable de Usuario */}
           <div className="dropdown user-dropdown" ref={userDropdownRef}>
@@ -139,7 +182,6 @@ const Header2 = () => {
 
             {openUserMenu && (
               <ul className="dropdown-menu user-menu" role="menu">
-                {/* Otros enlaces de usuario desactivados por ahora */}
                 <li>
                   <Link to="/perfil" className="menu-link" role="menuitem" onClick={handleLinkClick}>
                     Mi Perfil
