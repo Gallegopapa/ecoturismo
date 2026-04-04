@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 18: Implementación US-REV-03 (Eliminar Reseña propia / Admin)
+**Fecha:** 04 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReviewController.php` (método `destroy()` restaurado permitiendo el borrado por autor o admin).
+- Endpoints: `routes/api.php` (habilitado `DELETE /api/reviews/{review}`).
+- Frontend React: `ecohotels/detail/page.jsx` y `places/detail/page.jsx` (habilitada la funcionalidad real del botón "Eliminar").
+**Integración y Aislamiento (Módulo Completo):**
+- Módulo de Reseñas: Se ha completado el ciclo de vida (CRUD) de reseñas de forma atómica y aislada. Se han removido todas las mutilaciones relacionadas con el servicio de reseñas.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
 ## Commit 17: Implementación US-REV-02 (Editar Reseña Propia)
 **Fecha:** 04 Abril 2026
 **Archivos implicados y mantenidos:**

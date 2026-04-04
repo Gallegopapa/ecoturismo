@@ -63,6 +63,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // US-REV-02: Editar Reseña
     Route::put('/reviews/{review}', [\App\Http\Controllers\API\ReviewController::class, 'update']);
 
+    // US-REV-03: Eliminar Reseña
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\API\ReviewController::class, 'destroy']);
+
     // US-RES-02: Ver Mis Reservas
     Route::get('/reservations/my', [\App\Http\Controllers\API\ReservationController::class, 'myReservations']);
 

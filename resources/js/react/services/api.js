@@ -281,9 +281,7 @@ export const reviewsService = {
 
   delete: async (id) => {
     const response = await api.delete(`/reviews/${id}`);
-    return response.data;
   },
-  // El delete permanece mutilado para el sprint de US-REV-03
 };
 
 // Servicios de favoritos
