@@ -48,4 +48,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // US-PROF-04: Eliminar Cuenta
     Route::delete('/profile', [\App\Http\Controllers\API\ProfileController::class, 'destroy']); // Eliminar cuenta
 
+    // ============================================
+    // RUTAS DE EMPRESA (US-COMP-01)
+    // ============================================
+    Route::prefix('company')->group(function () {
+        Route::get('/places', [\App\Http\Controllers\API\CompanyController::class, 'getPlaces']);
+        Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyController::class, 'getReservationStats']);
+    });
 });

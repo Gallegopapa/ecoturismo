@@ -6,7 +6,7 @@ import "./page.css";
 export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { login, register, isAuthenticated } = useAuth();
+  const { login, register, isAuthenticated, user } = useAuth();
   const isRegister = location.pathname === "/registro";
   const emailInputRef = useRef(null);
 
@@ -39,10 +39,14 @@ export default function Login() {
   }, [isRegister]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/pagLogueados", { replace: true });
+    if (isAuthenticated && user) {
+      if (user.tipo_usuario === 'empresa') {
+        navigate("/company/dashboard", { replace: true });
+      } else {
+        navigate("/pagLogueados", { replace: true });
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +83,11 @@ export default function Login() {
       if (result.success) {
         setMsg("¡Inicio de sesión exitoso! Redirigiendo...");
         setTimeout(() => {
-          navigate("/pagLogueados", { replace: true });
+          if (result.user?.tipo_usuario === 'empresa') {
+            navigate("/company/dashboard", { replace: true });
+          } else {
+            navigate("/pagLogueados", { replace: true });
+          }
         }, 500);
       } else {
         setMsg(result.error || "Error al procesar la solicitud");

@@ -9,6 +9,7 @@ import ForgotPasswordPage from "./forgot-password/page.jsx";
 import ForgotPasswordSentPage from "./forgot-password/sent.jsx";
 import ResetPasswordPage from "./reset-password/page.jsx";
 import PerfilPage from "./perfil/page.jsx";
+import CompanyDashboard from "./company/dashboard/page.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
   {
     path: "/perfil",
     element: <PerfilPage />,
+  },
+  {
+    path: "/company/dashboard",
+    element: <CompanyDashboard />,
   }
 ]);
 
