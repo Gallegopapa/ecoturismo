@@ -71,10 +71,7 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        return response()->json([
-            'message' => 'Lugar actualizado correctamente (Simulación)',
-            'updated_id' => $id
-        ], 200);
+        return response()->json([ 'message' => 'Lugar actualizado correctamente (Simulación)', 'updated_id' => $id ], 200);
     }
 
     /**
@@ -149,33 +146,9 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        /*
-         * Código Futuro Real:
-         * $reservations = Reservation::whereIn('place_id', $user->placesManaged()->pluck('id'))->get();
-         */
         $reservations = [
-            [
-                'id' => 1,
-                'place_name' => 'Reserva Natural La Pastora',
-                'client_name' => 'Juan Pérez',
-                'email' => 'juan.perez@gmail.com',
-                'phone' => '+57 321 000 0000',
-                'fecha_visita' => '2025-05-15',
-                'hora_visita' => '10:00',
-                'personas' => 4,
-                'status' => 'pending'
-            ],
-            [
-                'id' => 2,
-                'place_name' => 'Reserva Natural La Pastora',
-                'client_name' => 'María García',
-                'email' => 'maria.garcia@gmail.com',
-                'phone' => '+57 310 999 9999',
-                'fecha_visita' => '2025-05-16',
-                'hora_visita' => '14:30',
-                'personas' => 2,
-                'status' => 'accepted'
-            ]
+            [ 'id' => 1, 'place_name' => 'Reserva Natural La Pastora', 'client_name' => 'Juan Pérez', 'email' => 'juan.perez@gmail.com', 'phone' => '+57 321 000 0000', 'fecha_visita' => '2025-05-15', 'hora_visita' => '10:00', 'personas' => 4, 'status' => 'pending' ],
+            [ 'id' => 2, 'place_name' => 'Reserva Natural La Pastora', 'client_name' => 'María García', 'email' => 'maria.garcia@gmail.com', 'phone' => '+57 310 999 9999', 'fecha_visita' => '2025-05-16', 'hora_visita' => '14:30', 'personas' => 2, 'status' => 'accepted' ]
         ];
 
         return response()->json($reservations, 200);
@@ -240,7 +213,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Get reservation statistics (Mocked).
+     * Get reservation statistics (Global company stats - Mocked).
      */
     public function getReservationStats(Request $request): JsonResponse
     {
@@ -250,11 +223,37 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        $stats = [
-            'pending' => 5,
-            'accepted' => 12,
-            'rejected' => 2,
-        ];
+        /*
+         * Código Futuro Real:
+         * $placeIds = $user->placesManaged()->pluck('id');
+         * $stats = [
+         *     'pending' => Reservation::whereIn('place_id', $placeIds)->where('status', 'pending')->count(),
+         *     'accepted' => Reservation::whereIn('place_id', $placeIds)->where('status', 'accepted')->count(),
+         *     'rejected' => Reservation::whereIn('place_id', $placeIds)->where('status', 'rejected')->count(),
+         * ];
+         */
+        $stats = [ 'pending' => 8, 'accepted' => 24, 'rejected' => 5 ];
+
+        return response()->json($stats, 200);
+    }
+
+    /**
+     * Get reservation statistics for a specific place (Mocked - AC2).
+     */
+    public function getPlaceReservationStats(Request $request, $placeId): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
+        /*
+         * Código Futuro Real (AC3 Access Control):
+         * $place = $user->placesManaged()->findOrFail($placeId);
+         */
+        
+        $stats = [ 'pending' => 4, 'accepted' => 12, 'rejected' => 3 ];
 
         return response()->json($stats, 200);
     }

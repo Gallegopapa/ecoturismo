@@ -70,5 +70,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/rejection-reasons', [\App\Http\Controllers\API\CompanyController::class, 'getRejectionReasons']);
         
         Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyController::class, 'getReservationStats']);
+        Route::get('/reservations/place/{place}/stats', [\App\Http\Controllers\API\CompanyController::class, 'getPlaceReservationStats']);
     });
 });

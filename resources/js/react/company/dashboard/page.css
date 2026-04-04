@@ -166,6 +166,29 @@
   letter-spacing: 0.5px;
 }
 
+.btn-view-stats {
+  margin-top: 24px;
+  width: 100%;
+  padding: 12px;
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  color: #475569;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-view-stats:hover {
+  background-color: #f1f5f9;
+  border-color: #4ade80;
+  color: #071a0e;
+}
+
 /* Empty State Styles */
 .empty-state {
   text-align: center;

@@ -108,6 +108,9 @@ export default function CompanyDashboard() {
                   <span className="stat-label">Rechazadas</span>
                 </div>
               </div>
+              <button className="btn-view-stats" onClick={() => navigate('/company/statistics')}>
+                📊 Ver Estadísticas Detalladas
+              </button>
             </section>
 
             <section className="dashboard-card places-section">
