@@ -71,6 +71,31 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // US-RES-03: Cancelar Reserva
     Route::delete('/reservations/{reservation}', [\App\Http\Controllers\API\ReservationController::class, 'destroy']);
+
+    // ============================================
+    // RUTAS DE EMPRESA (US-COMP-01)
+    // ============================================
+    Route::prefix('company')->group(function () {
+        Route::get('/places', [\App\Http\Controllers\API\CompanyController::class, 'getPlaces']);
+        Route::get('/places/{place}', [\App\Http\Controllers\API\CompanyController::class, 'getPlace']);
+        Route::put('/places/{place}', [\App\Http\Controllers\API\CompanyController::class, 'updatePlace']);
+        
+        // Schedules CRUD (US-COMP-03)
+        Route::get('/places/{place}/schedules', [\App\Http\Controllers\API\CompanyController::class, 'getSchedules']);
+        Route::post('/places/{place}/schedules', [\App\Http\Controllers\API\CompanyController::class, 'storeSchedule']);
+        Route::put('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\CompanyController::class, 'updateSchedule']);
+        Route::delete('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\CompanyController::class, 'destroySchedule']);
+        
+        // Reservations Management (US-COMP-04)
+        Route::get('/reservations', [\App\Http\Controllers\API\CompanyController::class, 'getReservations']);
+        Route::post('/reservations/{id}/accept', [\App\Http\Controllers\API\CompanyController::class, 'acceptReservation']);
+        Route::post('/reservations/{id}/reject', [\App\Http\Controllers\API\CompanyController::class, 'rejectReservation']);
+        Route::post('/reservations/{id}/reopen', [\App\Http\Controllers\API\CompanyController::class, 'reopenReservation']);
+        Route::get('/rejection-reasons', [\App\Http\Controllers\API\CompanyController::class, 'getRejectionReasons']);
+        
+        Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyController::class, 'getReservationStats']);
+        Route::get('/reservations/place/{place}/stats', [\App\Http\Controllers\API\CompanyController::class, 'getPlaceReservationStats']);
+    });
 });
 
 // US-PLCS-01: Explorar Lugares

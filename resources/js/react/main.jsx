@@ -19,6 +19,11 @@ import MapPage from "./map/page.jsx";
 import EcohotelsPage from "./ecohotels/page.jsx";
 import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
 import ReservationsPage from "./reservations/page.jsx";
+import CompanyDashboard from "./company/dashboard/page.jsx";
+import EditPlace from "./company/places/EditPlace.jsx";
+import ManageSchedules from "./company/schedules/ManageSchedules.jsx";
+import ManageReservations from "./company/reservations/ManageReservations.jsx";
+import CompanyStatistics from "./company/statistics/CompanyStatistics.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -103,6 +108,26 @@ const router = createBrowserRouter([
   {
     path: "/ecohoteles/:id",
     element: <EcohotelDetailPage />,
+  },
+  {
+    path: "/company/dashboard",
+    element: <CompanyDashboard />,
+  },
+  {
+    path: "/company/places/:id/edit",
+    element: <EditPlace />,
+  },
+  {
+    path: "/company/places/:id/schedules",
+    element: <ManageSchedules />,
+  },
+  {
+    path: "/company/reservations",
+    element: <ManageReservations />,
+  },
+  {
+    path: "/company/statistics",
+    element: <CompanyStatistics />,
   }
 ]);
 
