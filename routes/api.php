@@ -57,6 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // US-RES-01: Crear una Reserva
     Route::post('/reservations', [\App\Http\Controllers\API\ReservationController::class, 'store']);
 
+    // US-REV-01: Crear una Reseña
+    Route::post('/reviews', [\App\Http\Controllers\API\ReviewController::class, 'store']);
+
     // US-RES-02: Ver Mis Reservas
     Route::get('/reservations/my', [\App\Http\Controllers\API\ReservationController::class, 'myReservations']);
 

@@ -1,0 +1,25 @@
+origin/develop:mds/ARCHITECTURE.md:- reviewsService: CRUD de reseñas
+origin/develop:mds/REACT_LARAVEL_SETUP.md:- `reviewsService` - getByPlace, create, delete
+origin/develop:resources/js/react/comments/page.jsx:import { reviewsService, placesService } from "@/react/services/api";
+origin/develop:resources/js/react/comments/page.jsx:        reviewsService.getAll(),
+origin/develop:resources/js/react/comments/page.jsx:      await reviewsService.create(buildReviewPayload(formData));
+origin/develop:resources/js/react/comments2/page.jsx:import { reviewsService, placesService } from "@/react/services/api";
+origin/develop:resources/js/react/comments2/page.jsx:        reviewsService.getAll(),
+origin/develop:resources/js/react/comments2/page.jsx:      await reviewsService.create(buildReviewPayload(formData));
+origin/develop:resources/js/react/comments2/page.jsx:      await reviewsService.update(editingReviewId, buildReviewPayload({
+origin/develop:resources/js/react/comments2/page.jsx:      await reviewsService.delete(reviewId);
+origin/develop:resources/js/react/components/ReviewForm/ReviewForm.jsx:import { reviewsService } from '@/react/services/api';
+origin/develop:resources/js/react/components/ReviewForm/ReviewForm.jsx:          const reviewsData = await reviewsService.getByPlace(placeId);
+origin/develop:resources/js/react/components/ReviewForm/ReviewForm.jsx:          const reviewsData = await reviewsService.getByEcohotel(ecohotelId);
+origin/develop:resources/js/react/components/ReviewForm/ReviewForm.jsx:      await reviewsService.create(reviewData);
+origin/develop:resources/js/react/ecohotels/detail/page.jsx:import { reviewsService } from "../../services/api";
+origin/develop:resources/js/react/ecohotels/detail/page.jsx:        await reviewsService.update(reviewId, {
+origin/develop:resources/js/react/ecohotels/detail/page.jsx:        await reviewsService.delete(reviewId);
+origin/develop:resources/js/react/ecohotels/detail/page.jsx:      const res = await reviewsService.getByEcohotel(id);
+origin/develop:resources/js/react/examples/PlacesExample.jsx:import { placesService, reviewsService, favoritesService } from '../services/api';
+origin/develop:resources/js/react/examples/PlacesExample.jsx:      await reviewsService.create({
+origin/develop:resources/js/react/places/detail/page.jsx:import { placesService, favoritesService, reviewsService } from '@/react/services/api';
+origin/develop:resources/js/react/places/detail/page.jsx:      const data = await reviewsService.getByPlace(placeId);
+origin/develop:resources/js/react/places/detail/page.jsx:      await reviewsService.delete(reviewId);
+origin/develop:resources/js/react/places/detail/page.jsx:      await reviewsService.update(reviewId, {
+origin/develop:resources/js/react/services/api.js:export const reviewsService = {

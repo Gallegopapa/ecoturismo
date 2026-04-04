@@ -186,14 +186,12 @@ const EcohotelDetailPage = () => {
                   ) : (
                     <div style={{ color: '#888', fontStyle: 'italic' }}>Aún no hay reseñas para este ecohotel.</div>
                   )}
-                  {/* Mutilado: Formulario de nueva reseña postergado
                   <ReviewForm
                     ecohotelId={id}
                     user={user}
                     isAuthenticated={isAuthenticated}
                     onReviewAdded={loadReviews}
                   />
-                  */}
                   {/* Lista de reseñas */}
                   {reviews.length > 0 && (
                     <div style={{ marginTop: 24 }}>

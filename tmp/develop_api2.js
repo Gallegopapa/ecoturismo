@@ -1,4 +1,4 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 
 // Configurar la URL base de la API
 // Usar URL relativa siempre para que funcione en cualquier dominio
@@ -283,7 +283,6 @@ export const reviewsService = {
     const response = await api.delete(`/reviews/${id}`);
     return response.data;
   },
-  // update y delete mutilados para el sprint de US-REV-02 y US-REV-03
 };
 
 // Servicios de favoritos
@@ -365,7 +364,7 @@ export const profileService = {
       }
       formData.append('foto_perfil', fotoPerfil);
 
-      console.log('📤 FormData + FILE:', {
+      console.log(' FormData + FILE:', {
         name: profileData.name,
         email: profileData.email,
         telefono: profileData.telefono,
@@ -383,7 +382,7 @@ export const profileService = {
       return response.data;
     } else {
       // Si no hay imagen, enviar JSON normal
-      console.log('📤 JSON sin file:', profileData);
+      console.log(' JSON sin file:', profileData);
       const response = await api.put('/profile', profileData);
       return response.data;
     }

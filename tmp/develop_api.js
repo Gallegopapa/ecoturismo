@@ -40,8 +40,8 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Si el token expirÃ³ o es invÃ¡lido, limpiar y redirigir al login
-    // Pero solo si no estamos ya en la pÃ¡gina de login
+    // Si el token expir?? o es inv??lido, limpiar y redirigir al login
+    // Pero solo si no estamos ya en la p??gina de login
     if (error.response?.status === 401) {
       const currentPath = window.location.pathname;
       if (currentPath !== '/login' && currentPath !== '/registro') {
@@ -52,9 +52,9 @@ api.interceptors.response.use(
     }
 
     // Los errores se manejan en la respuesta sin loguear datos sensibles
-    // En producción, registrar solo códigos de error sin datos sensibles
+    // En producci?n, registrar solo c?digos de error sin datos sensibles
     if (process.env.NODE_ENV === 'development') {
-      // Solo en desarrollo, loguear información de debugging sin datos personales
+      // Solo en desarrollo, loguear informaci?n de debugging sin datos personales
       if (error.response) {
         console.debug('API Error:', error.response.status, error.config?.url);
       }
@@ -64,7 +64,7 @@ api.interceptors.response.use(
   }
 );
 
-// Servicios de autenticaciÃ³n
+// Servicios de autenticaci??n
 export const authService = {
   // Login
   login: async (credentials) => {
@@ -83,7 +83,7 @@ export const authService = {
     try {
       await api.post('/logout');
     } catch (error) {
-      // Error silencioso - no es crítico para logout
+      // Error silencioso - no es cr?tico para logout
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -136,7 +136,7 @@ export const placesService = {
 
       return [];
     } catch (_) {
-      // Compatibilidad con despliegues que aún no tengan la ruta nueva.
+      // Compatibilidad con despliegues que a?n no tengan la ruta nueva.
       return placesService.getAll();
     }
   },
@@ -214,7 +214,7 @@ export const reservationsService = {
   },
 };
 
-// Servicios de reseÃ±as
+// Servicios de rese??as
 export const reviewsService = {
   // getByEntity eliminado: ahora se usan getByPlace y getByEcohotel
   getAll: async () => {
@@ -283,7 +283,6 @@ export const reviewsService = {
     const response = await api.delete(`/reviews/${id}`);
     return response.data;
   },
-  // update y delete mutilados para el sprint de US-REV-02 y US-REV-03
 };
 
 // Servicios de favoritos
@@ -323,7 +322,7 @@ export const favoritesService = {
   },
 };
 
-// Servicios de categorÃ­as
+// Servicios de categor??as
 export const categoriesService = {
   getAll: async () => {
     const response = await api.get('/categories');
@@ -365,7 +364,7 @@ export const profileService = {
       }
       formData.append('foto_perfil', fotoPerfil);
 
-      console.log('📤 FormData + FILE:', {
+      console.log(' FormData + FILE:', {
         name: profileData.name,
         email: profileData.email,
         telefono: profileData.telefono,
@@ -383,7 +382,7 @@ export const profileService = {
       return response.data;
     } else {
       // Si no hay imagen, enviar JSON normal
-      console.log('📤 JSON sin file:', profileData);
+      console.log(' JSON sin file:', profileData);
       const response = await api.put('/profile', profileData);
       return response.data;
     }
@@ -447,7 +446,7 @@ export const adminService = {
       if (placeData.longitude) formData.append('longitude', placeData.longitude);
       if (placeData.image) formData.append('image', placeData.image);
 
-      // Agregar categorías como array
+      // Agregar categor?as como array
       if (placeData.categories && Array.isArray(placeData.categories) && placeData.categories.length > 0) {
         placeData.categories.forEach((categoryId) => {
           formData.append('categories[]', categoryId);
@@ -480,7 +479,7 @@ export const adminService = {
         formData.append('image', placeData.image);
       }
 
-      // Agregar categorías como array solo cuando haya datos válidos.
+      // Agregar categor?as como array solo cuando haya datos v?lidos.
       // Si no vienen, backend usa [] por defecto y hace sync([]).
       if (placeData.categories !== undefined) {
         if (Array.isArray(placeData.categories) && placeData.categories.length > 0) {
@@ -490,8 +489,8 @@ export const adminService = {
         }
       }
 
-      // Agregar ecohoteles como array solo cuando haya selección.
-      // Evita enviar ecohoteles[]='' que falla validación exists.
+      // Agregar ecohoteles como array solo cuando haya selecci?n.
+      // Evita enviar ecohoteles[]='' que falla validaci?n exists.
       if (placeData.ecohoteles !== undefined) {
         if (Array.isArray(placeData.ecohoteles) && placeData.ecohoteles.length > 0) {
           placeData.ecohoteles.forEach((ecohotelId) => {
@@ -549,7 +548,7 @@ export const adminService = {
       if (ecohotelData.sitio_web) formData.append('sitio_web', ecohotelData.sitio_web);
       if (ecohotelData.image) formData.append('image', ecohotelData.image);
 
-      // Agregar categorías como array
+      // Agregar categor?as como array
       if (ecohotelData.categories && Array.isArray(ecohotelData.categories) && ecohotelData.categories.length > 0) {
         ecohotelData.categories.forEach((categoryId) => {
           formData.append('categories[]', categoryId);
@@ -581,7 +580,7 @@ export const adminService = {
       if (ecohotelData.sitio_web) formData.append('sitio_web', ecohotelData.sitio_web);
       if (ecohotelData.image) formData.append('image', ecohotelData.image);
 
-      // Agregar categorías como array
+      // Agregar categor?as como array
       if (ecohotelData.categories !== undefined) {
         if (Array.isArray(ecohotelData.categories) && ecohotelData.categories.length > 0) {
           ecohotelData.categories.forEach((categoryId) => {
@@ -591,7 +590,7 @@ export const adminService = {
           formData.append('categories[]', '');
         }
       }
-      // Agregar lugares como array (incluso si está vacío para sincronizar)
+      // Agregar lugares como array (incluso si est? vac?o para sincronizar)
       if (ecohotelData.places !== undefined) {
         if (Array.isArray(ecohotelData.places) && ecohotelData.places.length > 0) {
           ecohotelData.places.forEach((placeId) => {

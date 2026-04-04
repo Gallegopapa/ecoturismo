@@ -1,5 +1,16 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 16: Implementación US-REV-01 (Creación de Reseña)
+**Fecha:** 04 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `routes/api.php` (habilitado endpoint `POST /api/reviews` bajo protección Sanctum).
+- Frontend React: `api.js` (validación de `reviewsService` para habilitar `create`), `ecohotels/detail/page.jsx` (re-inserción visual del `<ReviewForm />`).
+**Integración y Aislamiento (Mutilación):**
+- Edición y Borrado: Las funciones `update` y `delete` del `reviewsService` permanecen mutiladas en `api.js` y en los controladores para respetar el alcance atómico de este ticket.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
 ## Commit 15: Implementación US-RES-03 (Cancelar una Reserva)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**
