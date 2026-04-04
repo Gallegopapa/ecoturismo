@@ -283,7 +283,7 @@ export const reviewsService = {
     const response = await api.delete(`/reviews/${id}`);
     return response.data;
   },
-  // update y delete mutilados para el sprint de US-REV-02 y US-REV-03
+  // El delete permanece mutilado para el sprint de US-REV-03
 };
 
 // Servicios de favoritos

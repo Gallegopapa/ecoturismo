@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 17: Implementación US-REV-02 (Editar Reseña Propia)
+**Fecha:** 04 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReviewController.php` (método `update()` habilitado con validación de propiedad y lenguaje offensivo).
+- Endpoints: `routes/api.php` (habilitado `PUT /api/reviews/{review}`).
+- Frontend React: `ecohotels/detail/page.jsx` y `places/detail/page.jsx` (habilitada la UI de edición y conexión con el servicio).
+**Integración y Aislamiento (Mutilación):**
+- Eliminación de Reseñas: El botón "Eliminar" permanece visible pero se ha mantenido la mutilación estratégica en el controlador y servicio hasta el siguiente ticket para evitar solapamientos.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
 ## Commit 16: Implementación US-REV-01 (Creación de Reseña)
 **Fecha:** 04 Abril 2026
 **Archivos implicados y mantenidos:**
