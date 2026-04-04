@@ -145,6 +145,20 @@ const Header2 = () => {
                     Mi Perfil
                   </Link>
                 </li>
+                {user?.is_admin && (
+                  <li>
+                    <Link to="/admin/places" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
+                      Gestión de Lugares (Admin)
+                    </Link>
+                  </li>
+                )}
+                {user?.tipo_usuario === 'empresa' && (
+                  <li>
+                    <Link to="/company/dashboard" className="menu-link company-link" role="menuitem" onClick={handleLinkClick}>
+                      Panel de Empresa
+                    </Link>
+                  </li>
+                )}
                 <li className="menu-divider"></li>
                 <li>
                   <button

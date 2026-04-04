@@ -14,6 +14,7 @@ import EditPlace from "./company/places/EditPlace.jsx";
 import ManageSchedules from "./company/schedules/ManageSchedules.jsx";
 import ManageReservations from "./company/reservations/ManageReservations.jsx";
 import CompanyStatistics from "./company/statistics/CompanyStatistics.jsx";
+import ManagePlacesAdmin from "./admin/places/ManagePlaces.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
   {
     path: "/company/statistics",
     element: <CompanyStatistics />,
+  },
+  {
+    path: "/admin/places",
+    element: <ManagePlacesAdmin />,
   }
 ]);
 

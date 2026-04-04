@@ -72,4 +72,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyController::class, 'getReservationStats']);
         Route::get('/reservations/place/{place}/stats', [\App\Http\Controllers\API\CompanyController::class, 'getPlaceReservationStats']);
     });
+
+    // ============================================
+    // RUTAS ADMINISTRATIVAS (US-ADMN-01)
+    // ============================================
+    Route::prefix('admin')->group(function () {
+        Route::apiResource('places', \App\Http\Controllers\API\AdminController::class);
+    });
 });
