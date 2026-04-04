@@ -35,6 +35,38 @@
 .dashboard-header p {
   color: #4a5568;
   font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-primary-res {
+  background-color: #071a0e;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary-res:hover {
+  background-color: #12351d;
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary-res:active {
+  transform: translateY(0);
 }
 
 .dashboard-error {

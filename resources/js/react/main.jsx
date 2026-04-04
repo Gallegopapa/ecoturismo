@@ -12,6 +12,7 @@ import PerfilPage from "./perfil/page.jsx";
 import CompanyDashboard from "./company/dashboard/page.jsx";
 import EditPlace from "./company/places/EditPlace.jsx";
 import ManageSchedules from "./company/schedules/ManageSchedules.jsx";
+import ManageReservations from "./company/reservations/ManageReservations.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
   {
     path: "/company/places/:id/schedules",
     element: <ManageSchedules />,
+  },
+  {
+    path: "/company/reservations",
+    element: <ManageReservations />,
   }
 ]);
 

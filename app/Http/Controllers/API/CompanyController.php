@@ -88,28 +88,9 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        /*
-         * Código Futuro Real:
-         * $place = $user->placesManaged()->findOrFail($id);
-         * $schedules = $place->schedules()->orderBy('id')->get();
-         */
         $schedules = [
-            [
-                'id' => 101,
-                'place_id' => $id,
-                'dia_semana' => 'lunes',
-                'hora_inicio' => '08:00',
-                'hora_fin' => '17:00',
-                'activo' => true
-            ],
-            [
-                'id' => 102,
-                'place_id' => $id,
-                'dia_semana' => 'martes',
-                'hora_inicio' => '08:00',
-                'hora_fin' => '17:00',
-                'activo' => true
-            ]
+            [ 'id' => 101, 'place_id' => $id, 'dia_semana' => 'lunes', 'hora_inicio' => '08:00', 'hora_fin' => '17:00', 'activo' => true ],
+            [ 'id' => 102, 'place_id' => $id, 'dia_semana' => 'martes', 'hora_inicio' => '08:00', 'hora_fin' => '17:00', 'activo' => true ]
         ];
 
         return response()->json($schedules, 200);
@@ -126,16 +107,7 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        /*
-         * Código Futuro Real:
-         * $place = $user->placesManaged()->findOrFail($id);
-         * $schedule = $place->schedules()->create($request->all());
-         */
-        
-        return response()->json([
-            'message' => 'Horario creado correctamente (Simulación)',
-            'id' => rand(1000, 9999)
-        ], 201);
+        return response()->json([ 'message' => 'Horario creado correctamente (Simulación)', 'id' => rand(1000, 9999) ], 201);
     }
 
     /**
@@ -149,15 +121,7 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        /*
-         * Código Futuro Real:
-         * $schedule = PlaceSchedule::where('place_id', $id)->findOrFail($scheduleId);
-         * $schedule->update($request->all());
-         */
-
-        return response()->json([
-            'message' => 'Horario actualizado correctamente (Simulación)'
-        ], 200);
+        return response()->json([ 'message' => 'Horario actualizado correctamente (Simulación)' ], 200);
     }
 
     /**
@@ -171,15 +135,108 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
+        return response()->json([ 'message' => 'Horario eliminado correctamente (Simulación)' ], 200);
+    }
+
+    /**
+     * Get reservations for company places (Mocked).
+     */
+    public function getReservations(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
         /*
          * Código Futuro Real:
-         * $schedule = PlaceSchedule::where('place_id', $id)->findOrFail($scheduleId);
-         * $schedule->delete();
+         * $reservations = Reservation::whereIn('place_id', $user->placesManaged()->pluck('id'))->get();
          */
+        $reservations = [
+            [
+                'id' => 1,
+                'place_name' => 'Reserva Natural La Pastora',
+                'client_name' => 'Juan Pérez',
+                'email' => 'juan.perez@gmail.com',
+                'phone' => '+57 321 000 0000',
+                'fecha_visita' => '2025-05-15',
+                'hora_visita' => '10:00',
+                'personas' => 4,
+                'status' => 'pending'
+            ],
+            [
+                'id' => 2,
+                'place_name' => 'Reserva Natural La Pastora',
+                'client_name' => 'María García',
+                'email' => 'maria.garcia@gmail.com',
+                'phone' => '+57 310 999 9999',
+                'fecha_visita' => '2025-05-16',
+                'hora_visita' => '14:30',
+                'personas' => 2,
+                'status' => 'accepted'
+            ]
+        ];
 
-        return response()->json([
-            'message' => 'Horario eliminado correctamente (Simulación)'
-        ], 200);
+        return response()->json($reservations, 200);
+    }
+
+    /**
+     * Accept a reservation (Mocked).
+     */
+    public function acceptReservation(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
+        return response()->json([ 'message' => 'Reservación aceptada con éxito (Simulación)' ], 200);
+    }
+
+    /**
+     * Reject a reservation with reason (Mocked).
+     */
+    public function rejectReservation(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
+        return response()->json([ 'message' => 'Reservación rechazada con éxito (Simulación)' ], 200);
+    }
+
+    /**
+     * Reopen a rejected reservation (Mocked).
+     */
+    public function reopenReservation(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
+        return response()->json([ 'message' => 'Reservación reabierta con éxito (Simulación)' ], 200);
+    }
+
+    /**
+     * Get rejection reasons (Mocked/Static).
+     */
+    public function getRejectionReasons(): JsonResponse
+    {
+        $reasons = [
+            ['id' => 1, 'label' => 'El lugar está lleno'],
+            ['id' => 2, 'label' => 'Mantenimiento en las instalaciones'],
+            ['id' => 3, 'label' => 'Clima adverso'],
+            ['id' => 4, 'label' => 'Evento privado'],
+            ['id' => 5, 'label' => 'Otro (especificar)']
+        ];
+
+        return response()->json($reasons, 200);
     }
 
     /**

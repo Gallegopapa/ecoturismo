@@ -79,6 +79,11 @@ export default function CompanyDashboard() {
         <header className="dashboard-header">
           <h1>Panel de Empresa</h1>
           <p>Bienvenido, {user.name}. Gestiona tus lugares ecoturísticos y reservaciones aquí.</p>
+          <div className="header-actions">
+            <button className="btn-primary-res" onClick={() => navigate('/company/reservations')}>
+              📋 Gestionar Reservas Entrantes
+            </button>
+          </div>
         </header>
 
         {errorConfig && <div className="dashboard-error">{errorConfig}</div>}

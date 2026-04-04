@@ -62,6 +62,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\CompanyController::class, 'updateSchedule']);
         Route::delete('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\CompanyController::class, 'destroySchedule']);
         
+        // Reservations Management (US-COMP-04)
+        Route::get('/reservations', [\App\Http\Controllers\API\CompanyController::class, 'getReservations']);
+        Route::post('/reservations/{id}/accept', [\App\Http\Controllers\API\CompanyController::class, 'acceptReservation']);
+        Route::post('/reservations/{id}/reject', [\App\Http\Controllers\API\CompanyController::class, 'rejectReservation']);
+        Route::post('/reservations/{id}/reopen', [\App\Http\Controllers\API\CompanyController::class, 'reopenReservation']);
+        Route::get('/rejection-reasons', [\App\Http\Controllers\API\CompanyController::class, 'getRejectionReasons']);
+        
         Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyController::class, 'getReservationStats']);
     });
 });
