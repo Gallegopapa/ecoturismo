@@ -9,6 +9,16 @@ import ForgotPasswordPage from "./forgot-password/page.jsx";
 import ForgotPasswordSentPage from "./forgot-password/sent.jsx";
 import ResetPasswordPage from "./reset-password/page.jsx";
 import PerfilPage from "./perfil/page.jsx";
+import PlacesPage from "./places/page.jsx";
+import ParaisosAcuaticos from "./places2/paraisosAcuaticos/page.jsx";
+import LugaresMontanosos from "./places2/lugaresMontanosos/page.jsx";
+import ParquesYMas from "./places2/parquesYMas/page.jsx";
+import TerritoriosDelCafe from "./places2/territoriosDelCafe/page.jsx";
+import PlaceDetailPage from "./places/detail/page.jsx";
+import MapPage from "./map/page.jsx";
+import EcohotelsPage from "./ecohotels/page.jsx";
+import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
+import ReservationsPage from "./reservations/page.jsx";
 import CompanyDashboard from "./company/dashboard/page.jsx";
 import EditPlace from "./company/places/EditPlace.jsx";
 import ManageSchedules from "./company/schedules/ManageSchedules.jsx";
@@ -55,6 +65,50 @@ const router = createBrowserRouter([
   {
     path: "/perfil",
     element: <PerfilPage />,
+  },
+  {
+    path: "/reservas",
+    element: <ReservationsPage />,
+  },
+  {
+    path: "/lugares",
+    element: <PlacesPage />,
+  },
+  {
+    path: "/places",
+    element: <PlacesPage />,
+  },
+  {
+    path: "/lugares/:id",
+    element: <PlaceDetailPage />,
+  },
+  {
+    path: "/paraisosAcuaticos",
+    element: <ParaisosAcuaticos />,
+  },
+  {
+    path: "/lugaresMontanosos",
+    element: <LugaresMontanosos />,
+  },
+  {
+    path: "/parquesYMas",
+    element: <ParquesYMas />,
+  },
+  {
+    path: "/territoriosDelCafe",
+    element: <TerritoriosDelCafe />,
+  },
+  {
+    path: "/mapa",
+    element: <MapPage />,
+  },
+  {
+    path: "/ecohoteles",
+    element: <EcohotelsPage />,
+  },
+  {
+    path: "/ecohoteles/:id",
+    element: <EcohotelDetailPage />,
   },
   {
     path: "/company/dashboard",

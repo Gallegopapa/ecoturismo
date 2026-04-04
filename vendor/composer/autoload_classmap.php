@@ -7,9 +7,14 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Http\\Controllers\\API\\AuthController' => $baseDir . '/app/Http/Controllers/API/AuthController.php',
+    'App\\Http\\Controllers\\API\\CategoryController' => $baseDir . '/app/Http/Controllers/API/CategoryController.php',
     'App\\Http\\Controllers\\API\\PasswordResetController' => $baseDir . '/app/Http/Controllers/API/PasswordResetController.php',
+    'App\\Http\\Controllers\\API\\PlaceController' => $baseDir . '/app/Http/Controllers/API/PlaceController.php',
+    'App\\Http\\Controllers\\API\\ProfileController' => $baseDir . '/app/Http/Controllers/API/ProfileController.php',
     'App\\Http\\Middleware\\EnsureUserIsAdmin' => $baseDir . '/app/Http/Middleware/EnsureUserIsAdmin.php',
     'App\\Http\\Middleware\\HandleCors' => $baseDir . '/app/Http/Middleware/HandleCors.php',
+    'App\\Models\\Category' => $baseDir . '/app/Models/Category.php',
+    'App\\Models\\Place' => $baseDir . '/app/Models/Place.php',
     'App\\Models\\Usuarios' => $baseDir . '/app/Models/Usuarios.php',
     'App\\Notifications\\ResetPasswordNotification' => $baseDir . '/app/Notifications/ResetPasswordNotification.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
@@ -139,6 +144,8 @@ return array(
     'Cron\\HoursField' => $vendorDir . '/dragonmantank/cron-expression/src/Cron/HoursField.php',
     'Cron\\MinutesField' => $vendorDir . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
     'Cron\\MonthField' => $vendorDir . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
+    'Database\\Seeders\\PlaceSeeder' => $baseDir . '/database/seeders/PlaceSeeder.php',
+    'Database\\Seeders\\PlacesSeeder' => $baseDir . '/database/seeders/PlacesSeeder.php',
     'DateError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
     'DateException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
     'DateInvalidOperationException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateInvalidOperationException.php',

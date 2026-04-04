@@ -1,5 +1,117 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 18: Implementación US-REV-03 (Eliminar Reseña propia / Admin)
+**Fecha:** 04 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReviewController.php` (método `destroy()` restaurado permitiendo el borrado por autor o admin).
+- Endpoints: `routes/api.php` (habilitado `DELETE /api/reviews/{review}`).
+- Frontend React: `ecohotels/detail/page.jsx` y `places/detail/page.jsx` (habilitada la funcionalidad real del botón "Eliminar").
+**Integración y Aislamiento (Módulo Completo):**
+- Módulo de Reseñas: Se ha completado el ciclo de vida (CRUD) de reseñas de forma atómica y aislada. Se han removido todas las mutilaciones relacionadas con el servicio de reseñas.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
+## Commit 17: Implementación US-REV-02 (Editar Reseña Propia)
+**Fecha:** 04 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReviewController.php` (método `update()` habilitado con validación de propiedad y lenguaje offensivo).
+- Endpoints: `routes/api.php` (habilitado `PUT /api/reviews/{review}`).
+- Frontend React: `ecohotels/detail/page.jsx` y `places/detail/page.jsx` (habilitada la UI de edición y conexión con el servicio).
+**Integración y Aislamiento (Mutilación):**
+- Eliminación de Reseñas: El botón "Eliminar" permanece visible pero se ha mantenido la mutilación estratégica en el controlador y servicio hasta el siguiente ticket para evitar solapamientos.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
+## Commit 16: Implementación US-REV-01 (Creación de Reseña)
+**Fecha:** 04 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `routes/api.php` (habilitado endpoint `POST /api/reviews` bajo protección Sanctum).
+- Frontend React: `api.js` (validación de `reviewsService` para habilitar `create`), `ecohotels/detail/page.jsx` (re-inserción visual del `<ReviewForm />`).
+**Integración y Aislamiento (Mutilación):**
+- Edición y Borrado: Las funciones `update` y `delete` del `reviewsService` permanecen mutiladas en `api.js` y en los controladores para respetar el alcance atómico de este ticket.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
+## Commit 15: Implementación US-RES-03 (Cancelar una Reserva)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReservationController.php` (se restauró el método `destroy()` logrando atrapar por Inyección de Dependencias a la `Reservation` e invocando su borrado).
+- Endpoints: `routes/api.php` (se activó el endpoint `DELETE /api/reservations/{reservation}` para el frontend bajo autenticación Sanctum).
+- Frontend React: `reservations/page.jsx` (se revirtió la mutilación estratégica sobre `handleDelete()` reconectando el Prompt de validación del navegador nativo con la petición de Axios alojada en `reservationsService.delete(id)`).
+**Integración y Aislamiento (Mutilación):**
+- Cancelación de Reservas: El perimetral que impide que un administrador cruce estas rutas fue mantenido en los controladores (no está permitida la interacción sin `$user->is_admin === true` pero de momento el Admin se encuentra desactivado visualmente en flujos futuros).
+**Estado de la Tarea:** Terminada y validada en su respectiva UI y servidor. Listo para su `git commit`.
+
+---
+
+## Commit 14: Implementación US-RES-02 (Ver Mis Reservas)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReservationController.php` (se habilitó estrictamente el método `myReservations()`) y `routes/api.php` (se agregó el endpoint `/api/reservations/my` bajo middleware auth:sanctum).
+- Frontend React: `main.jsx` (recuperación de ruta `/reservas`), `Header2.jsx` (re-inserción de link "Mis Reservas" en el dropdown del estado usuario) y `reservations/page.jsx` (componente principal de lecturas activado).
+**Integración y Aislamiento (Mutilación):**
+- Cancelación de Reservas: En `reservations/page.jsx` el botón y método `handleDelete()` fue bloqueado para evitar solapar con las entregas de US-RES-03 de cancelación, mostrando a cambio un pop-up que avisa el alcance actual del módulo.
+**Estado de la Tarea:** Terminada y validada en su respectiva UI y servidor. Listo para su `git commit`.
+
+---
+
+## Commit 13: Implementación US-RES-01 (Creación de Reserva)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Modelos y Migraciones: Se extrajeron pasivamente los modelos y migraciones de `Reservation.php` y `CompanyReservation.php` preservando así la integridad de la base de datos para la funcionalidad base y las interacciones cruzadas automáticas exigidas en el AC5.
+- Controladores Backend: Se importó `ReservationController.php` donde todas sus lógicas externas de lectura global (ej. Ver Mis Reservas e indexación administrativa) fueron mutiladas para acotar la funcionalidad al único objetivo de persistir (método `store`). También se habilitaron las consultas de lógicas subyacentes relacionadas con horarios en el `PlaceController.php` (métodos `show` y `getAvailableSchedules`).
+- Endpoints: Se inyectó en `routes/api.php` bajo la validación de `auth:sanctum` el endpoint clave `POST /api/reservations`.
+- Frontend React: Se extrajo exitosamente el `<ReservationModal />` con sus estilos; inyectando orgánicamente y liberando sus hooks de despliegue sobre `resources/js/react/places/detail/page.jsx`.
+**Integración y Aislamiento (Mutilación):**
+- Reservas de Usuarios: Se deshabilitó conscientemente el botón de 'Ver mis reservas' o cualquier iteración visual de las mismas con el fin de evitar colisiones con el módulo siguiente: US-RES-02.
+**Estado de la Tarea:** Terminada. El visitante puede observar lógicamente las reservaciones activas al evaluar el Detail y, los usuarios autenticados, interactuar para lanzar la inserción de DB con POST y su confirmación. Listo para su `git commit`.
+
+---
+
+## Commit 12: Implementación US-PLCS-03 (Explorar Ecohoteles)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Modelos y Migraciones: Se extrajo a `Ecohotel.php` sin funciones fantasma problemáticas junto a sus pivotes y migraciones fundacionales para operar de modo nativo.
+- Controladores Backend: `EcohotelController.php` fue restaurado focalizando sus respuestas en métodos de solo visualización (`index` y `show`).
+- Endpoints: Se inyectaron en `routes/api.php` las 3 rutas públicas exigidas, delegando astutamente `ecohotels/{id}/reviews` al `ReviewController`.
+- Frontend React: Se extrajo el macrocomponente de interfaces de usuario ubicados bajo `resources/js/react/ecohotels` y se ajustaron estéticamente a React Router a través del core `main.jsx`.
+**Integración y Aislamiento (Mutilación):**
+- Reservas de Ecohoteles (ReviewForm): El layout `resources/js/react/ecohotels/detail/page.jsx` silencia radicalmente los callbacks o inyecciones POST del formulario de nuevas reseñas priorizando una navegación aséptica al aislar todo efecto secundario.
+- Rehabilitación del Menú: Se rehabilitó limpiamente la redirección top-bar a "Ecohoteles" en el layout nativo de `Header.jsx` y `Header2.jsx`.
+**Estado de la Tarea:** Terminada. El ecosistema visual que da fin al Módulo 3 está 100% operativo y asilado. Listo para su `git commit`.
+
+---
+
+## Commit 11: Implementación US-PLCS-02 (Ver Detalle de Lugar)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Modelos y Migraciones: Extracción pasiva de `Review.php` y `PlaceSchedule.php` junto con sus tablas para sustentar el detalle de lecturas.
+- Controladores Backend: `PlaceController.php` (habilitados `show` y `getAvailableSchedules`), además de integrar orgánicamente los Controladores `PlaceScheduleController.php` y `ReviewController.php`.
+- Endpoints: Registro en `routes/api.php` de los 4 accesos estipulados para lugares, horarios y reseñas.
+- Frontend React: `resources/js/react/places/detail/page.jsx` introducido globalizando la UI para el detalle de lugar.
+**Integración y Aislamiento (Mutilación):**
+- Reservas: El backend bloqueó consultas a la clase inexistente `Reservation` y la UI transformó los botones de "Reservar" a "Próximamente" para usuarios autenticados, evitando caídas 500 y encadenamientos de interfaz incorrectos. El Componente `<ReservationModal />` fue desvinculado visual y funcionalmente.
+- Favoritos: Igualmente, bloqueados a nivel de Frontend para atajarse posteriormente.
+**Estado de la Tarea:** Terminada. El visitante y el usuario final pueden disfrutar visualmente la exploración de detalles y horarios, en un modo "sólo visualización". Todo listo para su `git commit`.
+
+---
+
+## Commit 10: Implementación US-PLCS-01 (Módulo de Exploración y Mapa)
+**Fecha:** 03 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: Modelos `Place.php`, `Category.php`, `PlaceController.php`, `CategoryController.php` y migraciones relacionadas. Rutas en `api.php`.
+- Frontend: Vistas `places/page.jsx`, `places/detail/page.jsx`, `map/page.jsx` y rutas temáticas en `places2/`. Integración en `main.jsx`.
+- Navegación: `Header.jsx` y `Header2.jsx` rehabilitados para navegación pública y privada.
+**Integración y Aislamiento (Mutilación):**
+- Mutilación de Código Futuro: Se desactivaron manual y agresivamente todas las referencias a `Reviews`, `Ecohotels`, `Reservas` y `Schedules` complejos tanto en el controlador como en los componentes React, garantizando un renderizado limpio sin errores 500 o fallos de importación.
+- Compatibilidad: Se configuró Composer para ignorar requisitos de plataforma y se eliminó el bloqueo de versión PHP (platform_check) para asegurar operatividad.
+**Estado de la Tarea:** Terminada. El núcleo de exploración ecoturística está ensamblado. Todo listo para su `git commit`.
+
+---
+
 ## Commit 9: Implementación US-PROF-04 (Eliminar Cuenta)
 **Fecha:** 03 Abril 2026
 **Archivos implicados y mantenidos:**

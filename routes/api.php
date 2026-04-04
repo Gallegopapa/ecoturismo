@@ -22,6 +22,12 @@ Route::post('/password/reset', [\App\Http\Controllers\API\PasswordResetControlle
 Route::get('/profile/photo/stream', [\App\Http\Controllers\API\ProfileController::class, 'photoByQuery']);
 Route::get('/profile/photo/{filename}', [\App\Http\Controllers\API\ProfileController::class, 'photo'])->where('filename', '.*');
 
+// US-PLCS-01: Explorar Lugares Ecoturísticos (Públicas)
+Route::get('/places', [\App\Http\Controllers\API\PlaceController::class, 'index']);
+Route::get('/places/options', [\App\Http\Controllers\API\PlaceController::class, 'options']);
+Route::get('/categories', [\App\Http\Controllers\API\CategoryController::class, 'index']);
+Route::get('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'show']);
+
 // ============================================
 // RUTAS PROTEGIDAS (requieren autenticación con Sanctum)
 // ============================================
@@ -48,6 +54,24 @@ Route::middleware('auth:sanctum')->group(function () {
     // US-PROF-04: Eliminar Cuenta
     Route::delete('/profile', [\App\Http\Controllers\API\ProfileController::class, 'destroy']); // Eliminar cuenta
 
+    // US-RES-01: Crear una Reserva
+    Route::post('/reservations', [\App\Http\Controllers\API\ReservationController::class, 'store']);
+
+    // US-REV-01: Crear una Reseña
+    Route::post('/reviews', [\App\Http\Controllers\API\ReviewController::class, 'store']);
+
+    // US-REV-02: Editar Reseña
+    Route::put('/reviews/{review}', [\App\Http\Controllers\API\ReviewController::class, 'update']);
+
+    // US-REV-03: Eliminar Reseña
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\API\ReviewController::class, 'destroy']);
+
+    // US-RES-02: Ver Mis Reservas
+    Route::get('/reservations/my', [\App\Http\Controllers\API\ReservationController::class, 'myReservations']);
+
+    // US-RES-03: Cancelar Reserva
+    Route::delete('/reservations/{reservation}', [\App\Http\Controllers\API\ReservationController::class, 'destroy']);
+
     // ============================================
     // RUTAS DE EMPRESA (US-COMP-01)
     // ============================================
@@ -72,6 +96,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyController::class, 'getReservationStats']);
         Route::get('/reservations/place/{place}/stats', [\App\Http\Controllers\API\CompanyController::class, 'getPlaceReservationStats']);
     });
+<<<<<<< HEAD
 
     // ============================================
     // RUTAS ADMINISTRATIVAS (US-ADMN-01)
@@ -79,4 +104,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::apiResource('places', \App\Http\Controllers\API\AdminController::class);
     });
+=======
+});
+
+// US-PLCS-01: Explorar Lugares
+Route::get('/places', [\App\Http\Controllers\API\PlaceController::class, 'index']);
+Route::get('/places/options', [\App\Http\Controllers\API\PlaceController::class, 'options']);
+
+// US-PLCS-02: Ver Detalle de Lugar
+Route::get('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'show']);
+Route::get('/places/{place}/available-schedules', [\App\Http\Controllers\API\PlaceController::class, 'getAvailableSchedules']);
+Route::get('/places/{place}/schedules', [\App\Http\Controllers\API\PlaceScheduleController::class, 'index']);
+Route::get('/places/{id}/reviews', function($id, \Illuminate\Http\Request $request) {
+    return app(\App\Http\Controllers\API\ReviewController::class)->index($request, 'place', $id);
+});
+
+// US-PLCS-03: Explorar Ecohoteles
+Route::get('/ecohotels', [\App\Http\Controllers\API\EcohotelController::class, 'index']);
+Route::get('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'show']);
+Route::get('/ecohotels/{id}/reviews', function($id, \Illuminate\Http\Request $request) {
+    return app(\App\Http\Controllers\API\ReviewController::class)->index($request, 'ecohotel', $id);
+>>>>>>> 74312fe349af08537fafd1b282d4674de2809efc
 });
