@@ -121,7 +121,7 @@ export default function CompanyDashboard() {
                         <h3>{place.nombre}</h3>
                         <p>{place.ubicación}</p>
                       </div>
-                      <button className="btn-manage" onClick={() => alert('Próximamente: Administrar lugar')}>Administrar</button>
+                      <button className="btn-manage" onClick={() => navigate(`/company/places/${place.id}/edit`)}>Administrar</button>
                     </li>
                   ))}
                 </ul>

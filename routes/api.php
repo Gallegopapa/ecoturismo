@@ -53,6 +53,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // ============================================
     Route::prefix('company')->group(function () {
         Route::get('/places', [\App\Http\Controllers\API\CompanyController::class, 'getPlaces']);
+        Route::get('/places/{place}', [\App\Http\Controllers\API\CompanyController::class, 'getPlace']);
+        Route::put('/places/{place}', [\App\Http\Controllers\API\CompanyController::class, 'updatePlace']);
         Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyController::class, 'getReservationStats']);
     });
 });
