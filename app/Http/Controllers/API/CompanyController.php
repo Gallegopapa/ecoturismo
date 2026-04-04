@@ -19,14 +19,6 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        /*
-         * NOTA DE AISLAMIENTO Y MUTILACIÓN: 
-         * El modelo 'Place' y tabla 'place_company_users' aún no existen o no 
-         * están implementados en esta rama, por lo tanto mockeamos y evitamos error de DB.
-         * 
-         * Código Futuro Real:
-         * $places = $user->placesManaged()->get();
-         */
         $places = [
             [
                 'id' => 1,
@@ -54,19 +46,12 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        /*
-         * NOTA DE AISLAMIENTO Y MUTILACIÓN: 
-         * Simulación de obtención de detalle de lugar.
-         * 
-         * Código Futuro Real:
-         * $place = $user->placesManaged()->findOrFail($id);
-         */
         $place = [
             'id' => $id,
             'nombre' => 'Reserva Natural La Pastora',
             'ubicación' => 'Pereira-Marsella, Risaralda',
             'descripción' => 'Un paraíso natural perfecto para el senderismo y la observación de aves en el corazón de Risaralda.',
-            'imagen' => null, // Simulamos que aún no tiene imagen para probar fallback
+            'imagen' => null,
             'latitud' => 4.8133,
             'longitud' => -75.6961,
             'categorías' => ['naturaleza', 'senderismo']
@@ -86,15 +71,6 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        /*
-         * NOTA DE AISLAMIENTO Y MUTILACIÓN: 
-         * Simulación de persistencia. Validamos datos pero no tocamos la base de datos real.
-         * 
-         * Código Futuro Real:
-         * $place = $user->placesManaged()->findOrFail($id);
-         * $place->update($request->all());
-         */
-        
         return response()->json([
             'message' => 'Lugar actualizado correctamente (Simulación)',
             'updated_id' => $id
@@ -102,7 +78,112 @@ class CompanyController extends Controller
     }
 
     /**
-     * Get reservation statistics for the company dashboard.
+     * Get schedules for a specific place (Mocked).
+     */
+    public function getSchedules(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
+        /*
+         * Código Futuro Real:
+         * $place = $user->placesManaged()->findOrFail($id);
+         * $schedules = $place->schedules()->orderBy('id')->get();
+         */
+        $schedules = [
+            [
+                'id' => 101,
+                'place_id' => $id,
+                'dia_semana' => 'lunes',
+                'hora_inicio' => '08:00',
+                'hora_fin' => '17:00',
+                'activo' => true
+            ],
+            [
+                'id' => 102,
+                'place_id' => $id,
+                'dia_semana' => 'martes',
+                'hora_inicio' => '08:00',
+                'hora_fin' => '17:00',
+                'activo' => true
+            ]
+        ];
+
+        return response()->json($schedules, 200);
+    }
+
+    /**
+     * Store a new schedule for a specific place (Mocked).
+     */
+    public function storeSchedule(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
+        /*
+         * Código Futuro Real:
+         * $place = $user->placesManaged()->findOrFail($id);
+         * $schedule = $place->schedules()->create($request->all());
+         */
+        
+        return response()->json([
+            'message' => 'Horario creado correctamente (Simulación)',
+            'id' => rand(1000, 9999)
+        ], 201);
+    }
+
+    /**
+     * Update an existing schedule (Mocked).
+     */
+    public function updateSchedule(Request $request, $id, $scheduleId): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
+        /*
+         * Código Futuro Real:
+         * $schedule = PlaceSchedule::where('place_id', $id)->findOrFail($scheduleId);
+         * $schedule->update($request->all());
+         */
+
+        return response()->json([
+            'message' => 'Horario actualizado correctamente (Simulación)'
+        ], 200);
+    }
+
+    /**
+     * Remove a schedule (Mocked).
+     */
+    public function destroySchedule(Request $request, $id, $scheduleId): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user->tipo_usuario !== 'empresa') {
+            return response()->json(['message' => 'Acceso denegado'], 403);
+        }
+
+        /*
+         * Código Futuro Real:
+         * $schedule = PlaceSchedule::where('place_id', $id)->findOrFail($scheduleId);
+         * $schedule->delete();
+         */
+
+        return response()->json([
+            'message' => 'Horario eliminado correctamente (Simulación)'
+        ], 200);
+    }
+
+    /**
+     * Get reservation statistics (Mocked).
      */
     public function getReservationStats(Request $request): JsonResponse
     {
@@ -112,19 +193,6 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Acceso denegado'], 403);
         }
 
-        /*
-         * NOTA DE AISLAMIENTO Y MUTILACIÓN: 
-         * El modelo 'CompanyReservation' no existe en esta iteración.
-         * Devolveremos 0 contadores mockeados.
-         * 
-         * Código Futuro Real:
-         * $stats = [
-         *     'pending' => $user->companyReservations()->where('status', 'pending')->count(),
-         *     'accepted' => $user->companyReservations()->where('status', 'accepted')->count(),
-         *     'rejected' => $user->companyReservations()->where('status', 'rejected')->count(),
-         * ];
-         */
-        
         $stats = [
             'pending' => 5,
             'accepted' => 12,

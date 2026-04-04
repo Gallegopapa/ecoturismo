@@ -55,6 +55,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/places', [\App\Http\Controllers\API\CompanyController::class, 'getPlaces']);
         Route::get('/places/{place}', [\App\Http\Controllers\API\CompanyController::class, 'getPlace']);
         Route::put('/places/{place}', [\App\Http\Controllers\API\CompanyController::class, 'updatePlace']);
+        
+        // Schedules CRUD (US-COMP-03)
+        Route::get('/places/{place}/schedules', [\App\Http\Controllers\API\CompanyController::class, 'getSchedules']);
+        Route::post('/places/{place}/schedules', [\App\Http\Controllers\API\CompanyController::class, 'storeSchedule']);
+        Route::put('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\CompanyController::class, 'updateSchedule']);
+        Route::delete('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\CompanyController::class, 'destroySchedule']);
+        
         Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyController::class, 'getReservationStats']);
     });
 });

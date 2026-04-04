@@ -196,6 +196,11 @@
   font-size: 0.9rem;
 }
 
+.btn-group {
+  display: flex;
+  gap: 12px;
+}
+
 .btn-manage {
   background-color: #4ade80;
   color: #064e3b;
@@ -212,6 +217,23 @@
   background-color: #22c55e;
 }
 
-.btn-manage:active {
+.btn-schedules {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-schedules:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn-manage:active, .btn-schedules:active {
   transform: scale(0.98);
 }
