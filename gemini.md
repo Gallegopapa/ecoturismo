@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 22: Implementación US-ADMN-05 (Gestión de Reservas - ADMIN CRUD)
+**Fecha:** 05 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `ReservationController.php` (restaurado con métodos administrativos globales), `routes/api.php` (registro de endpoints `/api/admin/reservations`).
+- Frontend React: `main.jsx` (vinculación de `/admin/reservas`), `Header2.jsx` (inyección del link de gestión en el menú administrativo).
+- Componentes: `ReservationsAdmin.jsx` (validado y activado).
+**Integración y Aislamiento:**
+- Módulo de Administración: Se completa la transición del inventario de reservas al panel maestro. Se mantiene la integridad con los modelos de `Place` y `User` para las lecturas cruzadas.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
 ## Commit 21: Implementación US-ADMN-04 (Gestión de Lugares - ADMIN CRUD)
 **Fecha:** 05 Abril 2026
 **Archivos implicados y mantenidos:**

@@ -210,7 +210,13 @@ const Header2 = () => {
                         Gestión de Usuarios
                       </Link>
                     </li>
+                    <li>
+                      <Link to="/admin/reservas" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
+                        Gestión de Reservas
+                      </Link>
+                    </li>
                   </>
+
 
                 )}
                 {user?.tipo_usuario === 'empresa' && (

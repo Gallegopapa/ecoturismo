@@ -120,6 +120,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Gestión de Lugares
         Route::apiResource('places', PlaceController::class);
+
+        // Gestión de Reservas (US-ADMN-05)
+        Route::get('/reservations', [ReservationController::class, 'all']);
+        Route::post('/reservations', [ReservationController::class, 'store']);
+        Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
+        Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy']);
         
         // Gestión de Ecohoteles (US-ADMN-02)
 

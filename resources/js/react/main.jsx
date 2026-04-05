@@ -21,7 +21,9 @@ import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
 import ReservationsPage from "./reservations/page.jsx";
 import EcohotelsAdmin from "./admin/EcohotelsAdmin.jsx";
 import UsersAdmin from "./admin/UsersAdminMejorado.jsx";
+import ReservationsAdmin from "./admin/ReservationsAdmin.jsx";
 import CompanyDashboard from "./company/dashboard/page.jsx";
+
 
 
 import EditPlace from "./company/places/EditPlace.jsx";
@@ -145,7 +147,12 @@ const router = createBrowserRouter([
   {
     path: "/admin/usuarios",
     element: <UsersAdmin />,
+  },
+  {
+    path: "/admin/reservas",
+    element: <ReservationsAdmin />,
   }
+
 
 ]);
 
