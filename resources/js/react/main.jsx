@@ -19,7 +19,9 @@ import MapPage from "./map/page.jsx";
 import EcohotelsPage from "./ecohotels/page.jsx";
 import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
 import ReservationsPage from "./reservations/page.jsx";
+import EcohotelsAdmin from "./admin/EcohotelsAdmin.jsx";
 import CompanyDashboard from "./company/dashboard/page.jsx";
+
 import EditPlace from "./company/places/EditPlace.jsx";
 import ManageSchedules from "./company/schedules/ManageSchedules.jsx";
 import ManageReservations from "./company/reservations/ManageReservations.jsx";
@@ -108,6 +110,10 @@ const router = createBrowserRouter([
   {
     path: "/ecohoteles/:id",
     element: <EcohotelDetailPage />,
+  },
+  {
+    path: "/admin/ecohotels",
+    element: <EcohotelsAdmin />,
   },
   {
     path: "/company/dashboard",

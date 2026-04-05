@@ -1,5 +1,16 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 19: Implementación US-ADMN-02 (Gestión de Ecohoteles - ADMIN CRUD)
+**Fecha:** 04 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `EcohotelController.php` (validada la lógica CRUD completa), `routes/api.php` (registro de rutas públicas y administrativas de ecohoteles).
+- Frontend React: `main.jsx` (registro de ruta `/admin/ecohotels`), `Header2.jsx` (inyección del link "Panel Admin" en el menú de usuario condicionado a `is_admin`).
+**Integración y Aislamiento (Módulo Completo):**
+- Módulo de Administración: Se ha habilitado el primer bloque del panel administrativo (Ecohoteles). Se mantiene la integridad polimórfica con categorías y lugares.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
 ## Commit 18: Implementación US-REV-03 (Eliminar Reseña propia / Admin)
 **Fecha:** 04 Abril 2026
 **Archivos implicados y mantenidos:**

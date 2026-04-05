@@ -193,7 +193,15 @@ const Header2 = () => {
                     Mis Reservas
                   </Link>
                 </li>
+                {user?.is_admin && (
+                  <li>
+                    <Link to="/admin/ecohotels" className="menu-link" role="menuitem" onClick={handleLinkClick}>
+                      Panel Admin
+                    </Link>
+                  </li>
+                )}
                 <li className="menu-divider"></li>
+
                 <li>
                   <button
                     onClick={handleLogout}
