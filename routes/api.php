@@ -119,7 +119,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/users/{id}', [\App\Http\Controllers\API\AdminUserController::class, 'destroy']);
 
         // Gestión de Lugares
-        Route::apiResource('places', AdminController::class);
+        Route::apiResource('places', PlaceController::class);
         
         // Gestión de Ecohoteles (US-ADMN-02)
 

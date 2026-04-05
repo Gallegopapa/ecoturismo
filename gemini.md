@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 21: Implementación US-ADMN-04 (Gestión de Lugares - ADMIN CRUD)
+**Fecha:** 05 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `PlaceController.php` (restaurado con métodos CRUD completos para Administrador), `routes/api.php` (re-asociación de `admin/places` al controlador real).
+- Frontend React: `main.jsx` (vinculación de `/admin/places` a `ManagePlaces.jsx`), `Header2.jsx` (validación de link administrativo).
+- Componentes: `ManagePlaces.jsx` y `PlaceForm.jsx` (validados y operativos).
+**Integración y Aislamiento:**
+- Módulo de Administración: Se habilita el catálogo maestro de lugares. Se mantiene la integridad con categorías y horarios a través del controlador unificado.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
 ## Commit 20: Implementación US-ADMN-03 (Gestión de Usuarios - ADMIN CRUD)
 **Fecha:** 05 Abril 2026
 **Archivos implicados y mantenidos:**
