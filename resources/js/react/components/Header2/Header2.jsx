@@ -194,12 +194,27 @@ const Header2 = () => {
                   </Link>
                 </li>
                 {user?.is_admin && (
+                  <>
+                    <li>
+                      <Link to="/admin/places" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
+                        Gestión de Lugares (Admin)
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/admin/ecohotels" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
+                        Panel Admin (Ecohoteles)
+                      </Link>
+                    </li>
+                  </>
+                )}
+                {user?.tipo_usuario === 'empresa' && (
                   <li>
-                    <Link to="/admin/ecohotels" className="menu-link" role="menuitem" onClick={handleLinkClick}>
-                      Panel Admin
+                    <Link to="/company/dashboard" className="menu-link company-link" role="menuitem" onClick={handleLinkClick}>
+                      Panel de Empresa
                     </Link>
                   </li>
                 )}
+
                 <li className="menu-divider"></li>
 
                 <li>
