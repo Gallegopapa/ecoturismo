@@ -1,5 +1,17 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 20: Implementación US-ADMN-03 (Gestión de Usuarios - ADMIN CRUD)
+**Fecha:** 05 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `AdminUserController.php` (CRUD completo de usuarios con asignación de lugares), `routes/api.php` (registro de endpoints `/api/admin/users`).
+- Frontend React: `main.jsx` (registro de ruta `/admin/usuarios`), `Header2.jsx` (inyección del link "Gestión de Usuarios" en el menú administrativo).
+- Componentes: `UsersAdminMejorado.jsx`, `CreateUserModal.jsx`, `EditUserModal.jsx` (validados y activados).
+**Integración y Aislamiento:**
+- Módulo de Administración: Se completa la gestión de Identidad y Acceso. Se mantiene el middleware de protección y la validación de integridad para evitar auto-eliminación o cambios de rol críticos sin privilegios.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
 ## Commit 19: Implementación US-ADMN-02 (Gestión de Ecohoteles - ADMIN CRUD)
 **Fecha:** 04 Abril 2026
 **Archivos implicados y mantenidos:**

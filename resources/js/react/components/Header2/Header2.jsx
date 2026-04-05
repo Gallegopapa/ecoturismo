@@ -205,7 +205,13 @@ const Header2 = () => {
                         Panel Admin (Ecohoteles)
                       </Link>
                     </li>
+                    <li>
+                      <Link to="/admin/usuarios" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
+                        Gestión de Usuarios
+                      </Link>
+                    </li>
                   </>
+
                 )}
                 {user?.tipo_usuario === 'empresa' && (
                   <li>

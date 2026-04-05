@@ -20,7 +20,9 @@ import EcohotelsPage from "./ecohotels/page.jsx";
 import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
 import ReservationsPage from "./reservations/page.jsx";
 import EcohotelsAdmin from "./admin/EcohotelsAdmin.jsx";
+import UsersAdmin from "./admin/UsersAdminMejorado.jsx";
 import CompanyDashboard from "./company/dashboard/page.jsx";
+
 
 import EditPlace from "./company/places/EditPlace.jsx";
 import ManageSchedules from "./company/schedules/ManageSchedules.jsx";
@@ -139,7 +141,12 @@ const router = createBrowserRouter([
   {
     path: "/admin/places",
     element: <ManagePlacesAdmin />,
+  },
+  {
+    path: "/admin/usuarios",
+    element: <UsersAdmin />,
   }
+
 ]);
 
 createRoot(document.getElementById("root")).render(

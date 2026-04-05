@@ -112,10 +112,17 @@ Route::middleware('auth:sanctum')->group(function () {
     // MÓDULO ADMINISTRATIVO (US-ADMN)
     // ============================================
     Route::prefix('admin')->group(function () {
+        // Gestión de Usuarios (US-ADMN-03)
+        Route::get('/users', [\App\Http\Controllers\API\AdminUserController::class, 'index']);
+        Route::post('/users', [\App\Http\Controllers\API\AdminUserController::class, 'store']);
+        Route::put('/users/{id}', [\App\Http\Controllers\API\AdminUserController::class, 'update']);
+        Route::delete('/users/{id}', [\App\Http\Controllers\API\AdminUserController::class, 'destroy']);
+
         // Gestión de Lugares
         Route::apiResource('places', AdminController::class);
         
         // Gestión de Ecohoteles (US-ADMN-02)
+
         Route::get('/ecohotels', [EcohotelController::class, 'index']);
         Route::post('/ecohotels', [EcohotelController::class, 'store']);
         Route::post('/ecohotels/{ecohotel}', [EcohotelController::class, 'update']); // Spoofing para multipart
