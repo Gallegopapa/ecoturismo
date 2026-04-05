@@ -1,664 +1,286 @@
-﻿
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body, input, textarea {
-  font-family: 'Poppins', sans-serif;
-}
-
-.contact-page-container {
-  position: relative !important;
-  width: 100% !important;
-  background-color: #f5f6fa;
-  overflow: hidden;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding-top: 120px;
-  padding-bottom: 120px;
-  margin: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  box-sizing: border-box;
-}
-
-.information a {
-  text-decoration: none;
-  color: #555;
-}
-
-.information a:hover {
-  color: #27ae60;
-  text-decoration: underline;
-}
-
-.form {
-  width: 95%;
-  max-width: 1100px;
-  background-color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-  z-index: 1 !important;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  position: relative;
-  transition: box-shadow 0.3s ease;
-}
-
-.form:hover {
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-}
-
-.contact-form {
-  background-color: #27ae60;
-  position: relative;
-  border-left: 5px solid #27ae60;
-}
-
-.circle {
-  border-radius: 50%;
-  background: linear-gradient(135deg, transparent 20%, #0f0f0f);
-  position: absolute;
-}
-
-.circle.one {
-  width: 130px;
-  height: 130px;
-  top: 130px;
-  right: -40px;
-  animation: subeybaja 2s infinite alternate;
-}
-
-.circle.two {
-  width: 80px;
-  height: 80px;
-  top: 10px;
-  right: 30px;
-  animation: subeybaja 2s infinite alternate;
-}
-
-.contact-form:before {
-  content: "";
-  position: absolute;
-  width: 26px;
-  height: 26px;
-  background-color: #27ae60;
-  transform: rotate(45deg);
-  top: 50px;
-  left: -13px;
-}
-
-form {
-  padding: 2.3rem 2.2rem;
-  z-index: 10;
-
-  position: relative;
-}
-
-.tittle {
-  color: #0b0a0a;
-  font-weight: 500;
-  font-size: 1.5rem;
-  line-height: 1;
-  margin-bottom: 0.7rem;
-}
-
-.input-container {
-  position: relative;
-  margin: 1rem 0;
-}
-
-.input {
-  width: 100%;
-  outline: none;
-  border: 2px solid #fafafa;
-  background: none;
-  padding: 0.6rem 1.2rem;
-  color: #fff;
-  font-weight: 500;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  border-radius: 25px;
-  transition: 0.3s;
-}
-
-/* ===== INPUTS TRANSPARENTES CON BORDE BLANCO ===== */
-
-.input,
-textarea.input {
-  background-color: transparent !important;
-  border: 2px solid #ffffff;
-}
-
-/* Focus */
-.input:focus,
-textarea.input:focus {
-  outline: none;
-  border-color: #ffffff;
-  background-color: transparent;
-}
-
-/* Placeholder */
-.input::placeholder,
-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* Autofill (Chrome, Edge) */
-input:-webkit-autofill,
-textarea:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
-  -webkit-text-fill-color: #ffffff !important;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
-/* Hover opcional */
-.input:hover,
-textarea.input:hover {
-  border-color: #ffffff;
-}
-
-/* ============================= */
-/* INPUTS TAMA├æO EXACTO IMAGEN */
-/* ============================= */
-
-.contact-form .input-container:not(.textarea) .input {
-  display: block;
-  height: 42px;
-  min-height: 42px;
-  max-height: 42px;
-  padding: 0 1rem;
-  line-height: 42px;
-  border: 2px solid #ffffff;
-  background-color: transparent !important;
-  color: #ffffff;
-  font-size: 0.9rem;
-  border-radius: 30px;
-}
-
-/* Textarea proporcional */
-.contact-form textarea.input {
-  min-height: 130px;
-  padding: 0.8rem 1.2rem;
-  border-radius: 22px;
-  background-color: transparent !important;
-  color: #ffffff;
-}
-
-/* Focus limpio */
-.contact-form .input:focus,
-.contact-form textarea.input:focus {
-  outline: none;
-  border-color: #ffffff;
-  background-color: transparent;
-}
-
-/* Label ajustado al nuevo tama├▒o */
-.contact-form .input-container label {
-  font-size: 0.25rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #27ae60;
-  padding: 0 6px;
-  color: #ffffff;
-}
-
-/* Label flotante */
-.contact-form .input-container.focus label {
-  color: #ffffff;
-  top: 0;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-}
-
-/* Elimina cortes del borde */
-.contact-form .input-container span {
-  display: none;
-}
-
-/* Autofill */
-input:-webkit-autofill,
-textarea:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-
-
-textarea.input {
-  padding: 0.8rem 1.2rem;
-  min-height: 150px;
-  border-radius: 22px;
-  resize: none;
-  overflow-y: auto;
-}
-
-.input-container label {
-  position: absolute;
-  top: 50%;
-  left: 15px;
-  transform: translateY(-50%);
-  padding: 0 0.4rem;
-  color: #fafafa;
-  font-size: 0.9rem;
-  font-weight: 400;
-  pointer-events: none;
-  z-index: 1000;
-  transition: 0.5s;
-}
-
-.input-container.textarea label {
-  top: 1rem;
-  transform: translateY(0);
-}
-
-.btn {
-  padding: 0.6rem 1.3rem;
-  background-color: #fff;
-  border: 2px solid #fafafa;
-  font-size: 0.95rem;
-  color: #2ecc71;
-  line-height: 1;
-  border-radius: 25px;
-  outline: none;
-  cursor: pointer;
-  transition: 0.3s;
-  margin-top: 0;
-  margin-left: 0;
-}
-
-.btn:hover {
-  transform: scale(1.1);
-  background-color: transparent;
-  color: #fff;
-}
-
-.button-container {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-start;
-  margin-top: 25px;
-  flex-wrap: wrap;
-}
-
-.input-container span {
-  position: absolute;
-  top: 0;
-  left: 25px;
-  transform: translateY(-50%);
-  font-size: 0.8rem;
-  padding: 0 0.4rem;
-  color: transparent;
-  pointer-events: none;
-  z-index: 500;
-}
-
-.input-container span:before,
-.input-container span::after {
-  content: "";
-  position: absolute;
-  width: 10%;
-  opacity: 0;
-  transition: 0.3s;
-  height: 5px;
-  background-color: #27ae60;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.input-container span:before {
-  left: 50%;
-}
-
-.input-container span:after {
-  right: 50%;
-}
-
-.input-container.focus label {
-  top: 0;
-  transform: translateY(-50%);
-  left: 25px;
-  font-size: 0.8rem;
-}
-
-.input-container.focus span:before,
-.input-container.focus span::after {
-  width: 50%;
-  opacity: 1;
-}
-
-/* --- INFORMACI├ôN Y CONTACTO --- */
-.contact-info {
-  padding: 2.5rem 2.5rem;
-  position: relative;
-  margin-bottom: 0;
-  background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-  display: flex;
-  flex-direction: column;
-}
-
-.contact-info .tittle {
-  color: #27ae60;
-  font-weight: 600;
-  font-size: 1.6rem;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.5px;
-}
-
-.text {
-  color: #555;
-  margin: 1rem 0 1.5rem 0;
-  line-height: 1.6;
-  font-weight: 400;
-  font-size: 0.95rem;
-}
-
-.information {
-  display: flex;
-  color: #666;
-  margin: 1rem 0;
-  align-items: center;
-  font-size: 0.95rem;
-  padding: 0.6rem 0;
-  transition: all 0.3s ease;
-}
-
-.information:hover {
-  color: #27ae60;
-  padding-left: 8px;
-}
-
-.icon {
-  width: 32px;
-  height: 32px;
-  margin-right: 1rem;
-  transition: transform 0.3s ease;
-  flex-shrink: 0;
-}
-
-.information:hover .icon {
-  transform: scale(1.1);
-}
-
-/* ICONOS DE REDES */
-.social-media {
-  position: relative;
-  margin-top: auto;
-  padding-top: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  border-top: 2px solid rgba(39, 174, 96, 0.15);
-}
-
-.social-media p {
-  color: #27ae60;
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
-}
-
-.social-icon {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  width: 100%;
-}
-
-.social-icon a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(34, 153, 84, 0.05));
-  transition: all 0.3s ease;
-  border: 2px solid rgba(39, 174, 96, 0.2);
-}
-
-.social-icon a:hover {
-  background: linear-gradient(135deg, #27ae60, #229954);
-  border-color: #27ae60;
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-}
-
-.social-icon img {
-  width: 24px;
-  height: 24px;
-  transition: all 0.3s ease;
-}
-
-.social-icon a:hover img {
-  filter: brightness(1.2);
-}
-
-#volver {
-  padding: 0.65rem 1.8rem;
-  background-color: #000;
-  border: 2px solid #000;
-  font-size: 0.95rem;
-  color: white;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-#volver a {
-  text-decoration: none;
-  color: white;
-}
-
-#volver:hover {
-  border: 2px solid #000;
-  transform: translateY(-2px);
-  background-color: #222;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-#volver:hover a {
-  color: white;
-}
-
-.copyright {
-  color: #999;
-  margin-top: auto;
-  padding-top: 1rem;
-  letter-spacing: 0.5px;
-  font-size: 0.85rem;
-  text-align: center;
-  border-top: 2px solid rgba(39, 174, 96, 0.1);
-}
-
-/* ANIMACI├ôN */
-@keyframes subeybaja {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
-  100% {
-    transform: translateX(-10px);
-  }
-}
-
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 1024px) {
-  .contact-page-container {
-    padding: 100px 20px;
-  }
-
-  .form {
-    grid-template-columns: 1fr;
-    max-width: 95%;
-  }
-}
-
-@media (max-width: 850px) {
-  .contact-page-container {
-    max-height: 300vh !important;
-    padding: 90px 15px;
-  }
-
-  .form {
-    grid-template-columns: 1fr;
-  }
-
-  .contact-info:before {
-    top: -75px;
-    right: 65px;
-    transform: scale(0.95);
-  }
-
-  .contact-form:before {
-    top: -13px;
-    right: 70px;
-  }
-
-  .text {
-    margin: 1rem 0 1.5rem 0;
-  }
-
-  .social-media {
-    padding: 1.5rem 0 0 0;
-  }
-}
-
-@media (max-width: 600px) {
-  .contact-page-container {
-    padding: 80px 12px 60px 12px;
-  }
-
-  form,
-  .contact-info {
-    padding: 1.5rem 1.2rem;
-  }
-
-  .tittle {
-    font-size: 1.5rem;
-    margin-bottom: 0.8rem;
-  }
-
-  .text {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-  }
-
-  .input-container {
-    margin-bottom: 1rem;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .contact-page-container {
-    padding: 80px 10px 60px 10px;
-  }
-
-  form,
-  .contact-info {
-    padding: 1.4rem 1rem;
-  }
-
-  .text,
-  .information,
-  .social-media p {
-    font-size: 0.8rem;
-  }
-
-  .title {
-    font-size: 1.15rem;
-  }
-
-  .icon {
-    width: 23px;
-  }
-
-  .input {
-    padding: 0.45rem 1.2rem;
-  }
-
-  .btn {
-    padding: 0.45rem 1.2rem;
-  }
-}
-
-@media (min-width: 851px) {
-  .contact-info {
-    margin-bottom: 20px;
-  }
-
-  #volver {
-    position: relative;
-    bottom: 50px;
-  }
-}
-
-/* Contador de caracteres y validaci├│n */
-.char-counter {
-  margin-top: 12px;
-  margin-bottom: 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #ffffff;
-  color: white;
-  text-align: right;
-  padding: 0 1.3rem;
-}
-
-.char-counter.error {
-  color: #ffcccc;
-  font-weight: 700;
-}
-
-.error-message {
-  margin-top: 10px;
-  margin-bottom: 15px;
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 600;
-  background: #e74c3c;
-  padding: 12px 15px;
-  border-radius: 8px;
-  border-left: 4px solid #c0392b;
-  animation: slideIn 0.3s ease;
-}
-
-/* Estilos para errores de campos individuales */
-.input-error {
-  border-color: #ef4444 !important;
-  background-color: #fef2f2 !important;
-}
-
-.field-error {
-  color: #dc2626;
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-top: 4px;
-  margin-bottom: 12px;
-  display: block;
-  animation: slideIn 0.2s ease;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+﻿import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/react/context/AuthContext";
+import Header from "@/react/components/Header/Header";
+import Header2 from "@/react/components/Header2/Header2";
+import Footer from "@/react/components/Footer/Footer";
+import { contactsService } from "@/react/services/api";
+import "./contacto.css";
+
+// ­ƒö╣ Importaci├│n correcta de im├ígenes
+import locationIcon from "@/assets/maps-and-location.png";
+import mailIcon from "@/assets/correo-electronico.png";
+import phoneIcon from "@/assets/telefono.png";
+import fbIcon from "@/assets/iconofb.png";
+import wpIcon from "@/assets/iconowp.png";
+import igIcon from "@/assets/iconoig.png";
+
+export default function Contact() {
+  const { isAuthenticated } = useAuth();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState({});
+  const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [messageError, setMessageError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Validaci├│n de mensaje con limite de 500 caracteres
+    if (name === "message") {
+      if (value.length > 500) {
+        setMessageError("El mensaje no debe tener m├ís de 500 caracteres.");
+      } else {
+        setMessageError("");
+      }
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "El nombre es requerido";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "El correo es requerido";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "El correo no es v├ílido";
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "El tel├®fono es requerido";
+    } else if (!/^\d{7,10}$/.test(formData.phone)) {
+      newErrors.phone = "El tel├®fono debe tener entre 7 y 10 d├¡gitos";
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = "El mensaje es requerido";
+    } else if (formData.message.length > 500) {
+      newErrors.message = "El mensaje no debe tener m├ís de 500 caracteres";
+    }
+
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrors({});
+    setSuccessMsg("");
+    setLoading(true);
+
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Enviar el mensaje al backend
+      const response = await contactsService.send({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+      });
+
+      // Mensaje enviado exitosamente
+      setSuccessMsg(response.message || "┬íMensaje enviado exitosamente!");
+
+      // Limpiar el formulario
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+
+      // Ocultar el mensaje despu├®s de 5 segundos
+      setTimeout(() => setSuccessMsg(""), 5000);
+    } catch (error) {
+      console.error("Error al enviar mensaje:", error);
+      
+      // Manejar errores de validaci├│n del servidor
+      if (error.response?.data?.errors) {
+        setErrors(error.response.data.errors);
+      } else {
+        setErrors({
+          general: error.response?.data?.message || "Error al enviar el mensaje. Por favor, intenta nuevamente."
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      {isAuthenticated ? <Header2 /> : <Header />}
+
+      <div className="contact-page-container">
+        <div className="form">
+
+          {/* ------- COLUMNA IZQUIERDA ------- */}
+          <div className="contact-info">
+            <h3 className="tittle">Pong├ímonos en contacto</h3>
+            <p className="text">
+              Escr├¡benos y te buscamos la mejor opci├│n para tu p├ígina
+            </p>
+
+            <div className="info">
+              <div className="information">
+                <img src={locationIcon} className="icon" alt="" />
+                <p>Dosquebradas-Pereira</p>
+              </div>
+
+              <div className="information">
+                <img src={mailIcon} className="icon" alt="" />
+                <a href="mailto:proyectoecoturismo2@gmail.com">
+                  <p>proyectoecoturismo2@gmail.com</p>
+                </a>
+              </div>
+
+              <div className="information">
+                <img src={phoneIcon} className="icon" alt="" />
+                <a href="tel:3134152020">
+                  <p>3134152020</p>
+                </a>
+              </div>
+
+              <div className="information copyright">
+                <p>┬® 2025 RisaraldaEcoTurismo</p>
+              </div>
+            </div>
+
+            {/* Redes sociales */}
+            <div className="social-media">
+              <p>Con├®ctate con nosotros:</p>
+              <div className="social-icon">
+                <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
+                  <img src={fbIcon} width="30" alt="Facebook" />
+                </a>
+
+                <a href="https://www.whatsapp.com" target="_blank" rel="noreferrer">
+                  <img src={wpIcon} width="30" alt="WhatsApp" />
+                </a>
+
+                <a href="https://www.instagram.com" target="_blank" rel="noreferrer">
+                  <img src={igIcon} width="30" alt="Instagram" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* ------- COLUMNA DERECHA ------- */}
+          <div className="contact-form">
+            <form onSubmit={handleSubmit}>
+              <h3 className="tittle">Cont├íctanos</h3>
+
+              <div className="input-container focus">
+                <input
+                  type="text"
+                  name="name"
+                  className={`input ${errors.name ? 'input-error' : ''}`}
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+                <label>Nombre de usuario</label>
+                <span>Nombre de usuario</span>
+              </div>
+              {errors.name && <p className="field-error">{errors.name}</p>}
+
+              <div className="input-container focus">
+                <input
+                  type="email"
+                  name="email"
+                  className={`input ${errors.email ? 'input-error' : ''}`}
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+                <label>Correo</label>
+                <span>Correo</span>
+              </div>
+              {errors.email && <p className="field-error">{errors.email}</p>}
+
+              <div className="input-container focus">
+                <input
+                  type="tel"
+                  name="phone"
+                  className={`input ${errors.phone ? 'input-error' : ''}`}
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
+                <label>Tel├®fono</label>
+                <span>Tel├®fono</span>
+              </div>
+              {errors.phone && <p className="field-error">{errors.phone}</p>}
+
+              <div className="input-container textarea focus">
+                <textarea
+                  name="message"
+                  className={`input ${errors.message ? 'input-error' : ''}`}
+                  value={formData.message}
+                  onChange={handleChange}
+                ></textarea>
+                <label>Mensaje</label>
+                <span>Mensaje</span>
+              </div>
+              {errors.message && <p className="field-error">{errors.message}</p>}
+
+              <div className={`char-counter ${formData.message.length > 500 ? 'error' : ''}`}>
+                {formData.message.length}/500
+              </div>
+
+              {messageError && <p className="error-message">{messageError}</p>}
+
+              <div className="button-container">
+                <input 
+                  type="submit" 
+                  value={loading ? "Enviando..." : "Enviar"} 
+                  className="btn" 
+                  disabled={loading}
+                />
+              </div>
+
+              {successMsg && (
+                <p style={{ color: "#2563eb", marginTop: "10px", fontWeight: "bold", backgroundColor: "#dbeafe", padding: "12px", borderRadius: "6px", border: "1px solid #93c5fd" }}>
+                  Ô£ô {successMsg}
+                </p>
+              )}
+
+              {errors.general && (
+                <p style={{ color: "#ef4444", marginTop: "10px" }}>
+                  {errors.general}
+                </p>
+              )}
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+    </>
+  );
 }
