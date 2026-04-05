@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Http\Controllers\API;
 
@@ -23,16 +23,16 @@ class ContactController extends Controller
             'message' => ['required', 'string', 'max:2000', new NoProfanity()],
         ], [
             'name.required' => 'El nombre es requerido.',
-            'email.required' => 'El correo electr├│nico es requerido.',
-            'email.email' => 'El correo electr├│nico debe ser v├ílido.',
-            'phone.required' => 'El tel├®fono es requerido.',
+            'email.required' => 'El correo electrónico es requerido.',
+            'email.email' => 'El correo electrónico debe ser válido.',
+            'phone.required' => 'El teléfono es requerido.',
             'message.required' => 'El mensaje es requerido.',
             'message.max' => 'El mensaje no puede exceder los 2000 caracteres.',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Error de validaci├│n',
+                'message' => 'Error de validación',
                 'errors' => $validator->errors()
             ], 422);
         }
@@ -80,7 +80,7 @@ class ContactController extends Controller
     }
 
     /**
-     * Obtener un contacto espec├¡fico (solo para administradores)
+     * Obtener un contacto específico (solo para administradores)
      */
     public function show(Request $request, $id): JsonResponse
     {

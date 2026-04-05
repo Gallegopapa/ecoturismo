@@ -3,135 +3,182 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\PasswordResetController;
-use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\PlaceController;
-use App\Http\Controllers\API\CategoryController;
-use App\Http\Controllers\API\EcohotelController;
-use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\ReservationController;
+use App\Http\Controllers\API\ReviewController;
+use App\Http\Controllers\API\FavoriteController;
+use App\Http\Controllers\API\PaymentController;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\API\MessageController;
+use App\Http\Controllers\API\ContactController;
+use App\Http\Controllers\API\AdminPlaceController;
+use App\Http\Controllers\API\AdminUserController;
 use App\Http\Controllers\API\PlaceScheduleController;
-use App\Http\Controllers\API\CompanyController;
-use App\Http\Controllers\API\AdminController;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
+use App\Http\Controllers\API\PasswordResetController;
+use App\Http\Controllers\API\CompanyReservationController;
+use App\Http\Controllers\API\RejectionReasonController;
+use App\Http\Controllers\API\CompanyPlaceController;
+use App\Http\Controllers\API\CompanyPlaceScheduleController;
+use App\Http\Controllers\API\EcohotelController;
 
 // ============================================
-// RUTAS PÚBLICAS (sin autenticación)
+// RUTAS PÃšBLICAS (sin autenticaciÃ³n)
 // ============================================
-
-// Autenticación y Recuperación
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/password/forgot', [PasswordResetController::class, 'sendResetLink']);
 Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
-
-// Perfil e Imágenes
 Route::get('/profile/photo/stream', [ProfileController::class, 'photoByQuery']);
 Route::get('/profile/photo/{filename}', [ProfileController::class, 'photo'])->where('filename', '.*');
 
-// Exploración de Lugares (US-PLCS-01, US-PLCS-02)
+
+// Rutas pÃºblicas de lugares
 Route::get('/places', [PlaceController::class, 'index']);
 Route::get('/places/options', [PlaceController::class, 'options']);
 Route::get('/places/{place}', [PlaceController::class, 'show']);
 Route::get('/places/{place}/available-schedules', [PlaceController::class, 'getAvailableSchedules']);
 Route::get('/places/{place}/schedules', [PlaceScheduleController::class, 'index']);
-Route::get('/places/{id}/reviews', function($id, Request $request) {
-    return app(ReviewController::class)->index($request, 'place', $id);
-});
 
-// Categorías
-Route::get('/categories', [CategoryController::class, 'index']);
-
-// Exploración de Ecohoteles (US-PLCS-03)
+// Rutas pÃºblicas de ecohoteles
 Route::get('/ecohotels', [EcohotelController::class, 'index']);
 Route::get('/ecohotels/{ecohotel}', [EcohotelController::class, 'show']);
-Route::get('/ecohotels/{id}/reviews', function($id, Request $request) {
-    return app(ReviewController::class)->index($request, 'ecohotel', $id);
+
+// Rutas pÃºblicas de categorÃ­as
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{category}', [CategoryController::class, 'show']);
+
+// Rutas pÃºblicas de reseÃ±as
+Route::get('/reviews/all', [ReviewController::class, 'all']);
+Route::get('/places/{id}/reviews', function($id, \Illuminate\Http\Request $request) {
+    return app(\App\Http\Controllers\API\ReviewController::class)->index($request, 'place', $id);
+});
+Route::get('/ecohotels/{id}/reviews', function($id, \Illuminate\Http\Request $request) {
+    return app(\App\Http\Controllers\API\ReviewController::class)->index($request, 'ecohotel', $id);
 });
 
+// Rutas pÃºblicas de razones de rechazo
+Route::get('/rejection-reasons', [RejectionReasonController::class, 'index']);
+
+// EnvÃ­o de mensajes (pÃºblico, pero puede incluir user_id si estÃ¡ autenticado)
+Route::post('/messages', [MessageController::class, 'store']);
+
+// EnvÃ­o de contactos (pÃºblico, pero puede incluir user_id si estÃ¡ autenticado)
+Route::post('/contacts', [ContactController::class, 'store']);
+
 // ============================================
-// RUTAS PROTEGIDAS (requieren autenticación con Sanctum)
+// RUTAS PROTEGIDAS (requieren autenticaciÃ³n con Sanctum)
 // ============================================
 Route::middleware('auth:sanctum')->group(function () {
-    
-    // Gestión de Sesión
+    // AutenticaciÃ³n
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/logout-all', [AuthController::class, 'logoutAll']);
     Route::get('/user', [AuthController::class, 'me']);
     Route::get('/verify-token', [AuthController::class, 'verifyToken']);
-
-    // Gestión del Perfil (US-PROF)
+    
+    // Perfil de usuario
     Route::get('/profile', [ProfileController::class, 'show']);
-    Route::post('/profile', [ProfileController::class, 'update']); // Multi-part
-    Route::put('/profile', [ProfileController::class, 'update']);  // JSON
+    Route::post('/profile', [ProfileController::class, 'update']); // POST para FormData con imagen
+    Route::put('/profile', [ProfileController::class, 'update']); // PUT para JSON sin imagen
     Route::put('/profile/password', [ProfileController::class, 'changePassword']);
-    Route::delete('/profile', [ProfileController::class, 'destroy']);
-
-    // Reservas de Usuario (US-RES)
-    Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::delete('/profile', [ProfileController::class, 'destroy']); // Eliminar cuenta
+    
+    // Rutas de lugares (CRUD completo - solo admin)
+    Route::post('/places', [PlaceController::class, 'store'])->middleware('admin');
+    Route::put('/places/{place}', [PlaceController::class, 'update'])->middleware('admin');
+    Route::delete('/places/{place}', [PlaceController::class, 'destroy'])->middleware('admin');
+    
+    // Rutas de categorÃ­as (CRUD completo - solo admin)
+    Route::post('/categories', [CategoryController::class, 'store'])->middleware('admin');
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])->middleware('admin');
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->middleware('admin');
+    
+    // Rutas de reservas
     Route::get('/reservations/my', [ReservationController::class, 'myReservations']);
-    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy']);
-
-    // Reseñas de Usuario (US-REV)
+    Route::apiResource('reservations', ReservationController::class);
+    
+    // Rutas de comentarios/reseÃ±as
     Route::post('/reviews', [ReviewController::class, 'store']);
     Route::put('/reviews/{review}', [ReviewController::class, 'update']);
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
-
+    
+    // Rutas de favoritos
+    Route::get('/favorites', [FavoriteController::class, 'index']);
+    Route::get('/favorites/check/{placeId}', [FavoriteController::class, 'check']);
+    Route::post('/favorites', [FavoriteController::class, 'store']);
+    Route::delete('/favorites/{placeId}', [FavoriteController::class, 'destroy']);
+    
+    // Rutas de pagos (BOCETO)
+    Route::get('/payments', [PaymentController::class, 'index']);
+    Route::post('/payments', [PaymentController::class, 'store']);
+    
+    // Rutas de contactos (solo lectura para admin)
+    Route::get('/contacts', [ContactController::class, 'index'])->middleware('admin');
+    Route::get('/contacts/{contact}', [ContactController::class, 'show'])->middleware('admin');
+    
     // ============================================
-    // MÓDULO DE EMPRESA (US-COMP)
+    // RUTAS DE EMPRESA (para usuarios tipo empresa)
     // ============================================
     Route::prefix('company')->group(function () {
-        Route::get('/places', [CompanyController::class, 'getPlaces']);
-        Route::get('/places/{place}', [CompanyController::class, 'getPlace']);
-        Route::put('/places/{place}', [CompanyController::class, 'updatePlace']);
-        
-        // Horarios
-        Route::get('/places/{place}/schedules', [CompanyController::class, 'getSchedules']);
-        Route::post('/places/{place}/schedules', [CompanyController::class, 'storeSchedule']);
-        Route::put('/places/{place}/schedules/{schedule}', [CompanyController::class, 'updateSchedule']);
-        Route::delete('/places/{place}/schedules/{schedule}', [CompanyController::class, 'destroySchedule']);
-        
-        // Reservas
-        Route::get('/reservations', [CompanyController::class, 'getReservations']);
-        Route::post('/reservations/{id}/accept', [CompanyController::class, 'acceptReservation']);
-        Route::post('/reservations/{id}/reject', [CompanyController::class, 'rejectReservation']);
-        Route::post('/reservations/{id}/reopen', [CompanyController::class, 'reopenReservation']);
-        Route::get('/rejection-reasons', [CompanyController::class, 'getRejectionReasons']);
-        
-        // Estadísticas
-        Route::get('/reservations/stats', [CompanyController::class, 'getReservationStats']);
-        Route::get('/reservations/place/{place}/stats', [CompanyController::class, 'getPlaceReservationStats']);
+        // Lugares gestionados por la empresa
+        Route::get('/places', [CompanyPlaceController::class, 'index']);
+
+        Route::get('/places/{place}', [CompanyPlaceController::class, 'show']);
+        Route::post('/places/{place}', [CompanyPlaceController::class, 'update']); // POST para FormData con _method=PUT
+        Route::put('/places/{place}', [CompanyPlaceController::class, 'update']);
+        Route::delete('/places/{place}', [CompanyPlaceController::class, 'destroy']);
+
+        Route::get('/places/{place}/schedules', [CompanyPlaceScheduleController::class, 'index']);
+        Route::post('/places/{place}/schedules', [CompanyPlaceScheduleController::class, 'store']);
+        Route::put('/places/{place}/schedules/{schedule}', [CompanyPlaceScheduleController::class, 'update']);
+        Route::delete('/places/{place}/schedules/{schedule}', [CompanyPlaceScheduleController::class, 'destroy']);
+
+        // Gestión de reservas desde la perspectiva de la empresa
+        Route::get('/reservations', [CompanyReservationController::class, 'index']);
+        Route::get('/reservations/stats', [CompanyReservationController::class, 'statsSummary']);
+        Route::get('/reservations/{companyReservation}', [CompanyReservationController::class, 'show']);
+        Route::post('/reservations/{companyReservation}/accept', [CompanyReservationController::class, 'accept']);
+        Route::post('/reservations/{companyReservation}/reject', [CompanyReservationController::class, 'reject']);
+        Route::post('/reservations/{companyReservation}/reopen', [CompanyReservationController::class, 'reopen']);
+        Route::get('/reservations/place/{placeId}/stats', [CompanyReservationController::class, 'stats']);
     });
-
+    
     // ============================================
-    // MÓDULO ADMINISTRATIVO (US-ADMN)
+    // RUTAS DE ADMIN API (requieren autenticaciÃ³n + admin)
     // ============================================
-    Route::prefix('admin')->group(function () {
-        // Gestión de Usuarios (US-ADMN-03)
-        Route::get('/users', [\App\Http\Controllers\API\AdminUserController::class, 'index']);
-        Route::post('/users', [\App\Http\Controllers\API\AdminUserController::class, 'store']);
-        Route::put('/users/{id}', [\App\Http\Controllers\API\AdminUserController::class, 'update']);
-        Route::delete('/users/{id}', [\App\Http\Controllers\API\AdminUserController::class, 'destroy']);
-
-        // Gestión de Lugares
-        Route::apiResource('places', PlaceController::class);
-
-        // Gestión de Reservas (US-ADMN-05)
-        Route::get('/reservations', [ReservationController::class, 'all']);
-        Route::post('/reservations', [ReservationController::class, 'store']);
-        Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
-        Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy']);
+    Route::prefix('admin')->middleware('admin')->group(function () {
+        // Rutas de lugares para admin
+        Route::get('/places', [AdminPlaceController::class, 'index']);
+        Route::get('/places/{place}', [AdminPlaceController::class, 'show']);
+        Route::post('/places', [AdminPlaceController::class, 'store']);
+        Route::post('/places/{place}', [AdminPlaceController::class, 'update']); // POST para FormData con _method=PUT
+        Route::put('/places/{place}', [AdminPlaceController::class, 'update']); // Mantener PUT tambiÃ©n por compatibilidad
+        Route::delete('/places/{place}', [AdminPlaceController::class, 'destroy']);
         
-        // Gestión de Ecohoteles (US-ADMN-02)
+        // Rutas de ecohoteles para admin
+        Route::apiResource('ecohotels', EcohotelController::class);
+        
+        // Rutas de usuarios para admin (mejorado con tipo_usuario y lugares)
+        Route::get('/users', [AdminUserController::class, 'index']);
+        Route::get('/users/{user}', [AdminUserController::class, 'show']);
+        Route::post('/users', [AdminUserController::class, 'store']);
+        Route::put('/users/{user}', [AdminUserController::class, 'update']);
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
 
-        Route::get('/ecohotels', [EcohotelController::class, 'index']);
-        Route::post('/ecohotels', [EcohotelController::class, 'store']);
-        Route::post('/ecohotels/{ecohotel}', [EcohotelController::class, 'update']); // Spoofing para multipart
-        Route::delete('/ecohotels/{id}', [EcohotelController::class, 'destroy']);
+        // Rutas de reservas para admin
+        Route::get('/reservations', [ReservationController::class, 'all']);
+
+        // Rutas de razones de rechazo
+        Route::get('/rejection-reasons', [RejectionReasonController::class, 'index']);
+        Route::post('/rejection-reasons', [RejectionReasonController::class, 'store']);
+        Route::get('/rejection-reasons/{reason}', [RejectionReasonController::class, 'show']);
+        Route::put('/rejection-reasons/{reason}', [RejectionReasonController::class, 'update']);
+        Route::delete('/rejection-reasons/{reason}', [RejectionReasonController::class, 'destroy']);
+
+        // Rutas de horarios para lugares
+        Route::get('/places/{place}/schedules', [PlaceScheduleController::class, 'index']);
+        Route::post('/places/{place}/schedules', [PlaceScheduleController::class, 'store']);
+        Route::put('/places/{place}/schedules/{schedule}', [PlaceScheduleController::class, 'update']);
+        Route::delete('/places/{place}/schedules/{schedule}', [PlaceScheduleController::class, 'destroy']);
     });
 });

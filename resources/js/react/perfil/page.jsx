@@ -30,14 +30,6 @@ const PerfilPage = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
 
-  const [passwordData, setPasswordData] = useState({
-    current_password: "",
-    new_password: "",
-    new_password_confirmation: ""
-  });
-  const [isPasswordSubmitting, setIsPasswordSubmitting] = useState(false);
-  const [passwordMessage, setPasswordMessage] = useState("");
-
   const appendCacheBuster = (url) => {
     const separator = url.includes('?') ? '&' : '?';
     return `${url}${separator}t=${Date.now()}`;
@@ -267,34 +259,6 @@ const PerfilPage = () => {
     }
   };
 
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setPasswordData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handlePasswordSubmit = async (e) => {
-    e.preventDefault();
-    setIsPasswordSubmitting(true);
-    setPasswordMessage("");
-
-    try {
-      const response = await profileService.changePassword({
-        current_password: passwordData.current_password,
-        new_password: passwordData.new_password,
-        new_password_confirmation: passwordData.new_password_confirmation 
-      });
-      setPasswordMessage(response.message || "Contraseña actualizada exitosamente");
-      setPasswordData({ current_password: "", new_password: "", new_password_confirmation: "" });
-      setTimeout(() => setPasswordMessage(""), 5000);
-    } catch (error) {
-      console.error('❌ Error al cambiar contraseña:', error);
-      const msg = error.response?.data?.message || error.message || 'Error';
-      setPasswordMessage(`Error: ${msg}`);
-    } finally {
-      setIsPasswordSubmitting(false);
-    }
-  };
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -429,69 +393,6 @@ const PerfilPage = () => {
                 Cerrar Sesión
               </button>
             </div>
-
-            <hr style={{ margin: '32px 0 16px 0', border: 'none', borderTop: '1px solid #eee' }} />
-
-            {/* Formulario de Cambio de Contraseña */}
-            <form onSubmit={handlePasswordSubmit} className="perfil-form">
-              <h3 style={{ fontWeight: 'bold', fontSize: '1.1em', marginBottom: '16px' }}>Cambiar Contraseña</h3>
-              
-              {passwordMessage && (
-                <div className={`message ${passwordMessage.includes("Error") ? "error" : "success"}`} style={{ marginBottom: '16px' }}>
-                  {passwordMessage}
-                </div>
-              )}
-
-              <div className="form-group">
-                <label htmlFor="current_password">Contraseña Actual:</label>
-                <input
-                  id="current_password"
-                  type="password"
-                  name="current_password"
-                  value={passwordData.current_password}
-                  onChange={handlePasswordChange}
-                  required
-                  disabled={isPasswordSubmitting}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="new_password">Nueva Contraseña:</label>
-                <input
-                  id="new_password"
-                  type="password"
-                  name="new_password"
-                  value={passwordData.new_password}
-                  onChange={handlePasswordChange}
-                  required
-                  disabled={isPasswordSubmitting}
-                  minLength="6"
-                  maxLength="20"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="new_password_confirmation">Confirmar Nueva Contraseña:</label>
-                <input
-                  id="new_password_confirmation"
-                  type="password"
-                  name="new_password_confirmation"
-                  value={passwordData.new_password_confirmation}
-                  onChange={handlePasswordChange}
-                  required
-                  disabled={isPasswordSubmitting}
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isPasswordSubmitting}
-                className="btn-guardar"
-                style={{ marginBottom: '16px' }}
-              >
-                {isPasswordSubmitting ? "Actualizando..." : "Actualizar Contraseña"}
-              </button>
-            </form>
 
             <hr style={{ margin: '32px 0 16px 0', border: 'none', borderTop: '1px solid #eee' }} />
             <div className="danger-zone" style={{ marginBottom: '24px' }}>

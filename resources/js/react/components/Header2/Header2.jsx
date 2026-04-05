@@ -115,6 +115,14 @@ const Header2 = () => {
         </button>
 
         <nav className={`navbar ${mobileMenuOpen ? "mobile-open" : ""}`}>
+          <Link 
+            to="/comentarios2" 
+            className="nav-link"
+            onClick={handleLinkClick}
+          >
+            Reseñas
+          </Link>
+
           {/* Menú desplegable de Lugares */}
           <div className="dropdown" ref={placesDropdownRef}>
             <button
@@ -129,28 +137,38 @@ const Header2 = () => {
             {openPlacesMenu && (
               <ul className="dropdown-menu" role="menu">
                 <li>
-                  <Link to="/paraisosAcuaticos" role="menuitem" onClick={handleLinkClick}>
+                  <Link 
+                    to="/paraisosAcuaticos" 
+                    role="menuitem"
+                    onClick={handleLinkClick}
+                  >
                     Lugares Acuáticos
                   </Link>
                 </li>
                 <li>
-                  <Link to="/lugaresMontanosos" role="menuitem" onClick={handleLinkClick}>
+                  <Link 
+                    to="/lugaresMontanosos" 
+                    role="menuitem"
+                    onClick={handleLinkClick}
+                  >
                     Lugares Montañosos
                   </Link>
                 </li>
                 <li>
-                  <Link to="/parquesYMas" role="menuitem" onClick={handleLinkClick}>
+                  <Link 
+                    to="/parquesYMas" 
+                    role="menuitem"
+                    onClick={handleLinkClick}
+                  >
                     Parques y Más
                   </Link>
                 </li>
                 <li>
-                  <Link to="/territoriosDelCafe" role="menuitem" onClick={handleLinkClick}>
-                    Territorios del Café
-                  </Link>
-                </li>
-                <li className="menu-divider"></li>
-                <li>
-                  <Link to="/lugares" role="menuitem" onClick={handleLinkClick}>
+                  <Link 
+                    to="/lugares" 
+                    role="menuitem"
+                    onClick={handleLinkClick}
+                  >
                     Todos los Lugares
                   </Link>
                 </li>
@@ -158,9 +176,19 @@ const Header2 = () => {
             )}
           </div>
 
-          <Link to="/ecohoteles" className="nav-link" onClick={handleLinkClick}>Ecohoteles</Link>
-          <Link to="/mapa" className="nav-link" onClick={handleLinkClick}>Mapa</Link>
-          <Link to="/contacto" className="nav-link" onClick={handleLinkClick}>Contacto</Link>
+          <Link to="/ecohoteles" className="nav-link">Ecohoteles</Link>
+          <Link to="/contacto" className="nav-link">Contacto</Link>
+
+          {/* Botón especial para usuarios empresa */}
+          {isCompanyUser && (
+            <Link
+              to="/company/dashboard"
+              className="nav-link company-dashboard-btn"
+              onClick={handleLinkClick}
+            >
+              🧭 Panel de Empresa
+            </Link>
+          )}
 
           {/* Menú desplegable de Usuario */}
           <div className="dropdown user-dropdown" ref={userDropdownRef}>
@@ -185,51 +213,48 @@ const Header2 = () => {
             {openUserMenu && (
               <ul className="dropdown-menu user-menu" role="menu">
                 <li>
-                  <Link to="/perfil" className="menu-link" role="menuitem" onClick={handleLinkClick}>
+                  <Link 
+                    to="/perfil" 
+                    role="menuitem"
+                    onClick={handleLinkClick}
+                  >
                     Mi Perfil
                   </Link>
                 </li>
                 <li>
-                  <Link to="/reservas" className="menu-link" role="menuitem" onClick={handleLinkClick}>
+                  <Link 
+                    to="/reservas" 
+                    role="menuitem"
+                    onClick={handleLinkClick}
+                  >
                     Mis Reservas
                   </Link>
                 </li>
-                {user?.is_admin && (
+                <li>
+                  <Link 
+                    to="/favoritos" 
+                    role="menuitem"
+                    onClick={handleLinkClick}
+                  >
+                    Mis Favoritos
+                  </Link>
+                </li>
+                {isAdmin && (
                   <>
+                    <li className="menu-divider"></li>
                     <li>
-                      <Link to="/admin/places" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
-                        Gestión de Lugares (Admin)
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/admin/ecohotels" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
-                        Panel Admin (Ecohoteles)
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/admin/usuarios" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
-                        Gestión de Usuarios
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/admin/reservas" className="menu-link admin-link" role="menuitem" onClick={handleLinkClick}>
-                        Gestión de Reservas
+                      <Link 
+                        to="/admin/panel" 
+                        role="menuitem"
+                        onClick={handleLinkClick}
+                        className="admin-link"
+                      >
+                        Panel de Admin
                       </Link>
                     </li>
                   </>
-
-
                 )}
-                {user?.tipo_usuario === 'empresa' && (
-                  <li>
-                    <Link to="/company/dashboard" className="menu-link company-link" role="menuitem" onClick={handleLinkClick}>
-                      Panel de Empresa
-                    </Link>
-                  </li>
-                )}
-
                 <li className="menu-divider"></li>
-
                 <li>
                   <button
                     onClick={handleLogout}

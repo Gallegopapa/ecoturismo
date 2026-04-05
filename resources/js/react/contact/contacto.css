@@ -1,4 +1,4 @@
-﻿
+
 * {
   margin: 0;
   padding: 0;
@@ -163,7 +163,7 @@ textarea.input:hover {
 }
 
 /* ============================= */
-/* INPUTS TAMA├æO EXACTO IMAGEN */
+/* INPUTS TAMAÑO EXACTO IMAGEN */
 /* ============================= */
 
 .contact-form .input-container:not(.textarea) .input {
@@ -197,7 +197,7 @@ textarea.input:hover {
   background-color: transparent;
 }
 
-/* Label ajustado al nuevo tama├▒o */
+/* Label ajustado al nuevo tamaño */
 .contact-form .input-container label {
   font-size: 0.25rem;
   top: 50%;
@@ -331,7 +331,7 @@ textarea.input {
   opacity: 1;
 }
 
-/* --- INFORMACI├ôN Y CONTACTO --- */
+/* --- INFORMACIÓN Y CONTACTO --- */
 .contact-info {
   padding: 2.5rem 2.5rem;
   position: relative;
@@ -477,7 +477,7 @@ textarea.input {
   border-top: 2px solid rgba(39, 174, 96, 0.1);
 }
 
-/* ANIMACI├ôN */
+/* ANIMACIÓN */
 @keyframes subeybaja {
   0% {
     transform: translateY(0);
@@ -606,7 +606,7 @@ textarea.input {
   }
 }
 
-/* Contador de caracteres y validaci├│n */
+/* Contador de caracteres y validación */
 .char-counter {
   margin-top: 12px;
   margin-bottom: 10px;

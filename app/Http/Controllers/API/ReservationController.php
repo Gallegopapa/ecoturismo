@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Http\Controllers\API;
 
@@ -106,24 +106,24 @@ class ReservationController extends Controller
             'place_id.required' => 'El lugar es requerido.',
             'place_id.exists' => 'El lugar seleccionado no existe.',
             'fecha_visita.required' => 'La fecha de visita es requerida.',
-            'fecha_visita.date' => 'La fecha de visita debe ser una fecha v├ílida.',
+            'fecha_visita.date' => 'La fecha de visita debe ser una fecha válida.',
             'fecha_visita.after_or_equal' => 'La fecha de visita debe ser hoy o una fecha futura.',
             'hora_visita.required' => 'La hora de visita es requerida.',
             'hora_visita.date_format' => 'La hora debe tener el formato HH:mm.',
-            'personas.required' => 'El n├║mero de personas es requerido.',
-            'personas.integer' => 'El n├║mero de personas debe ser un n├║mero entero.',
+            'personas.required' => 'El número de personas es requerido.',
+            'personas.integer' => 'El número de personas debe ser un número entero.',
             'personas.min' => 'Debe haber al menos 1 persona.',
-            'personas.max' => 'No puede haber m├ís de 50 personas.',
-            'telefono_contacto.max' => 'El tel├®fono no puede exceder 20 caracteres.',
+            'personas.max' => 'No puede haber más de 50 personas.',
+            'telefono_contacto.max' => 'El teléfono no puede exceder 20 caracteres.',
             'comentarios.max' => 'Los comentarios no pueden exceder 1000 caracteres.',
-            'precio_total.numeric' => 'El precio debe ser un n├║mero.',
+            'precio_total.numeric' => 'El precio debe ser un número.',
             'precio_total.min' => 'El precio no puede ser negativo.',
         ]);
 
         // Obtener el lugar
         $place = \App\Models\Place::findOrFail($data['place_id']);
 
-        // Validar que el d├¡a est├® disponible (verificar horarios del lugar)
+        // Validar que el día esté disponible (verificar horarios del lugar)
         $dayOfWeek = strtolower(date('l', strtotime($data['fecha_visita'])));
         $diasSemana = [
             'monday' => 'lunes',
@@ -142,15 +142,15 @@ class ReservationController extends Controller
 
         if ($daySchedules->isEmpty()) {
             return response()->json([
-                'message' => 'El lugar est├í cerrado el d├¡a seleccionado.',
+                'message' => 'El lugar está cerrado el día seleccionado.',
                 'errors' => [
-                    'fecha_visita' => ['El lugar est├í cerrado el ' . ucfirst($diaSemana) . '. Por favor, selecciona otro d├¡a.']
+                    'fecha_visita' => ['El lugar está cerrado el ' . ucfirst($diaSemana) . '. Por favor, selecciona otro día.']
                 ],
                 'suggestions' => []
             ], 422);
         }
 
-        // Validar que la hora est├® dentro de los horarios disponibles del d├¡a
+        // Validar que la hora esté dentro de los horarios disponibles del día
         $horaValida = false;
         foreach ($daySchedules as $schedule) {
             if ($data['hora_visita'] >= $schedule->hora_inicio && $data['hora_visita'] < $schedule->hora_fin) {
@@ -165,9 +165,9 @@ class ReservationController extends Controller
             })->implode(', ');
             
             return response()->json([
-                'message' => 'La hora seleccionada no est├í dentro del horario de atenci├│n del lugar.',
+                'message' => 'La hora seleccionada no está dentro del horario de atención del lugar.',
                 'errors' => [
-                    'hora_visita' => ['La hora seleccionada no est├í disponible. Horarios disponibles: ' . $horariosDisponibles]
+                    'hora_visita' => ['La hora seleccionada no está disponible. Horarios disponibles: ' . $horariosDisponibles]
                 ],
                 'suggestions' => []
             ], 422);
@@ -201,13 +201,13 @@ class ReservationController extends Controller
             $horaExistenteStr = substr($conflictingReservation->hora_visita, 0, 5);
             $horaExistente = \Carbon\Carbon::createFromFormat('H:i', $horaExistenteStr);
             
-            // Generar sugerencias: 2 horas antes y 2 horas despu├®s
+            // Generar sugerencias: 2 horas antes y 2 horas después
             $sugerenciaAntes = $horaExistente->copy()->subHours(2);
             $sugerenciaDespues = $horaExistente->copy()->addHours(2);
             
             $suggestions = [];
             
-            // Verificar que las sugerencias est├®n dentro de los horarios del lugar
+            // Verificar que las sugerencias estén dentro de los horarios del lugar
             foreach ($daySchedules as $schedule) {
                 // Normalizar formato de hora (tomar solo HH:MM)
                 $horaInicioScheduleStr = substr($schedule->hora_inicio, 0, 5);
@@ -224,17 +224,17 @@ class ReservationController extends Controller
                     ];
                 }
                 
-                // Sugerencia 2 horas despu├®s
+                // Sugerencia 2 horas después
                 if ($sugerenciaDespues->gte($horaInicioSchedule) && 
                     $sugerenciaDespues->copy()->addHours(2)->lte($horaFinSchedule)) {
                     $suggestions[] = [
                         'hora' => $sugerenciaDespues->format('H:i'),
-                        'descripcion' => '2 horas despu├®s de la reserva existente'
+                        'descripcion' => '2 horas después de la reserva existente'
                     ];
                 }
             }
 
-            $mensajeError = 'Ya existe una reserva que se solapa con el horario seleccionado. Cada reserva tiene una duraci├│n de 2 horas.';
+            $mensajeError = 'Ya existe una reserva que se solapa con el horario seleccionado. Cada reserva tiene una duración de 2 horas.';
             if (count($suggestions) > 0) {
                 $mensajeError .= ' Horarios sugeridos: ' . implode(', ', array_map(function($s) {
                     return $s['hora'] . ' (' . $s['descripcion'] . ')';
@@ -274,7 +274,7 @@ class ReservationController extends Controller
     }
 
     /**
-     * Obtener una reserva espec├¡fica
+     * Obtener una reserva específica
      */
     public function show(Request $request, Reservation $reservation): JsonResponse
     {
@@ -311,19 +311,19 @@ class ReservationController extends Controller
             'precio_total' => 'nullable|numeric|min:0',
             'estado' => 'sometimes|string|in:pendiente,confirmada,cancelada,completada,rechazada,aceptada',
         ], [
-            'fecha_visita.date' => 'La fecha de visita debe ser una fecha v├ílida.',
+            'fecha_visita.date' => 'La fecha de visita debe ser una fecha válida.',
             'fecha_visita.after_or_equal' => 'La fecha de visita debe ser hoy o una fecha futura.',
             'hora_visita.date_format' => 'La hora debe tener el formato HH:mm.',
-            'personas.integer' => 'El n├║mero de personas debe ser un n├║mero entero.',
+            'personas.integer' => 'El número de personas debe ser un número entero.',
             'personas.min' => 'Debe haber al menos 1 persona.',
-            'personas.max' => 'No puede haber m├ís de 50 personas.',
-            'telefono_contacto.max' => 'El tel├®fono no puede exceder 20 caracteres.',
+            'personas.max' => 'No puede haber más de 50 personas.',
+            'telefono_contacto.max' => 'El teléfono no puede exceder 20 caracteres.',
             'comentarios.max' => 'Los comentarios no pueden exceder 1000 caracteres.',
-            'precio_total.numeric' => 'El precio debe ser un n├║mero.',
+            'precio_total.numeric' => 'El precio debe ser un número.',
             'precio_total.min' => 'El precio no puede ser negativo.',
         ]);
 
-        // Si se actualiza fecha_visita, tambi├®n actualizar fecha para compatibilidad
+        // Si se actualiza fecha_visita, también actualizar fecha para compatibilidad
         if (isset($data['fecha_visita'])) {
             $data['fecha'] = $data['fecha_visita'];
         }

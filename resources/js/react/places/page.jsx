@@ -5,7 +5,7 @@ import { favoritesService, placesService } from "@/react/services/api";
 import Header from "@/react/components/Header/Header";
 import Header2 from "@/react/components/Header2/Header2";
 import Footer from "@/react/components/Footer/Footer";
-// import ReservationModal from "@/react/components/ReservationModal";
+import ReservationModal from "@/react/components/ReservationModal";
 import { resolvePlaceImage } from "@/react/utils/imageUtils";
 import "./page.css";
 import "../places2/paraisosAcuaticos/lugares.css";
@@ -35,7 +35,19 @@ const PlacesPage = () => {
   };
 
   const getPlaceRatingText = (lugar) => {
-    // MUTILADO PARA AISLAMIENTO
+    const reviews = Array.isArray(lugar?.reviews) ? lugar.reviews : [];
+    const countFromApi = Number(lugar?.reviews_count ?? lugar?.reviewsCount ?? 0);
+
+    if (reviews.length > 0) {
+      const total = reviews.reduce((sum, review) => sum + (Number(review?.rating) || 0), 0);
+      return `★ ${formatRating(total / reviews.length)}`;
+    }
+
+    if (countFromApi > 0) {
+      const ratingValue = Number(lugar?.average_rating ?? lugar?.averageRating ?? 0);
+      return `★ ${formatRating(ratingValue)}`;
+    }
+
     return "★ 0.0";
   };
 
@@ -648,8 +660,8 @@ const PlacesPage = () => {
           )}
         </div>
 
-        {/* Modal de reserva (MUTILADO NO IMPORTADO) */}
-        {false && reservationModal.isOpen && reservationModal.place && (
+        {/* Modal de reserva */}
+        {reservationModal.isOpen && reservationModal.place && (
           <ReservationModal
             place={reservationModal.place}
             isOpen={reservationModal.isOpen}

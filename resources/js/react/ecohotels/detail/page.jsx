@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import ReviewForm from "../../components/ReviewForm/ReviewForm"; // Mutilado: POST review pertenece a sprint futuro
+import ReviewForm from "../../components/ReviewForm/ReviewForm";
 import { reviewsService } from "../../services/api";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";

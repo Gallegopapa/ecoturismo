@@ -176,9 +176,7 @@ class Place extends Model
      */
     public function getAverageRatingAttribute()
     {
-        // MUTILADO PARA AISLAMIENTO
-        // return $this->reviews()->avg('rating') ?? 0;
-        return 0;
+        return $this->reviews()->avg('rating') ?? 0;
     }
 
     /**

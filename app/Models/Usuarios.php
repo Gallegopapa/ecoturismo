@@ -65,7 +65,7 @@ class Usuarios extends Authenticatable implements CanResetPasswordContract
 
         <!-- Badge superior -->
         <tr><td align="center" style="padding-bottom:32px;">
-          <span style="display:inline-block;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);color:#4ade80;font-size:12px;font-weight:700;padding:8px 22px;border-radius:999px;letter-spacing:1.5px;text-transform:uppercase;">🔐 Seguridad de cuenta</span>
+          <span style="display:inline-block;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);color:#4ade80;font-size:12px;font-weight:700;padding:8px 22px;border-radius:999px;letter-spacing:1.5px;text-transform:uppercase;"> Seguridad de cuenta</span>
         </td></tr>
 
         <!-- Título -->
@@ -82,9 +82,9 @@ class Usuarios extends Authenticatable implements CanResetPasswordContract
         <tr><td align="center" style="padding-bottom:50px;">
           <table cellpadding="0" cellspacing="8" align="center">
             <tr>
-              <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;">🔒 Enlace seguro</span></td>
+              <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;"> Enlace seguro</span></td>
               <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;">⏱ Válido 60 min</span></td>
-              <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;">🌿 Un solo uso</span></td>
+              <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;"> Un solo uso</span></td>
             </tr>
           </table>
         </td></tr>

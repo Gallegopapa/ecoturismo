@@ -3,36 +3,29 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import "./styles/accessibility-clean.css"; // Estilos limpios de accesibilidad
 import App from "./App.jsx";
+import ContactPage from "./contact/Contacto.jsx";
+import PlacesPage from "./places/page.jsx";
+import CommentsPage from "./comments/page.jsx";
 import Loginpage from "./login/page.jsx";
 import PagLogueados from "./pagLogueados.jsx";
-import ForgotPasswordPage from "./forgot-password/page.jsx";
-import ForgotPasswordSentPage from "./forgot-password/sent.jsx";
-import ResetPasswordPage from "./reset-password/page.jsx";
-import PerfilPage from "./perfil/page.jsx";
-import PlacesPage from "./places/page.jsx";
+import Comments2Page from "./comments2/page.jsx";
+import CookiesPage from "./legal/Cookies.jsx";
+import TerminosDeUsoPage from "./legal/TerminosDeUso.jsx";
+import PoliticaDePrivacidadPage from "./legal/PoliticaDePrivacidad.jsx";
+import CopyrightTotal from "./legal/CopyrightTotal.jsx";
+
+// NUEVAS PÁGINAS
 import ParaisosAcuaticos from "./places2/paraisosAcuaticos/page.jsx";
 import LugaresMontanosos from "./places2/lugaresMontanosos/page.jsx";
 import ParquesYMas from "./places2/parquesYMas/page.jsx";
 import TerritoriosDelCafe from "./places2/territoriosDelCafe/page.jsx";
 import PlaceDetailPage from "./places/detail/page.jsx";
-import MapPage from "./map/page.jsx";
+import CompanyDashboard from "./admin/CompanyDashboard.jsx";
+import AdminPanel from "./admin/AdminPanel.jsx";
 import EcohotelsPage from "./ecohotels/page.jsx";
 import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
-import ReservationsPage from "./reservations/page.jsx";
-import EcohotelsAdmin from "./admin/EcohotelsAdmin.jsx";
-import UsersAdmin from "./admin/UsersAdminMejorado.jsx";
-import ReservationsAdmin from "./admin/ReservationsAdmin.jsx";
-import ContactPage from "./contact/ContactPage.jsx";
-import CompanyDashboard from "./company/dashboard/page.jsx";
+import MapPage from "./map/page.jsx";
 
-
-
-
-import EditPlace from "./company/places/EditPlace.jsx";
-import ManageSchedules from "./company/schedules/ManageSchedules.jsx";
-import ManageReservations from "./company/reservations/ManageReservations.jsx";
-import CompanyStatistics from "./company/statistics/CompanyStatistics.jsx";
-import ManagePlacesAdmin from "./admin/places/ManagePlaces.jsx";
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
@@ -41,42 +34,33 @@ import { LanguageProvider } from "./contexts/LanguageContext.jsx";
 import AccessibilityPanel from "./components/AccessibilityPanel/AccessibilityPanel.jsx";
 import TranslationHelper from "./components/TranslationHelper/TranslationHelper.jsx";
 
+console.log('🔥🔥🔥 MAIN.JSX CARGADO - Router creándose - VERSION 2.0 🔥🔥🔥');
+console.log('Rutas disponibles: /', '/lugares', '/ecohoteles', '/admin');
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
   {
-    path: "/login",
-    element: <Loginpage />,
+    path: "/contact",
+    element: <ContactPage />,
   },
   {
-    path: "/registro",
-    element: <Loginpage />,
+    path: "/contacto",
+    element: <ContactPage />,
   },
   {
-    path: "/pagLogueados",
-    element: <PagLogueados />,
+    path: "/contact2",
+    element: <ContactPage />,
   },
   {
-    path: "/forgot-password",
-    element: <ForgotPasswordPage />,
+    path: "/contacto2",
+    element: <ContactPage />,
   },
   {
-    path: "/forgot-password/sent",
-    element: <ForgotPasswordSentPage />,
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPasswordPage />,
-  },
-  {
-    path: "/perfil",
-    element: <PerfilPage />,
-  },
-  {
-    path: "/reservas",
-    element: <ReservationsPage />,
+    path: "/lugares/:id",
+    element: <PlaceDetailPage />,
   },
   {
     path: "/lugares",
@@ -87,9 +71,51 @@ const router = createBrowserRouter([
     element: <PlacesPage />,
   },
   {
-    path: "/lugares/:id",
-    element: <PlaceDetailPage />,
+    path: "/ecohoteles",
+    element: <EcohotelsPage />,
   },
+  {
+    path: "/ecohoteles/:id",
+    element: <EcohotelDetailPage />,
+  },
+  {
+    path: "/mapa",
+    element: <MapPage />,
+  },
+  {
+    path: "/comments",
+    element: <CommentsPage />,
+  },
+  {
+    path: "/comentarios",
+    element: <CommentsPage />,
+  },
+  {
+    path: "/comments2",
+    element: <Comments2Page />,
+  },
+  {
+    path: "/comentarios2",
+    element: <Comments2Page />,
+  },
+  {
+    path: "/login",
+    element: <Loginpage />,
+  },
+  {
+    path: "/pagLogueados",
+    element: <PagLogueados />,
+  },
+  {
+    path: "/company/dashboard",
+    element: <CompanyDashboard />,
+  },
+  {
+    path: "/admin",
+    element: <AdminPanel />,
+  },
+
+  // 🌿 RUTAS DEL MENÚ LUGARES
   {
     path: "/paraisosAcuaticos",
     element: <ParaisosAcuaticos />,
@@ -107,59 +133,21 @@ const router = createBrowserRouter([
     element: <TerritoriosDelCafe />,
   },
   {
-    path: "/mapa",
-    element: <MapPage />,
+    path: "/cookies",
+    element: <CookiesPage />,
   },
   {
-    path: "/contacto",
-    element: <ContactPage />,
+    path: "/terminos-de-uso",
+    element: <TerminosDeUsoPage />,
   },
   {
-    path: "/ecohoteles",
-    element: <EcohotelsPage />,
+    path: "/politica-de-privacidad",
+    element: <PoliticaDePrivacidadPage />,
   },
   {
-    path: "/ecohoteles/:id",
-    element: <EcohotelDetailPage />,
+    path: "/CopyrightTotal",
+    element: <CopyrightTotal />,
   },
-  {
-    path: "/admin/ecohotels",
-    element: <EcohotelsAdmin />,
-  },
-  {
-    path: "/company/dashboard",
-    element: <CompanyDashboard />,
-  },
-  {
-    path: "/company/places/:id/edit",
-    element: <EditPlace />,
-  },
-  {
-    path: "/company/places/:id/schedules",
-    element: <ManageSchedules />,
-  },
-  {
-    path: "/company/reservations",
-    element: <ManageReservations />,
-  },
-  {
-    path: "/company/statistics",
-    element: <CompanyStatistics />,
-  },
-  {
-    path: "/admin/places",
-    element: <ManagePlacesAdmin />,
-  },
-  {
-    path: "/admin/usuarios",
-    element: <UsersAdmin />,
-  },
-  {
-    path: "/admin/reservas",
-    element: <ReservationsAdmin />,
-  }
-
-
 ]);
 
 createRoot(document.getElementById("root")).render(
@@ -171,4 +159,3 @@ createRoot(document.getElementById("root")).render(
     </LanguageProvider>
   </AccessibilityProvider>
 );
-

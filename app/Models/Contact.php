@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Models;
 
@@ -20,7 +20,7 @@ class Contact extends Model
     ];
 
     /**
-     * Relaci├│n: Un contacto puede pertenecer a un usuario (opcional)
+     * Relación: Un contacto puede pertenecer a un usuario (opcional)
      */
     public function usuario()
     {

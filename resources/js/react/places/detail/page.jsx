@@ -157,8 +157,8 @@ const PlaceDetailPage = () => {
 
   const checkFavorite = async () => {
     try {
-      // const favorite = await favoritesService.check(id); // Mutilado para US-PLCS-02
-      setIsFavorite(false);
+      const favorite = await favoritesService.check(id);
+      setIsFavorite(favorite);
     } catch (err) {
       console.error('Error al verificar favorito:', err);
     }
@@ -240,8 +240,15 @@ const PlaceDetailPage = () => {
     }
 
     try {
-      // Mutilado a futuro: Módulo de Favoritos (Sprint posterior)
-      setMessage('⭐ La función de favoritos se habilitará en el próximo módulo.');
+      if (isFavorite) {
+        await favoritesService.remove(id);
+        setIsFavorite(false);
+        setMessage('Eliminado de favoritos');
+      } else {
+        await favoritesService.add(id);
+        setIsFavorite(true);
+        setMessage('Agregado a favoritos');
+      }
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
       console.error('Error al actualizar favorito:', err);
@@ -889,14 +896,17 @@ const PlaceDetailPage = () => {
         </div>
       </div>
 
+      {/* Modal de Reserva */}
       {reservationModal.isOpen && reservationModal.place && (
         <ReservationModal
           place={reservationModal.place}
           isOpen={reservationModal.isOpen}
           onClose={() => setReservationModal({ isOpen: false, place: null })}
           onSuccess={async () => {
+            // Recargar las reservas después de crear una nueva
             if (place && place.id) {
-              await loadPlace(true);
+              // Recargar el lugar completo para obtener las reservas actualizadas
+              await loadPlace(true); // skipSchedules = true para no recargar horarios
             }
           }}
         />

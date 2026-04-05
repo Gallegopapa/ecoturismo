@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Http\Controllers\API;
 
@@ -36,7 +36,7 @@ class AdminUserController extends Controller
     }
 
     /**
-     * Obtener un usuario espec├¡fico con sus lugares asignados
+     * Obtener un usuario específico con sus lugares asignados
      */
     public function show(Usuarios $user): JsonResponse
     {
@@ -80,18 +80,18 @@ class AdminUserController extends Controller
             'lugares.*.es_principal' => 'nullable|boolean',
         ], [
             'name.required' => 'El nombre de usuario es requerido.',
-            'name.unique' => 'Este nombre de usuario ya est├í en uso.',
-            'name.regex' => 'El nombre de usuario solo puede contener letras, n├║meros y guiones bajos.',
-            'email.email' => 'El email debe ser v├ílido.',
-            'email.unique' => 'Este email ya est├í registrado.',
-            'password.min' => 'La contrase├▒a debe tener al menos 8 caracteres.',
-            'password.max' => 'La contrase├▒a no puede tener m├ís de 15 caracteres.',
+            'name.unique' => 'Este nombre de usuario ya está en uso.',
+            'name.regex' => 'El nombre de usuario solo puede contener letras, números y guiones bajos.',
+            'email.email' => 'El email debe ser válido.',
+            'email.unique' => 'Este email ya está registrado.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.max' => 'La contraseña no puede tener más de 15 caracteres.',
             'tipo_usuario.required' => 'El tipo de usuario es requerido.',
             'tipo_usuario.in' => 'El tipo de usuario debe ser: normal, empresa o admin.',
             'lugares.*.place_id.exists' => 'Uno de los lugares seleccionados no existe.',
         ]);
 
-        // Generar contrase├▒a aleatoria segura si no se proporciona
+        // Generar contraseña aleatoria segura si no se proporciona
         $plainPassword = $data['password'] ?? null;
         if (!$plainPassword) {
             $plainPassword = $this->generateSecurePassword();
@@ -124,17 +124,17 @@ class AdminUserController extends Controller
             ]
         ];
 
-        // Solo devolver la contrase├▒a si fue generada autom├íticamente
+        // Solo devolver la contraseña si fue generada automáticamente
         if (!isset($data['password'])) {
             $response['generated_password'] = $plainPassword;
-            $response['message'] = 'Usuario creado correctamente. La contrase├▒a generada se muestra a continuaci├│n.';
+            $response['message'] = 'Usuario creado correctamente. La contraseña generada se muestra a continuación.';
         }
 
         return response()->json($response, 201);
     }
 
     /**
-     * Generar una contrase├▒a aleatoria segura
+     * Generar una contraseña aleatoria segura
      */
     private function generateSecurePassword(int $length = 12): string
     {
@@ -165,12 +165,12 @@ class AdminUserController extends Controller
             'lugares.*.es_principal' => 'nullable|boolean',
         ], [
             'name.required' => 'El nombre de usuario es requerido.',
-            'name.unique' => 'Este nombre de usuario ya est├í en uso.',
-            'name.regex' => 'El nombre de usuario solo puede contener letras, n├║meros y guiones bajos.',
-            'email.email' => 'El email debe ser v├ílido.',
-            'email.unique' => 'Este email ya est├í registrado.',
-            'password.min' => 'La contrase├▒a debe tener al menos 8 caracteres.',
-            'password.max' => 'La contrase├▒a no puede tener m├ís de 15 caracteres.',
+            'name.unique' => 'Este nombre de usuario ya está en uso.',
+            'name.regex' => 'El nombre de usuario solo puede contener letras, números y guiones bajos.',
+            'email.email' => 'El email debe ser válido.',
+            'email.unique' => 'Este email ya está registrado.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.max' => 'La contraseña no puede tener más de 15 caracteres.',
             'tipo_usuario.in' => 'El tipo de usuario debe ser: normal, empresa o admin.',
         ]);
 
@@ -203,7 +203,7 @@ class AdminUserController extends Controller
         
         if (isset($data['tipo_usuario'])) {
             $updateData['tipo_usuario'] = $data['tipo_usuario'];
-            // Si se cambia a admin, marcar como admin tambi├®n
+            // Si se cambia a admin, marcar como admin también
             if ($data['tipo_usuario'] === 'admin') {
                 $updateData['is_admin'] = true;
             } else {

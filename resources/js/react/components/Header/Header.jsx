@@ -49,16 +49,41 @@ const Header = () => {
                     <nav
                         className={`navbar ${mobileMenuOpen ? "mobile-open" : ""}`}
                     >
-                        <Link to="/lugares" onClick={closeMobileMenu}>Lugares</Link>
-                        <Link to="/ecohoteles" onClick={closeMobileMenu}>Ecohoteles</Link>
-                        <Link to="/mapa" onClick={closeMobileMenu}>Mapa</Link>
-                        <Link to="/contacto" onClick={closeMobileMenu}>Contacto</Link>
+                        <Link
+                            to="/comentarios"
+                            onClick={closeMobileMenu}
+                            data-i18n="reviews"
+                        >
+                            Reseñas
+                        </Link>
+                        <Link
+                            to="/lugares"
+                            onClick={closeMobileMenu}
+                            data-i18n="places"
+                        >
+                            {t("places")}
+                        </Link>
+                        <Link
+                            to="/ecohoteles"
+                            onClick={closeMobileMenu}
+                            data-i18n="ecohotels"
+                        >
+                            {t("ecohotels")}
+                        </Link>
+                        <Link
+                            to="/contacto"
+                            onClick={closeMobileMenu}
+                            data-i18n="contact"
+                        >
+                            {t("contact")}
+                        </Link>
                         <Link
                             to="/login"
                             onClick={closeMobileMenu}
+                            data-i18n="login"
                             className="login-btn"
                         >
-                            Registro / Login
+                            {t("login")}
                         </Link>
                     </nav>
                 </div>

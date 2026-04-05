@@ -71,15 +71,7 @@ class ProfileController extends Controller
     public function destroy(Request $request): JsonResponse
     {
         $user = $request->user();
-        
-        // Revocar los tokens de la sesión
-        $user->tokens()->delete();
-
-        // Mutilación de módulos que aún no implementamos (ej. reservas en cascada)
-        // $user->reservations()->delete(); 
-
         $user->delete();
-
         return response()->json([
             'message' => 'Cuenta eliminada exitosamente.'
         ]);
