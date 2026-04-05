@@ -52,6 +52,7 @@ const Header = () => {
                         <Link to="/lugares" onClick={closeMobileMenu}>Lugares</Link>
                         <Link to="/ecohoteles" onClick={closeMobileMenu}>Ecohoteles</Link>
                         <Link to="/mapa" onClick={closeMobileMenu}>Mapa</Link>
+                        <Link to="/contacto" onClick={closeMobileMenu}>Contacto</Link>
                         <Link
                             to="/login"
                             onClick={closeMobileMenu}

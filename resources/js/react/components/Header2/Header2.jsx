@@ -160,6 +160,7 @@ const Header2 = () => {
 
           <Link to="/ecohoteles" className="nav-link" onClick={handleLinkClick}>Ecohoteles</Link>
           <Link to="/mapa" className="nav-link" onClick={handleLinkClick}>Mapa</Link>
+          <Link to="/contacto" className="nav-link" onClick={handleLinkClick}>Contacto</Link>
 
           {/* Menú desplegable de Usuario */}
           <div className="dropdown user-dropdown" ref={userDropdownRef}>

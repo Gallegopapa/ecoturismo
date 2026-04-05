@@ -22,7 +22,9 @@ import ReservationsPage from "./reservations/page.jsx";
 import EcohotelsAdmin from "./admin/EcohotelsAdmin.jsx";
 import UsersAdmin from "./admin/UsersAdminMejorado.jsx";
 import ReservationsAdmin from "./admin/ReservationsAdmin.jsx";
+import ContactPage from "./contact/ContactPage.jsx";
 import CompanyDashboard from "./company/dashboard/page.jsx";
+
 
 
 
@@ -107,6 +109,10 @@ const router = createBrowserRouter([
   {
     path: "/mapa",
     element: <MapPage />,
+  },
+  {
+    path: "/contacto",
+    element: <ContactPage />,
   },
   {
     path: "/ecohoteles",

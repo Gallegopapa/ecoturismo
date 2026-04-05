@@ -1,5 +1,16 @@
 # 📝 Registro de Avances del Proyecto (Historial de Commits)
 
+## Commit 23: Implementación US-CTCT-01 (Formulario de Contacto)
+**Fecha:** 05 Abril 2026
+**Archivos implicados y mantenidos:**
+- Backend: `Contact.php` (modelo de persistencia), `ContactController.php` (lógica de validación y guardado), `[Timestamp]_create_contacts_table.php` (esquema de base de datos).
+- Frontend React: `ContactPage.jsx`, `contacto.css` (interfaz de usuario y diseño), `main.jsx` (registro de ruta `/contacto`), `Header.jsx` y `Header2.jsx` (inyección de links de navegación).
+**Integración y Aislamiento:**
+- Módulo de Contacto: Se habilita la comunicación unidireccional visitante -> admin. Se mantiene la independencia de otros módulos de mensajería interna.
+**Estado de la Tarea:** Terminada y validada. Listo para su `git commit`.
+
+---
+
 ## Commit 22: Implementación US-ADMN-05 (Gestión de Reservas - ADMIN CRUD)
 **Fecha:** 05 Abril 2026
 **Archivos implicados y mantenidos:**
