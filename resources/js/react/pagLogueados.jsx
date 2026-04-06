@@ -111,10 +111,10 @@ const PagLogueados = () => {
                     );
                     const count = Number(
                         place?.reviews_count ??
-                            place?.reviewsCount ??
-                            (Array.isArray(place?.reviews)
-                                ? place.reviews.length
-                                : 0),
+                        place?.reviewsCount ??
+                        (Array.isArray(place?.reviews)
+                            ? place.reviews.length
+                            : 0),
                     );
                     const average = count > 0 ? getAverageFromPlace(place) : 0;
                     return [destino.id, average];
@@ -307,7 +307,6 @@ const PagLogueados = () => {
                 {/* MAPA INTERACTIVO */}
                 <section className="mapa-interactivo-section section-alt">
                     <div className="mapa-interactivo-inner">
-                        <div className="mapa-interactivo-badge"> Nuevo</div>
                         <h2 className="mapa-interactivo-title">
                             Explora con nuestro Mapa Interactivo
                         </h2>
