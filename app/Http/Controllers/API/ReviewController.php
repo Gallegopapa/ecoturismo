@@ -97,7 +97,7 @@ class ReviewController extends Controller
         $data = $request->validate([
             'place_id' => 'required_without:ecohotel_id|nullable|exists:places,id',
             'ecohotel_id' => 'required_without:place_id|nullable|exists:ecohotels,id',
-            'rating' => 'required|integer',
+            'rating' => 'required|integer|min:1|max:5',
             'comment' => ['nullable', 'string', 'max:500', new \App\Rules\NoProfanity()],
         ], $messages);
 
