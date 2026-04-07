@@ -76,4 +76,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/reservations/{companyReservation}/reopen', [\App\Http\Controllers\API\CompanyReservationController::class, 'reopen']);
         Route::get('/reservations/place/{placeId}/stats', [\App\Http\Controllers\API\CompanyReservationController::class, 'stats']);
     });
+
+    // ============================================
+    // RUTAS DE ADMINISTRADOR
+    // ============================================
+    Route::prefix('admin')->middleware(\App\Http\Middleware\EnsureUserIsAdmin::class)->group(function () {
+        // Rutas de lugares para admin
+        Route::get('/places', [\App\Http\Controllers\API\AdminPlaceController::class, 'index']);
+        Route::get('/places/{place}', [\App\Http\Controllers\API\AdminPlaceController::class, 'show']);
+        Route::post('/places', [\App\Http\Controllers\API\AdminPlaceController::class, 'store']);
+        Route::post('/places/{place}', [\App\Http\Controllers\API\AdminPlaceController::class, 'update']); // POST para FormData con _method=PUT
+        Route::put('/places/{place}', [\App\Http\Controllers\API\AdminPlaceController::class, 'update']);
+        Route::delete('/places/{place}', [\App\Http\Controllers\API\AdminPlaceController::class, 'destroy']);
+
+        // Rutas de horarios para lugares (Admin)
+        Route::get('/places/{place}/schedules', [\App\Http\Controllers\API\PlaceScheduleController::class, 'index']);
+        Route::post('/places/{place}/schedules', [\App\Http\Controllers\API\PlaceScheduleController::class, 'store']);
+        Route::put('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\PlaceScheduleController::class, 'update']);
+        Route::delete('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\PlaceScheduleController::class, 'destroy']);
+    });
 });
