@@ -54,4 +54,19 @@ class AuthController extends Controller
             'user' => $user
         ], 201);
     }
+
+    public function login(Request $request)
+    {
+        // AC6 & AC7: Empty fields (Returns 422)
+        $validator = Validator::make($request->all(), [
+            'login' => 'required',
+            'password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+    }
 }
