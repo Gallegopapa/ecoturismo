@@ -63,4 +63,20 @@ class FavoriteController extends Controller
 
         return response()->json(['is_favorite' => $isFavorite]);
     }
+
+    // AC5: Delete Favorite
+    public function destroy($placeId, Request $request)
+    {
+        $user = $request->user();
+        
+        $favorite = \App\Models\Favorite::where('user_id', $user->id)
+            ->where('place_id', $placeId)
+            ->first();
+
+        if ($favorite) {
+            $favorite->delete();
+        }
+
+        return response()->json(['message' => 'Eliminado de favoritos'], 200);
+    }
 }
