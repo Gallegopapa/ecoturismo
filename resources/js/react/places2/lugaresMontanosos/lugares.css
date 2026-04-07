@@ -1,0 +1,404 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f5f6fa;
+    color: #2c3e50;
+}
+
+:root{
+    --bg: #f5f6fa;
+    --card-bg: #ffffff;
+    --muted: #636e72;
+    --accent: #2ecc71;
+    --shadow-1: 0 4px 12px rgba(2,6,23,0.06);
+}
+
+.contenedorTodo {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 30px;
+}
+
+.contenedorTodo h1 {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin: 20px 0;
+    font-weight: 600;
+}
+
+.contenedor {
+    width: 100%;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.card-image{
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #eef3f6;
+}
+
+.card-image img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* muestra la imagen completa sin recortar */
+    display: block;
+    transition: transform 0.45s ease;
+}
+
+.card:hover .card-image img{ transform: scale(1.02); }
+
+.card-body{
+    padding: 10px 12px 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.card h4 {
+    margin: 0;
+    font-size: 1.12rem;
+    color: #243238;
+    font-weight: 700;
+    text-align: left;
+}
+
+.ubicacion-text {
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.descripcion {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    flex-grow: 1;
+    text-align: left;
+    max-height: 140px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Ensure all cards have same minimum height and footer sticks to bottom */
+.card{
+    min-height: auto;
+    height: 100%;
+}
+
+.card .card-body{ flex: 1 1 auto; }
+
+/* Footer area where buttons and favorite heart will be located */
+.card-actions{
+    position: relative;
+    z-index: 3;
+    background: transparent;
+}
+
+/* Place favorito inside footer rather than absolute overlay */
+
+
+/* Optional overlay link that covers most of the card but leaves footer clickable.
+   If you want the whole card to link to the info page, wrap card content (except footer)
+   with an <a class="card-link-overlay" href="/info/123"> and this CSS will make it clickable. */
+.card-link-overlay{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 76px; /* leave space for footer/buttons */
+    z-index: 2;
+    display: block;
+}
+
+/* Make sure interactive controls in footer are above overlay */
+.card-actions, .card .info-button, .card .map-button, .favorito{ z-index: 4; }
+
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: auto;
+    gap: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.map-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: #f8f9fa;
+    color: #2c3e50;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+}
+
+.map-button:hover {
+    background: #2ecc71;
+    color: white;
+    border-color: #2ecc71;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+}
+
+.map-button svg {
+    flex-shrink: 0;
+}
+
+.map-button span {
+    white-space: nowrap;
+}
+
+.info-button {
+    padding: 10px 20px;
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.info-button:hover {
+    background: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+}
+
+.mostrar-favoritos {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    padding: 12px 24px;
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 100;
+    transition: background 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.mostrar-favoritos:hover {
+    background: #27ae60;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.favorito {
+    font-size: 26px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.favorito:hover {
+    transform: scale(1.2);
+    background: rgba(46, 204, 113, 0.1);
+}
+
+/* Popup de favoritos */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+}
+
+.popup-content {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.cerrar-popup {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.cerrar-popup:hover {
+    background: #c0392b;
+}
+
+.popup-content h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.favoritos-list {
+    list-style: none;
+    padding: 0;
+}
+
+.favoritos-list li {
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.eliminar-favorito {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.eliminar-favorito:hover {
+    background: #c0392b;
+}
+
+.mensaje-vacio {
+    text-align: center;
+    color: #636e72;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .mostrar-favoritos {
+        top: 90px;
+        right: 10px;
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .contenedorTodo h1 {
+        font-size: 2rem;
+    }
+
+    .card-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .action-buttons {
+        flex: 1 1 100%;
+        justify-content: space-between;
+    }
+
+    .map-button {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .info-button {
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .favorito {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}
