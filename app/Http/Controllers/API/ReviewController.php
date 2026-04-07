@@ -101,6 +101,28 @@ class ReviewController extends Controller
             'comment' => ['nullable', 'string', 'max:500', new \App\Rules\NoProfanity()],
         ], $messages);
 
+        if ($data['place_id'] ?? false) {
+            $existingReview = Review::where('user_id', $user->id)
+                ->where('place_id', $data['place_id'])
+                ->first();
+            if ($existingReview) {
+                return response()->json([
+                    'message' => 'Ya has comentado este lugar. Solo puedes comentar una vez por lugar.'
+                ], 422);
+            }
+        }
+        
+        if ($data['ecohotel_id'] ?? false) {
+            $existingReview = Review::where('user_id', $user->id)
+                ->where('ecohotel_id', $data['ecohotel_id'])
+                ->first();
+            if ($existingReview) {
+                return response()->json([
+                    'message' => 'Ya has comentado este ecohotel. Solo puedes comentar una vez por ecohotel.'
+                ], 422);
+            }
+        }
+
         $review = Review::create([
             'user_id' => $user->id,
             'place_id' => $data['place_id'] ?? null,
