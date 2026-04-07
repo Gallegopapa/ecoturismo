@@ -79,5 +79,38 @@ class ReviewController extends Controller
         ]);
     }
 
+    // Crear reseña para lugar o ecohotel
+    public function store(Request $request): JsonResponse
+    {
+        $this->normalizeRating($request);
+        $this->logRatingPayload($request, 'store');
+        $user = $request->user();
+        
+        $messages = [
+            'comment.max' => 'El comentario no puede exceder los 500 caracteres.',
+            'rating.required' => 'La calificación es obligatoria.',
+            'rating.integer' => 'La calificación debe ser un número.',
+            'place_id.required_without' => 'El lugar es obligatorio si no se especifica ecohotel.',
+            'ecohotel_id.required_without' => 'El ecohotel es obligatorio si no se especifica lugar.',
+        ];
+        
+        $data = $request->validate([
+            'place_id' => 'required_without:ecohotel_id|nullable|exists:places,id',
+            'ecohotel_id' => 'required_without:place_id|nullable|exists:ecohotels,id',
+            'rating' => 'required|integer',
+            'comment' => ['nullable', 'string', 'max:500'],
+        ], $messages);
 
+        $review = Review::create([
+            'user_id' => $user->id,
+            'place_id' => $data['place_id'] ?? null,
+            'ecohotel_id' => $data['ecohotel_id'] ?? null,
+            'rating' => $data['rating'],
+            'comment' => $data['comment'] ?? null,
+            'fecha_comentario' => now(),
+        ]);
+        
+        $review->load('usuario:id,name,foto_perfil');
+        return response()->json($review, 201);
+    }
 }

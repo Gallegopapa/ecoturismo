@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Rules;
 
@@ -40,15 +40,15 @@ class NoProfanity implements Rule
         $normalize = function ($s) {
             $s = mb_strtolower($s);
             $map = [
-                '├í' => 'a', '├®' => 'e', '├¡' => 'i', '├│' => 'o', '├║' => 'u',
-                '├á' => 'a', '├¿' => 'e', '├¼' => 'i', '├▓' => 'o', '├╣' => 'u',
-                '├ñ' => 'a', '├½' => 'e', '├»' => 'i', '├Â' => 'o', '├╝' => 'u',
-                '├▒' => 'n', '├º' => 'c',
+                'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
+                'à' => 'a', 'è' => 'e', 'ì' => 'i', 'ò' => 'o', 'ù' => 'u',
+                'ä' => 'a', 'ë' => 'e', 'ï' => 'i', 'ö' => 'o', 'ü' => 'u',
+                'ñ' => 'n', 'ç' => 'c',
                 '0' => 'o', '1' => 'i', '3' => 'e', '4' => 'a', '5' => 's', '7' => 't',
                 '@' => 'a', '$' => 's'
             ];
             $s = strtr($s, $map);
-            // Reemplazar cualquier caracter que no sea letra o n├║mero por espacio
+            // Reemplazar cualquier caracter que no sea letra o número por espacio
             $s = preg_replace('/[^\p{L}\p{N}]+/u', ' ', $s);
             // Colapsar espacios
             $s = preg_replace('/\s+/u', ' ', $s);
