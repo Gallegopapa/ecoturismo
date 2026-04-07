@@ -51,4 +51,16 @@ class FavoriteController extends Controller
 
         return response()->json($favorites);
     }
+
+    // AC4: Check specific Favorite
+    public function checkFavorite($placeId, Request $request)
+    {
+        $user = $request->user();
+        
+        $isFavorite = \App\Models\Favorite::where('user_id', $user->id)
+            ->where('place_id', $placeId)
+            ->exists();
+
+        return response()->json(['is_favorite' => $isFavorite]);
+    }
 }
