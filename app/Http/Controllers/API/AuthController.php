@@ -86,4 +86,15 @@ class AuthController extends Controller
             'user' => $user
         ], 200);
     }
+
+    public function logout(Request $request)
+    {
+        // AC7: Token invalidated on logout
+        $request->user()->currentAccessToken()->delete();
+
+        // AC6: Logout successful -> Returns 200
+        return response()->json([
+            'message' => 'Cierre de sesión exitoso'
+        ], 200);
+    }
 }
