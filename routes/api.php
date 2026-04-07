@@ -41,4 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservations', [\App\Http\Controllers\API\ReservationController::class, 'store']);
     Route::get('/reservations/my', [\App\Http\Controllers\API\ReservationController::class, 'myReservations']);
     Route::delete('/reservations/{reservation}', [\App\Http\Controllers\API\ReservationController::class, 'destroy']);
+
+    // Reseñas
+    Route::post('/reviews', [\App\Http\Controllers\API\ReviewController::class, 'store']);
 });
