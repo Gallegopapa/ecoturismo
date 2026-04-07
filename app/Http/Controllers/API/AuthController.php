@@ -115,4 +115,16 @@ class AuthController extends Controller
             'message' => 'Sesión cerrada correctamente'
         ]);
     }
+
+    /**
+     * LOGOUT TODOS
+     */
+    public function logoutAll(Request $request): JsonResponse
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => 'Todas las sesiones cerradas'
+        ]);
+    }
 }
