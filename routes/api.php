@@ -44,4 +44,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Reseñas
     Route::post('/reviews', [\App\Http\Controllers\API\ReviewController::class, 'store']);
+    Route::put('/reviews/{review}', [\App\Http\Controllers\API\ReviewController::class, 'update']);
 });

@@ -135,4 +135,43 @@ class ReviewController extends Controller
         $review->load('usuario:id,name,foto_perfil');
         return response()->json($review, 201);
     }
+
+    public function update(Request $request, Review $review): JsonResponse
+    {
+        $this->normalizeRating($request);
+        $user = $request->user();
+
+        // AC2: Prevent users from updating other's reviews
+        if ($review->user_id !== $user->id) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $messages = [
+            'comment.max' => 'El comentario no puede exceder los 500 caracteres.',
+            'rating.integer' => 'La calificación debe ser un número.',
+            'rating.min' => 'La calificación mínima es 1.',
+            'rating.max' => 'La calificación máxima es 5.',
+        ];
+
+        // AC1 & AC4: Update review & rating constraints (1-5)
+        $data = $request->validate([
+            'rating' => 'sometimes|integer|min:1|max:5',
+            'comment' => ['nullable', 'string', 'max:500', new NoProfanity()],
+        ], $messages);
+
+        if (array_key_exists('rating', $data)) {
+            $review->rating = $data['rating'];
+        }
+
+        if (array_key_exists('comment', $data)) {
+            $review->comment = $data['comment'];
+        }
+
+        $review->fecha_comentario = now();
+        $review->save();
+
+        $review->load('usuario:id,name,foto_perfil', 'place:id,name,location');
+
+        return response()->json($review);
+    }
 }
