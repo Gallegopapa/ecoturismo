@@ -67,4 +67,50 @@ class PasswordResetController extends Controller
             ],
         ], 422);
     }
+
+    public function resetPassword(Request $request): JsonResponse
+    {
+        try {
+            $request->validate([
+                'token' => 'required|string',
+                'email' => 'required|email|max:255',
+                'password' => 'required|string|min:8|max:15|confirmed',
+            ], [
+                'token.required' => 'El token es requerido.',
+                'email.required' => 'El correo electronico es requerido.',
+                'email.email' => 'El correo electronico debe ser una direccion valida.',
+                'password.required' => 'La contrasena es requerida.',
+                'password.min' => 'La contrasena debe tener al menos 8 caracteres.',
+                'password.max' => 'La contrasena no puede tener mas de 15 caracteres.',
+                'password.confirmed' => 'Las contrasenas no coinciden.',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Error de validacion',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+
+        $status = Password::broker('users')->reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->password = bcrypt($password);
+                $user->setRememberToken(\Illuminate\Support\Str::random(60));
+                $user->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return response()->json([
+                'message' => 'Contrasena restablecida correctamente.',
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'No se pudo restablecer la contrasena.',
+            'errors' => [
+                'email' => [trans($status)],
+            ],
+        ], 422);
+    }
 }
