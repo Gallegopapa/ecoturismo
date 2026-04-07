@@ -102,5 +102,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'update']);
         Route::put('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'update']);
         Route::delete('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'destroy']);
+
+        // Rutas de administración de usuarios
+        Route::get('/users', [\App\Http\Controllers\API\AdminUserController::class, 'index']);
+        Route::post('/users', [\App\Http\Controllers\API\AdminUserController::class, 'store']);
+        Route::get('/users/{user}', [\App\Http\Controllers\API\AdminUserController::class, 'show']);
+        Route::put('/users/{user}', [\App\Http\Controllers\API\AdminUserController::class, 'update']);
+        Route::delete('/users/{user}', [\App\Http\Controllers\API\AdminUserController::class, 'destroy']);
     });
 });
