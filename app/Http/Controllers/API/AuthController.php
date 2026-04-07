@@ -72,7 +72,13 @@ class AuthController extends Controller
         // AC1: Correct credentials -> Returns 200 + token + user
         $user = Usuarios::where('email', $request->email)->first();
 
-        // (Validation and errors will be added in subsequent AC commits)
+        if (!$user) {
+            return response()->json([
+                'message' => 'Credenciales incorrectas'
+            ], 401);
+        }
+
+        // (Password check will be added in AC5 commit)
         
         $token = $user->createToken('auth_token')->plainTextToken;
 
