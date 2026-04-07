@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Models;
 
@@ -68,14 +68,14 @@ class Usuarios extends Authenticatable implements CanResetPasswordContract
           <span style="display:inline-block;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);color:#4ade80;font-size:12px;font-weight:700;padding:8px 22px;border-radius:999px;letter-spacing:1.5px;text-transform:uppercase;"> Seguridad de cuenta</span>
         </td></tr>
 
-        <!-- T├¡tulo -->
+        <!-- Título -->
         <tr><td align="center" style="padding-bottom:24px;">
-          <h1 style="margin:0;color:#ffffff;font-size:44px;font-weight:800;line-height:1.15;text-align:center;">Recupera tu<br>contrase├▒a</h1>
+          <h1 style="margin:0;color:#ffffff;font-size:44px;font-weight:800;line-height:1.15;text-align:center;">Recupera tu<br>contraseña</h1>
         </td></tr>
 
-        <!-- Subt├¡tulo -->
+        <!-- Subtítulo -->
         <tr><td align="center" style="padding-bottom:44px;">
-          <p style="margin:0 auto;color:rgba(255,255,255,.65);font-size:16px;line-height:1.75;text-align:center;max-width:400px;">Recibimos una solicitud para restablecer la contrase├▒a de tu cuenta en <strong style="color:#4ade80;">Risaralda EcoTurismo</strong>.</p>
+          <p style="margin:0 auto;color:rgba(255,255,255,.65);font-size:16px;line-height:1.75;text-align:center;max-width:400px;">Recibimos una solicitud para restablecer la contraseña de tu cuenta en <strong style="color:#4ade80;">Risaralda EcoTurismo</strong>.</p>
         </td></tr>
 
         <!-- Pills -->
@@ -83,20 +83,20 @@ class Usuarios extends Authenticatable implements CanResetPasswordContract
           <table cellpadding="0" cellspacing="8" align="center">
             <tr>
               <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;"> Enlace seguro</span></td>
-              <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;">ÔÅ▒ V├ílido 60 min</span></td>
+              <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;">⏱ Válido 60 min</span></td>
               <td><span style="display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;padding:10px 20px;border-radius:999px;"> Un solo uso</span></td>
             </tr>
           </table>
         </td></tr>
 
-        <!-- Bot├│n CTA -->
+        <!-- Botón CTA -->
         <tr><td align="center" style="padding-bottom:50px;">
-          <a href="' . $resetUrl . '" style="display:inline-block;background:#4ade80;color:#071a0e;text-decoration:none;padding:18px 52px;border-radius:10px;font-size:17px;font-weight:700;letter-spacing:.2px;">Restablecer contrase├▒a &nbsp;ÔåÆ</a>
+          <a href="' . $resetUrl . '" style="display:inline-block;background:#4ade80;color:#071a0e;text-decoration:none;padding:18px 52px;border-radius:10px;font-size:17px;font-weight:700;letter-spacing:.2px;">Restablecer contraseña &nbsp;→</a>
         </td></tr>
 
         <!-- Aviso -->
         <tr><td align="center">
-          <p style="margin:0;color:rgba(255,255,255,.35);font-size:13px;line-height:1.8;text-align:center;">Si no solicitaste este cambio, puedes ignorar este correo.<br>Tu contrase├▒a permanecer├í sin cambios.</p>
+          <p style="margin:0;color:rgba(255,255,255,.35);font-size:13px;line-height:1.8;text-align:center;">Si no solicitaste este cambio, puedes ignorar este correo.<br>Tu contraseña permanecerá sin cambios.</p>
         </td></tr>
 
         <!-- Divider -->
@@ -106,7 +106,7 @@ class Usuarios extends Authenticatable implements CanResetPasswordContract
 
         <!-- Footer -->
         <tr><td align="center">
-          <p style="margin:0;color:rgba(255,255,255,.25);font-size:12px;">┬® ' . date('Y') . ' Risaralda EcoTurismo &nbsp;┬À&nbsp; sgallego.dev</p>
+          <p style="margin:0;color:rgba(255,255,255,.25);font-size:12px;">© ' . date('Y') . ' Risaralda EcoTurismo &nbsp;·&nbsp; sgallego.dev</p>
         </td></tr>
 
       </table>
@@ -119,7 +119,7 @@ class Usuarios extends Authenticatable implements CanResetPasswordContract
         $resend->emails->send([
             'from'    => "{$fromName} <{$fromAddress}>",
             'to'      => [$this->email],
-            'subject' => 'Recuperaci├│n de contrase├▒a - Risaralda EcoTurismo',
+            'subject' => 'Recuperación de contraseña - Risaralda EcoTurismo',
             'html'    => $html,
         ]);
     }
@@ -134,7 +134,7 @@ class Usuarios extends Authenticatable implements CanResetPasswordContract
             return null;
         }
 
-        // Si ya es una URL absoluta v├ílida o data source, devolverla
+        // Si ya es una URL absoluta válida o data source, devolverla
         if (preg_match('/^https?:\/\//', $value) || strpos($value, 'data:') === 0) {
             return $value;
         }
@@ -151,7 +151,7 @@ class Usuarios extends Authenticatable implements CanResetPasswordContract
             return null;
         }
 
-        // Devolvemos SIEMPRE el endpoint sin extensi├│n est├ítica para que los Reverse Proxies (Nginx/Apache) no la intercepten.
+        // Devolvemos SIEMPRE el endpoint sin extensión estática para que los Reverse Proxies (Nginx/Apache) no la intercepten.
         return '/api/profile/photo/stream?f=' . rawurlencode($filename);
     }
 
