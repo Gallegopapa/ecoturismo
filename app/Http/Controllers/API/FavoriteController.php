@@ -36,4 +36,19 @@ class FavoriteController extends Controller
 
         return response()->json($favorite, 201);
     }
+
+    // AC3: List Favorites
+    public function index(Request $request)
+    {
+        $user = $request->user();
+        $favorites = \App\Models\Favorite::with('place')
+            ->where('user_id', $user->id)
+            ->get()
+            ->map(function ($fav) {
+                // Return the place details
+                return $fav->place;
+            });
+
+        return response()->json($favorites);
+    }
 }
