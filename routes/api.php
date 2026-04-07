@@ -82,17 +82,25 @@ Route::middleware('auth:sanctum')->group(function () {
     // ============================================
     Route::prefix('admin')->middleware(\App\Http\Middleware\EnsureUserIsAdmin::class)->group(function () {
         // Rutas de lugares para admin
-        Route::get('/places', [\App\Http\Controllers\API\AdminPlaceController::class, 'index']);
-        Route::get('/places/{place}', [\App\Http\Controllers\API\AdminPlaceController::class, 'show']);
-        Route::post('/places', [\App\Http\Controllers\API\AdminPlaceController::class, 'store']);
-        Route::post('/places/{place}', [\App\Http\Controllers\API\AdminPlaceController::class, 'update']); // POST para FormData con _method=PUT
-        Route::put('/places/{place}', [\App\Http\Controllers\API\AdminPlaceController::class, 'update']);
-        Route::delete('/places/{place}', [\App\Http\Controllers\API\AdminPlaceController::class, 'destroy']);
+        Route::get('/places', [\App\Http\Controllers\API\PlaceController::class, 'index']);
+        Route::get('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'show']);
+        Route::post('/places', [\App\Http\Controllers\API\PlaceController::class, 'store']);
+        Route::post('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'update']); // POST para FormData con _method=PUT
+        Route::put('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'update']);
+        Route::delete('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'destroy']);
 
         // Rutas de horarios para lugares (Admin)
         Route::get('/places/{place}/schedules', [\App\Http\Controllers\API\PlaceScheduleController::class, 'index']);
         Route::post('/places/{place}/schedules', [\App\Http\Controllers\API\PlaceScheduleController::class, 'store']);
         Route::put('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\PlaceScheduleController::class, 'update']);
         Route::delete('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\PlaceScheduleController::class, 'destroy']);
+
+        // Rutas de ecohoteles para admin
+        Route::get('/ecohotels', [\App\Http\Controllers\API\EcohotelController::class, 'index']);
+        Route::get('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'show']);
+        Route::post('/ecohotels', [\App\Http\Controllers\API\EcohotelController::class, 'store']);
+        Route::post('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'update']);
+        Route::put('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'update']);
+        Route::delete('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'destroy']);
     });
 });
