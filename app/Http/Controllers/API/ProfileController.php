@@ -317,4 +317,16 @@ class ProfileController extends Controller
             'message' => 'Contraseña actualizada correctamente.'
         ]);
     }
+
+    /**
+     * Eliminar la cuenta del usuario autenticado
+     */
+    public function destroy(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $user->delete();
+        return response()->json([
+            'message' => 'Cuenta eliminada exitosamente.'
+        ]);
+    }
 }
