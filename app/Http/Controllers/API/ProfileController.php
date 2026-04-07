@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -272,6 +273,48 @@ class ProfileController extends Controller
                 'fecha_registro' => $user->fecha_registro,
                 'is_admin' => $user->is_admin,
             ]
+        ]);
+    }
+
+    /**
+     * Cambiar contraseña del usuario
+     */
+    public function changePassword(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'current_password' => ['required', 'string'],
+            'new_password' => ['required', 'string', 'min:8', 'max:15', 'confirmed'],
+        ], [
+            'current_password.required' => 'La contraseña actual es requerida.',
+            'new_password.required' => 'La nueva contraseña es requerida.',
+            'new_password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
+            'new_password.max' => 'La nueva contraseña no puede tener más de 15 caracteres.',
+            'new_password.confirmed' => 'Las contraseñas no coinciden.',
+        ]);
+
+        // Verificar que la contraseña actual sea correcta
+        if (!Hash::check($validated['current_password'], $user->password)) {
+            return response()->json([
+                'message' => 'La contraseña actual es incorrecta.'
+            ], 422);
+        }
+
+        // Verificar que la nueva contraseña sea diferente
+        if (Hash::check($validated['new_password'], $user->password)) {
+            return response()->json([
+                'message' => 'La nueva contraseña debe ser diferente a la actual.'
+            ], 422);
+        }
+
+        // Actualizar la contraseña
+        $user->update([
+            'password' => Hash::make($validated['new_password'])
+        ]);
+
+        return response()->json([
+            'message' => 'Contraseña actualizada correctamente.'
         ]);
     }
 }
