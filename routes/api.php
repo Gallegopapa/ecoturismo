@@ -21,6 +21,10 @@ Route::get('/places/{place}', [\App\Http\Controllers\API\PlaceController::class,
 Route::get('/places/{place}/available-schedules', [\App\Http\Controllers\API\PlaceController::class, 'getAvailableSchedules']);
 Route::get('/categories', [\App\Http\Controllers\API\CategoryController::class, 'index']);
 
+// Rutas públicas de Ecohoteles
+Route::get('/ecohotels', [\App\Http\Controllers\API\EcohotelController::class, 'index']);
+Route::get('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'show']);
+
 // Reseñas (Públicas)
 Route::get('/{type}/{id}/reviews', [\App\Http\Controllers\API\ReviewController::class, 'index'])->where('type', 'place|ecohotel');
 
