@@ -18,7 +18,10 @@ class AuthController extends Controller
                 'unique:usuarios,email',
                 'regex:/^.+@gmail\.com$/'
             ],
-            'password' => 'min:8',
+            'password' => [
+                'min:8',
+                'max:15'
+            ],
         ]);
 
         if ($validator->fails()) {
