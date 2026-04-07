@@ -50,4 +50,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/favorites/check/{placeId}', [\App\Http\Controllers\API\FavoriteController::class, 'checkFavorite']);
     Route::post('/favorites', [\App\Http\Controllers\API\FavoriteController::class, 'store']);
     Route::delete('/favorites/{placeId}', [\App\Http\Controllers\API\FavoriteController::class, 'destroy']);
+
+    // ============================================
+    // RUTAS DE EMPRESA (para usuarios tipo empresa)
+    // ============================================
+    Route::prefix('company')->group(function () {
+        // Lugares gestionados por la empresa
+        Route::get('/places', [\App\Http\Controllers\API\CompanyPlaceController::class, 'index']);
+        Route::get('/places/{place}', [\App\Http\Controllers\API\CompanyPlaceController::class, 'show']);
+        Route::post('/places/{place}', [\App\Http\Controllers\API\CompanyPlaceController::class, 'update']);
+        Route::put('/places/{place}', [\App\Http\Controllers\API\CompanyPlaceController::class, 'update']);
+        Route::delete('/places/{place}', [\App\Http\Controllers\API\CompanyPlaceController::class, 'destroy']);
+
+        Route::get('/places/{place}/schedules', [\App\Http\Controllers\API\CompanyPlaceScheduleController::class, 'index']);
+        Route::post('/places/{place}/schedules', [\App\Http\Controllers\API\CompanyPlaceScheduleController::class, 'store']);
+        Route::put('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\CompanyPlaceScheduleController::class, 'update']);
+        Route::delete('/places/{place}/schedules/{schedule}', [\App\Http\Controllers\API\CompanyPlaceScheduleController::class, 'destroy']);
+
+        // Gestión de reservas desde la perspectiva de la empresa
+        Route::get('/reservations', [\App\Http\Controllers\API\CompanyReservationController::class, 'index']);
+        Route::get('/reservations/stats', [\App\Http\Controllers\API\CompanyReservationController::class, 'statsSummary']);
+        Route::get('/reservations/{companyReservation}', [\App\Http\Controllers\API\CompanyReservationController::class, 'show']);
+        Route::post('/reservations/{companyReservation}/accept', [\App\Http\Controllers\API\CompanyReservationController::class, 'accept']);
+        Route::post('/reservations/{companyReservation}/reject', [\App\Http\Controllers\API\CompanyReservationController::class, 'reject']);
+        Route::post('/reservations/{companyReservation}/reopen', [\App\Http\Controllers\API\CompanyReservationController::class, 'reopen']);
+        Route::get('/reservations/place/{placeId}/stats', [\App\Http\Controllers\API\CompanyReservationController::class, 'stats']);
+    });
 });
