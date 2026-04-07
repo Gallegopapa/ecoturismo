@@ -174,4 +174,19 @@ class ReviewController extends Controller
 
         return response()->json($review);
     }
+
+    public function destroy(Request $request, Review $review): JsonResponse
+    {
+        $user = $request->user();
+
+        // AC2: Prevent users from deleting other's reviews (Admin bypass)
+        if ($review->user_id !== $user->id && !$user->is_admin) {
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        // AC1 & AC5: Delete review & DB reflect
+        $review->delete();
+
+        return response()->json(['message' => 'Comentario eliminado']);
+    }
 }
