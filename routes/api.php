@@ -21,6 +21,9 @@ Route::get('/places/{place}', [\App\Http\Controllers\API\PlaceController::class,
 Route::get('/places/{place}/available-schedules', [\App\Http\Controllers\API\PlaceController::class, 'getAvailableSchedules']);
 Route::get('/categories', [\App\Http\Controllers\API\CategoryController::class, 'index']);
 
+// Rutas públicas de motivos de rechazo
+Route::get('/rejection-reasons', [\App\Http\Controllers\API\RejectionReasonController::class, 'index']);
+
 // Rutas públicas de Ecohoteles
 Route::get('/ecohotels', [\App\Http\Controllers\API\EcohotelController::class, 'index']);
 Route::get('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'show']);
@@ -109,5 +112,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/users/{user}', [\App\Http\Controllers\API\AdminUserController::class, 'show']);
         Route::put('/users/{user}', [\App\Http\Controllers\API\AdminUserController::class, 'update']);
         Route::delete('/users/{user}', [\App\Http\Controllers\API\AdminUserController::class, 'destroy']);
+
+        // Rutas de motivos de rechazo (Admin)
+        Route::post('/rejection-reasons', [\App\Http\Controllers\API\RejectionReasonController::class, 'store']);
+        Route::put('/rejection-reasons/{reason}', [\App\Http\Controllers\API\RejectionReasonController::class, 'update']);
+        Route::delete('/rejection-reasons/{reason}', [\App\Http\Controllers\API\RejectionReasonController::class, 'destroy']);
+
+        // Vista global de reservas para admin
+        Route::get('/reservations', [\App\Http\Controllers\API\ReservationController::class, 'index']);
     });
 });
