@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Usuarios;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -101,5 +102,17 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'user' => $user
         ], 200);
+    }
+
+    /**
+     * LOGOUT
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Sesión cerrada correctamente'
+        ]);
     }
 }
