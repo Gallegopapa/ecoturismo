@@ -56,5 +56,19 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'user' => $user
         ], 201);
+    public function login(Request $request)
+    {
+        // AC1: Correct credentials -> Returns 200 + token + user
+        $user = Usuarios::where('email', $request->email)->first();
+
+        // (Validation and errors will be added in subsequent AC commits)
+        
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user
+        ], 200);
     }
 }
