@@ -54,6 +54,19 @@ class ProfileController extends Controller
             }
         }
 
+        // Correo electrónico (AC3/AC4)
+        $rules['email'] = ['nullable', 'email', 'max:255', 'unique:usuarios,email,' . $user->id];
+        $incomingEmail = $request->input('email');
+        if ($incomingEmail !== null && strtolower(trim((string) $incomingEmail)) !== strtolower(trim((string) $user->email))) {
+            $rules['email'][] = new \App\Rules\AllowedEmailDomain();
+        }
+        $messages['email.email'] = 'El correo electrónico debe ser válido.';
+        $messages['email.unique'] = 'Este correo electrónico ya está en uso.';
+
+        // Teléfono (AC5)
+        $rules['telefono'] = ['nullable', 'string', 'max:20', new \App\Rules\NoProfanity()];
+        $messages['telefono.max'] = 'El teléfono no puede exceder 20 caracteres.';
+
         $validated = $request->validate($rules, $messages);
 
         if (array_key_exists('name', $validated)) {
@@ -61,6 +74,10 @@ class ProfileController extends Controller
             if ($validated['name'] === '') {
                 unset($validated['name']);
             }
+        }
+
+        if (array_key_exists('email', $validated) && $validated['email'] !== null) {
+            $validated['email'] = strtolower(trim((string) $validated['email']));
         }
 
         $user->update($validated);
