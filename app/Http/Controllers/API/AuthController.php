@@ -68,5 +68,19 @@ class AuthController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+
+        $login = $request->login;
+
+        // AC3: Case-insensitive login (by lowercasing or relying on database collation)
+        $user = Usuarios::where('email', $login)
+                        ->orWhere('name', $login)
+                        ->first();
+
+        // AC5: Identifier is not registered -> Returns 401
+        if (!$user) {
+            return response()->json([
+                'message' => 'Credenciales incorrectas'
+            ], 401);
+        }
     }
 }
