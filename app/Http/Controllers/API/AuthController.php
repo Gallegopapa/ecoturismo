@@ -13,7 +13,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'unique:usuarios,name',
+            'name' => [
+                'unique:usuarios,name',
+                'regex:/^[a-zA-Z0-9]+$/'
+            ],
             'email' => [
                 'unique:usuarios,email',
                 'regex:/^.+@gmail\.com$/'
