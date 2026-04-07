@@ -20,7 +20,7 @@ class AuthController extends Controller
                 'regex:/^[a-zA-Z0-9]+$/',
                 'unique:usuarios,name'
             ],
-            'email' => 'required',
+            'email' => 'required|email|unique:usuarios,email',
             'password' => 'required|confirmed',
         ]);
 
