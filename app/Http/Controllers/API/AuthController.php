@@ -12,6 +12,16 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'unique:usuarios,name',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         // AC1: Data is valid -> Returns 201 + token + user data
         $user = Usuarios::create([
             'name' => $request->name,
