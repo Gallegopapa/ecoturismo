@@ -10,6 +10,10 @@ class PasswordResetController extends Controller
 {
     public function forgotPassword(Request $request)
     {
+        $request->validate([
+            'email' => 'required'
+        ]);
+
         $user = Usuarios::where('email', $request->email)->first();
 
         if (!$user) {
