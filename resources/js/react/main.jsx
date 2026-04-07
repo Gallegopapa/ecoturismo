@@ -25,6 +25,7 @@ import AdminPanel from "./admin/AdminPanel.jsx";
 import EcohotelsPage from "./ecohotels/page.jsx";
 import EcohotelDetailPage from "./ecohotels/detail/page.jsx";
 import MapPage from "./map/page.jsx";
+import ReservationsPage from "./reservations/page.jsx";
 
 // CONTEXTOS DE ACCESIBILIDAD E IDIOMA
 import { AccessibilityProvider } from "./contexts/AccessibilityContext.jsx";
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
   {
     path: "/mapa",
     element: <MapPage />,
+  },
+  {
+    path: "/reservas",
+    element: <ReservationsPage />,
   },
   {
     path: "/comments",
