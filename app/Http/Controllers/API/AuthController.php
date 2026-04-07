@@ -26,7 +26,11 @@ class AuthController extends Controller
                 'unique:usuarios,email',
                 'regex:/^.+@gmail\.com$/'
             ],
-            'password' => 'required|confirmed',
+            'password' => [
+                'required',
+                'min:8',
+                'confirmed'
+            ],
         ]);
 
         if ($validator->fails()) {
