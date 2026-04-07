@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import Header from "../../components/Header/Header";
 import Header2 from "../../components/Header2/Header2";
 import Footer from "../../components/Footer/Footer";
+import { resolveEcohotelImageUrl, ECOHOTEL_IMAGE_FALLBACK } from "../utils/imageUrl";
 import "../../places/page.css";
 import "./detail.css";
 
@@ -159,10 +160,11 @@ const EcohotelDetailPage = () => {
             <div className="ecohotel-detail-left">
               <div className="detail-image">
                 <img
-                  src={ecohotel.image || "/imagenes/placeholder.jpg"}
+                  src={resolveEcohotelImageUrl(ecohotel.image, ECOHOTEL_IMAGE_FALLBACK)}
                   alt={ecohotel.name}
                   onError={(e) => {
-                    e.target.src = "/imagenes/placeholder.jpg";
+                    e.target.onerror = null;
+                    e.target.src = ECOHOTEL_IMAGE_FALLBACK;
                   }}
                 />
               </div>
@@ -455,10 +457,13 @@ const EcohotelDetailPage = () => {
                         >
                           <div className="related-card-image-wrapper">
                             <img
-                              src={place.image || '/imagenes/placeholder.jpg'}
+                              src={resolveEcohotelImageUrl(place.image, ECOHOTEL_IMAGE_FALLBACK)}
                               alt={place.name}
                               className="related-card-image"
-                              onError={e => { e.target.src = '/imagenes/placeholder.jpg'; }}
+                              onError={e => {
+                                e.target.onerror = null;
+                                e.target.src = ECOHOTEL_IMAGE_FALLBACK;
+                              }}
                             />
                           </div>
                           <div className="related-card-title">{place.name}</div>
