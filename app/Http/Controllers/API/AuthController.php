@@ -14,15 +14,18 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => [
+                'required',
                 'min:3',
                 'unique:usuarios,name',
                 'regex:/^[a-zA-Z0-9]+$/'
             ],
             'email' => [
+                'required',
                 'unique:usuarios,email',
                 'regex:/^.+@gmail\.com$/'
             ],
             'password' => [
+                'required',
                 'min:8',
                 'max:15',
                 'confirmed'
