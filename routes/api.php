@@ -14,10 +14,15 @@ Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']
 Route::get('/profile/photo', [ProfileController::class, 'photoByQuery']);
 Route::get('/profile/photo/{filename}', [ProfileController::class, 'photo']);
 
-// Rutas públicas de Lugares y Categorías (US-PLCS-01)
+// Rutas públicas de Lugares y Categorías
 Route::get('/places/options', [\App\Http\Controllers\API\PlaceController::class, 'options']);
 Route::get('/places', [\App\Http\Controllers\API\PlaceController::class, 'index']);
+Route::get('/places/{place}', [\App\Http\Controllers\API\PlaceController::class, 'show']);
+Route::get('/places/{place}/available-schedules', [\App\Http\Controllers\API\PlaceController::class, 'getAvailableSchedules']);
 Route::get('/categories', [\App\Http\Controllers\API\CategoryController::class, 'index']);
+
+// Reseñas (Públicas)
+Route::get('/{type}/{id}/reviews', [\App\Http\Controllers\API\ReviewController::class, 'index'])->where('type', 'place|ecohotel');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
