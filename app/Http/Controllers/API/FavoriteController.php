@@ -16,8 +16,19 @@ class FavoriteController extends Controller
 
         $user = $request->user();
 
-        // Guardamos el favorito sin chequeos por ahora (AC1)
-        // AC2 will handle duplicates
+        // AC2: Duplicate Prevention (422)
+        $exists = Favorite::where('user_id', $user->id)
+                          ->where('place_id', $request->place_id)
+                          ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'message' => 'Este lugar ya está en tus favoritos.',
+                'errors' => ['place_id' => ['Ya está en favoritos']]
+            ], 422);
+        }
+
+        // Guardamos el favorito
         $favorite = Favorite::create([
             'user_id' => $user->id,
             'place_id' => $request->place_id
