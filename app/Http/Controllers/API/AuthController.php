@@ -127,4 +127,33 @@ class AuthController extends Controller
             'message' => 'Todas las sesiones cerradas'
         ]);
     }
+
+    /**
+     * VERIFICAR TOKEN
+     */
+    public function verifyToken(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Token inválido'
+            ], 401);
+        }
+
+        return response()->json([
+            'valid' => true,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'telefono' => $user->telefono,
+                'foto_perfil' => $user->foto_perfil,
+                'is_admin' => $user->is_admin,
+                'tipo_usuario' => $user->tipo_usuario
+            ],
+            'message' => 'Token válido'
+        ]);
+    }
 }
