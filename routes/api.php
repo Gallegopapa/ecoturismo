@@ -24,6 +24,9 @@ Route::get('/categories', [\App\Http\Controllers\API\CategoryController::class, 
 // Rutas públicas de motivos de rechazo
 Route::get('/rejection-reasons', [\App\Http\Controllers\API\RejectionReasonController::class, 'index']);
 
+// Rutas públicas de contactos
+Route::post('/contacts', [\App\Http\Controllers\API\ContactController::class, 'store']);
+
 // Rutas públicas de Ecohoteles
 Route::get('/ecohotels', [\App\Http\Controllers\API\EcohotelController::class, 'index']);
 Route::get('/ecohotels/{ecohotel}', [\App\Http\Controllers\API\EcohotelController::class, 'show']);
@@ -117,6 +120,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/rejection-reasons', [\App\Http\Controllers\API\RejectionReasonController::class, 'store']);
         Route::put('/rejection-reasons/{reason}', [\App\Http\Controllers\API\RejectionReasonController::class, 'update']);
         Route::delete('/rejection-reasons/{reason}', [\App\Http\Controllers\API\RejectionReasonController::class, 'destroy']);
+
+        // Rutas de contactos (Admin)
+        Route::get('/contacts', [\App\Http\Controllers\API\ContactController::class, 'index']);
+        Route::get('/contacts/{contact}', [\App\Http\Controllers\API\ContactController::class, 'show']);
 
         // Vista global de reservas para admin
         Route::get('/reservations', [\App\Http\Controllers\API\ReservationController::class, 'index']);
