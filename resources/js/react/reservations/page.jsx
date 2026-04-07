@@ -39,6 +39,23 @@ const ReservationsPage = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('¿Estás seguro de cancelar esta reserva?')) {
+      return;
+    }
+
+    try {
+      await reservationsService.delete(id);
+      setMessage('✅ Reserva cancelada correctamente');
+      await loadReservations();
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      console.error('Error al cancelar reserva:', error);
+      setMessage('❌ Error al cancelar la reserva');
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'No especificada';
     
@@ -263,6 +280,14 @@ const ReservationsPage = () => {
                   </div>
                 </div>
 
+                <div className="reservation-actions">
+                  <button
+                    onClick={() => handleDelete(reservation.id)}
+                    className="btn-cancel"
+                  >
+                    Cancelar Reserva
+                  </button>
+                </div>
               </div>
             ))}
           </div>
