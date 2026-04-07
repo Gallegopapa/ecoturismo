@@ -89,5 +89,17 @@ class AuthController extends Controller
                 'message' => 'Credenciales incorrectas'
             ], 401);
         }
+
+        // AC8: Revoke all previous tokens
+        $user->tokens()->delete();
+
+        // AC1 & AC2: Successful login -> Returns 200 + token + user
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user
+        ], 200);
     }
 }
