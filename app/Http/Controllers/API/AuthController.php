@@ -3,104 +3,240 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Usuarios;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Models\Usuarios;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use App\Rules\AllowedEmailDomain;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+
+    /**
+     * REGISTRO DE USUARIO
+     */
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
+
             'name' => [
                 'required',
+                'string',
                 'min:3',
-                'unique:usuarios,name',
-                'regex:/^[a-zA-Z0-9]+$/'
+                'max:255',
+                'regex:/^[a-zA-Z0-9_]+$/',
+                Rule::unique('usuarios', 'name')
             ],
+
             'email' => [
                 'required',
-                'unique:usuarios,email',
-                'regex:/^.+@gmail\.com$/'
+                'email',
+                'max:255',
+                new AllowedEmailDomain(),
+                Rule::unique('usuarios', 'email')
             ],
+
             'password' => [
                 'required',
+                'string',
                 'min:8',
                 'max:15',
                 'confirmed'
-            ],
+            ]
+
+        ], [
+
+            'name.required' => 'El nombre de usuario es requerido.',
+            'name.min' => 'El nombre debe tener mínimo 3 caracteres.',
+            'name.unique' => 'Este nombre ya está en uso.',
+            'name.regex' => 'Solo se permiten letras, números y guiones bajos.',
+
+            'email.required' => 'El correo es obligatorio.',
+            'email.email' => 'El correo debe ser válido.',
+            'email.unique' => 'Este correo ya está registrado.',
+
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.max' => 'La contraseña no puede tener más de 15 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.'
+
         ]);
 
         if ($validator->fails()) {
             return response()->json([
+                'message' => 'Error de validación',
                 'errors' => $validator->errors()
             ], 422);
         }
 
-        // AC1: Data is valid -> Returns 201 + token + user data
-        $user = Usuarios::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'tipo_usuario' => 'registrado', // Default role for visitors
-        ]);
+        $data = $validator->validated();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        try {
+            [$user, $token] = DB::transaction(function () use ($data) {
+                $normalizedName = trim($data['name']);
+                $normalizedEmail = strtolower(trim($data['email']));
+
+                $user = Usuarios::create([
+                    'name' => $normalizedName,
+                    'email' => $normalizedEmail,
+                    'password' => Hash::make($data['password']),
+                    'fecha_registro' => now(),
+                ]);
+
+                // En algunos entornos el ID puede no venir inmediatamente en la instancia creada.
+                $user = $user->fresh() ?? Usuarios::query()->where('email', $normalizedEmail)->first();
+
+                if (!$user || !$user->id) {
+                    throw ValidationException::withMessages([
+                        'register' => ['No se pudo confirmar el ID del usuario creado.'],
+                    ]);
+                }
+
+                $token = $user->createToken('api-token')->plainTextToken;
+
+                return [$user, $token];
+            });
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Error al registrar usuario',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Throwable $e) {
+            Log::error('Fallo en registro de usuario', [
+                'message' => $e->getMessage(),
+                'db_connection' => config('database.default'),
+                'exception' => get_class($e),
+            ]);
+
+            return response()->json([
+                'message' => 'No fue posible registrar el usuario en este momento.',
+            ], 500);
+        }
 
         return response()->json([
-            'access_token' => $token,
+
+            'message' => 'Usuario registrado exitosamente',
+
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'telefono' => $user->telefono,
+                'foto_perfil' => $user->foto_perfil,
+                'fecha_registro' => $user->fecha_registro,
+                'is_admin' => $user->is_admin,
+                'tipo_usuario' => $user->tipo_usuario
+            ],
+
+            'token' => $token,
             'token_type' => 'Bearer',
-            'user' => $user
+            'expires_in' => 60 * 60 * 24 * 30
+
         ], 201);
     }
 
-    public function login(Request $request)
+    /**
+     * LOGIN
+     */
+    public function login(Request $request): JsonResponse
     {
-        // AC6 & AC7: Empty fields (Returns 422)
+
         $validator = Validator::make($request->all(), [
-            'login' => 'required',
-            'password' => 'required'
+
+            'login' => 'nullable|string|max:255',
+            'email' => 'nullable|string|max:255',
+            'username' => 'nullable|string|max:255',
+            'password' => 'required|string'
+
+        ], [
+
+            'password.required' => 'La contraseña es requerida.'
+
         ]);
 
         if ($validator->fails()) {
             return response()->json([
+                'message' => 'Error de validación',
                 'errors' => $validator->errors()
             ], 422);
         }
 
-        $login = $request->login;
+        $rawLogin = $request->input('login')
+            ?? $request->input('email')
+            ?? $request->input('username');
 
-        // AC3: Case-insensitive login (by lowercasing or relying on database collation)
-        $user = Usuarios::where('email', $login)
-                        ->orWhere('name', $login)
-                        ->first();
+        $login = strtolower(trim((string) $rawLogin));
 
-        // AC5: Identifier is not registered -> Returns 401
+        if ($login === '') {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => [
+                    'login' => ['El correo o usuario es requerido.']
+                ]
+            ], 422);
+        }
+
+        $password = $request->password;
+
+        $user = Usuarios::whereRaw('LOWER(email) = ?', [$login])
+            ->orWhereRaw('LOWER(name) = ?', [$login])
+            ->first();
+
         if (!$user) {
+
+            Log::warning('Login fallido - usuario no encontrado', [
+                'login' => $login
+            ]);
+
             return response()->json([
                 'message' => 'Credenciales incorrectas'
             ], 401);
         }
 
-        // AC4: Password incorrect -> Returns 401
-        if (!Hash::check($request->password, $user->password)) {
+        if (!Hash::check($password, $user->password)) {
+
+            Log::warning('Login fallido - contraseña incorrecta', [
+                'user_id' => $user->id
+            ]);
+
             return response()->json([
                 'message' => 'Credenciales incorrectas'
             ], 401);
         }
 
-        // AC8: Revoke all previous tokens
+        // eliminar tokens anteriores
         $user->tokens()->delete();
 
-        // AC1 & AC2: Successful login -> Returns 200 + token + user
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        Log::info('Login exitoso', [
+            'user_id' => $user->id
+        ]);
 
         return response()->json([
-            'access_token' => $token,
+
+            'message' => 'Inicio de sesión exitoso',
+
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'telefono' => $user->telefono,
+                'foto_perfil' => $user->foto_perfil,
+                'fecha_registro' => $user->fecha_registro,
+                'is_admin' => $user->is_admin,
+                'tipo_usuario' => $user->tipo_usuario
+            ],
+
+            'token' => $token,
             'token_type' => 'Bearer',
-            'user' => $user
+            'expires_in' => 60 * 60 * 24 * 30
+
         ], 200);
     }
 
@@ -109,6 +245,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
+
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
@@ -116,11 +253,13 @@ class AuthController extends Controller
         ]);
     }
 
+
     /**
      * LOGOUT TODOS
      */
     public function logoutAll(Request $request): JsonResponse
     {
+
         $request->user()->tokens()->delete();
 
         return response()->json([
@@ -128,11 +267,42 @@ class AuthController extends Controller
         ]);
     }
 
+
+    /**
+     * USUARIO ACTUAL
+     */
+    public function me(Request $request): JsonResponse
+    {
+
+        $user = $request->user();
+        $user->load('reservations');
+
+        return response()->json([
+
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'telefono' => $user->telefono,
+                'foto_perfil' => $user->foto_perfil,
+                'fecha_registro' => $user->fecha_registro,
+                'is_admin' => $user->is_admin,
+                'tipo_usuario' => $user->tipo_usuario,
+                'reservations_count' => $user->reservations->count()
+            ],
+
+            'reservations' => $user->reservations
+
+        ]);
+    }
+
+
     /**
      * VERIFICAR TOKEN
      */
     public function verifyToken(Request $request): JsonResponse
     {
+
         $user = $request->user();
 
         if (!$user) {
@@ -143,7 +313,9 @@ class AuthController extends Controller
         }
 
         return response()->json([
+
             'valid' => true,
+
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -153,7 +325,10 @@ class AuthController extends Controller
                 'is_admin' => $user->is_admin,
                 'tipo_usuario' => $user->tipo_usuario
             ],
+
             'message' => 'Token válido'
+
         ]);
     }
+
 }

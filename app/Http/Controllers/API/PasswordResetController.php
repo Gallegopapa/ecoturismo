@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class PasswordResetController extends Controller
@@ -21,7 +22,7 @@ class PasswordResetController extends Controller
             ]);
         } catch (ValidationException $e) {
             return response()->json([
-                'message' => 'Error de validación',
+                'message' => 'Error de validacion',
                 'errors' => $e->errors(),
             ], 422);
         }
@@ -45,13 +46,12 @@ class PasswordResetController extends Controller
         }
 
         if ($status === Password::RESET_LINK_SENT) {
-            // AC1: Enlace enviado
             return response()->json([
                 'message' => '¡Correo enviado! Revisa tu bandeja de entrada.',
             ], 200);
         }
 
-        // AC2: Email not registered -> System returns appropriate response
+        // Mensajes de error en español por tipo de fallo
         $mensajesError = [
             Password::RESET_THROTTLED => 'Espera unos segundos antes de solicitar otro enlace.',
             Password::INVALID_USER    => 'No encontramos ninguna cuenta con ese correo.',
@@ -68,20 +68,21 @@ class PasswordResetController extends Controller
         ], 422);
     }
 
+
     public function resetPassword(Request $request): JsonResponse
     {
         try {
             $request->validate([
                 'token' => 'required|string',
                 'email' => 'required|email|max:255',
-                'password' => 'required|string|min:8|max:15|confirmed',
+                'password' => 'required|string|min:6|max:20|confirmed',
             ], [
                 'token.required' => 'El token es requerido.',
                 'email.required' => 'El correo electronico es requerido.',
                 'email.email' => 'El correo electronico debe ser una direccion valida.',
                 'password.required' => 'La contrasena es requerida.',
-                'password.min' => 'La contrasena debe tener al menos 8 caracteres.',
-                'password.max' => 'La contrasena no puede tener mas de 15 caracteres.',
+                'password.min' => 'La contrasena debe tener al menos 6 caracteres.',
+                'password.max' => 'La contrasena no puede tener mas de 20 caracteres.',
                 'password.confirmed' => 'Las contrasenas no coinciden.',
             ]);
         } catch (ValidationException $e) {
@@ -95,7 +96,7 @@ class PasswordResetController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
                 $user->password = bcrypt($password);
-                $user->setRememberToken(\Illuminate\Support\Str::random(60));
+                $user->setRememberToken(Str::random(60));
                 $user->save();
             }
         );

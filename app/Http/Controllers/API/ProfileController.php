@@ -3,9 +3,16 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
+use App\Rules\NoProfanity;
+use App\Rules\AllowedEmailDomain;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -59,6 +66,17 @@ class ProfileController extends Controller
     }
 
     /**
+     * Eliminar la cuenta del usuario autenticado
+     */
+    public function destroy(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $user->delete();
+        return response()->json([
+            'message' => 'Cuenta eliminada exitosamente.'
+        ]);
+    }
+    /**
      * Obtener información del perfil del usuario autenticado
      */
     public function show(Request $request): JsonResponse
@@ -85,10 +103,41 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        $rules = [];
-        $messages = [];
+        // Log detallado para debugging
+        Log::info('Profile update request', [
+            'method' => $request->method(),
+            'has_file' => $request->hasFile('foto_perfil'),
+            'inputs' => array_keys($request->all()),
+            'has_base64' => $request->has('foto_perfil_base64'),
+            'base64_length' => $request->has('foto_perfil_base64') ? strlen($request->input('foto_perfil_base64')) : 0,
+        ]);
 
-        // Solo aplicar validaciones estrictas de name si se envía y es diferente (AC1/AC2)
+        if ($request->hasFile('foto_perfil')) {
+            $file = $request->file('foto_perfil');
+            Log::info('Foto recibida y válida', [
+                'name' => $file->getClientOriginalName(),
+                'mime' => $file->getMimeType(),
+                'size' => $file->getSize(),
+            ]);
+        } else {
+            // Check if there is a file object that failed validation (e.g., upload_max_filesize limit)
+            $fileObj = $request->file('foto_perfil');
+            if ($fileObj !== null && !$fileObj->isValid()) {
+                $errorMsg = $fileObj->getErrorMessage();
+                Log::error('Archivo de foto de perfil invalido', [
+                    'error' => $errorMsg,
+                    'error_code' => $fileObj->getError(),
+                ]);
+                return response()->json([
+                    'message' => "La imagen no se pudo subir. Probablemente exceda el límite de tamaño del servidor (upload_max_filesize en Docker). Detalle: {$errorMsg}"
+                ], 422);
+            }
+        }
+
+        $emailRules = ['nullable', 'email', 'max:255', 'unique:usuarios,email,' . $user->id];
+        $nameRules = ['nullable', 'string', 'max:255'];
+
+        // Solo aplicar validaciones estrictas de name si se envía y es diferente
         $incomingName = $request->input('name');
         if ($incomingName !== null && !empty(trim((string) $incomingName))) {
             $normalizedIncomingName = trim((string) $incomingName);
@@ -96,49 +145,35 @@ class ProfileController extends Controller
 
             // Si intenta cambiar el nombre, aplicar todas las reglas
             if (strcasecmp($normalizedIncomingName, $currentName) !== 0) {
-                $rules['name'] = ['required', 'string', 'max:255', 'min:3', 'unique:usuarios,name,' . $user->id, 'regex:/^[a-zA-Z0-9_]+$/', new \App\Rules\NoProfanity()];
-                $messages['name.required'] = 'El nombre de usuario es requerido.';
-                $messages['name.min'] = 'El nombre de usuario debe tener al menos 3 caracteres.';
-                $messages['name.unique'] = 'Este nombre de usuario ya está en uso.';
-                $messages['name.regex'] = 'El nombre de usuario solo puede contener letras, números y guiones bajos.';
+                $nameRules = ['required', 'string', 'max:255', 'min:3', 'unique:usuarios,name,' . $user->id, 'regex:/^[a-zA-Z0-9_]+$/', new NoProfanity()];
             }
         }
 
-        // Correo electrónico (AC3/AC4)
-        $rules['email'] = ['nullable', 'email', 'max:255', 'unique:usuarios,email,' . $user->id];
+        // Solo exigir dominio @gmail.com si el usuario intenta cambiar su correo.
         $incomingEmail = $request->input('email');
         if ($incomingEmail !== null && strtolower(trim((string) $incomingEmail)) !== strtolower(trim((string) $user->email))) {
-            $rules['email'][] = new \App\Rules\AllowedEmailDomain();
+            $emailRules[] = new AllowedEmailDomain();
         }
-        $messages['email.email'] = 'El correo electrónico debe ser válido.';
-        $messages['email.unique'] = 'Este correo electrónico ya está en uso.';
 
-        // Teléfono (AC5)
-        $rules['telefono'] = ['nullable', 'string', 'max:20', new \App\Rules\NoProfanity()];
-        $messages['telefono.max'] = 'El teléfono no puede exceder 20 caracteres.';
+        $rules = [
+            'name' => $nameRules,
+            'email' => $emailRules,
+            'telefono' => ['nullable', 'string', 'max:20', new NoProfanity()],
+            'foto_perfil' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'], // 5MB maximo
+            'foto_perfil_base64' => ['nullable', 'string'],
+        ];
 
-        // Foto de perfil y logging de request (AC7)
-        \Illuminate\Support\Facades\Log::info('Profile update request', [
-            'method' => $request->method(),
-            'has_file' => $request->hasFile('foto_perfil'),
+        $validated = $request->validate($rules, [
+            'name.required' => 'El nombre de usuario es requerido.',
+            'name.min' => 'El nombre de usuario debe tener al menos 3 caracteres.',
+            'name.unique' => 'Este nombre de usuario ya está en uso.',
+            'name.regex' => 'El nombre de usuario solo puede contener letras, números y guiones bajos.',
+            'email.email' => 'El correo electrónico debe ser válido.',
+            'email.unique' => 'Este correo electrónico ya está en uso.',
+            'telefono.max' => 'El teléfono no puede exceder 20 caracteres.',
+            'foto_perfil.image' => 'El archivo debe ser una imagen.',
+            'foto_perfil.max' => 'La imagen no puede exceder 5MB.',
         ]);
-
-        if ($request->hasFile('foto_perfil')) {
-            $fileObj = $request->file('foto_perfil');
-            if ($fileObj !== null && !$fileObj->isValid()) {
-                $errorMsg = $fileObj->getErrorMessage();
-                return response()->json([
-                    'message' => "La imagen no se pudo subir. Detalle: {$errorMsg}"
-                ], 422);
-            }
-        }
-
-        $rules['foto_perfil'] = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'];
-        $rules['foto_perfil_base64'] = ['nullable', 'string'];
-        $messages['foto_perfil.image'] = 'El archivo debe ser una imagen.';
-        $messages['foto_perfil.max'] = 'La imagen no puede exceder 5MB.';
-
-        $validated = $request->validate($rules, $messages);
 
         if (array_key_exists('name', $validated)) {
             $validated['name'] = trim((string) $validated['name']);
@@ -163,23 +198,23 @@ class ProfileController extends Controller
 
                     if ($oldFileName) {
                         try {
-                            if (\Illuminate\Support\Facades\Storage::disk('public')->exists('profiles/' . $oldFileName)) {
-                                \Illuminate\Support\Facades\Storage::disk('public')->delete('profiles/' . $oldFileName);
+                            if (Storage::disk('public')->exists('profiles/' . $oldFileName)) {
+                                Storage::disk('public')->delete('profiles/' . $oldFileName);
                             }
-                            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($oldFileName)) {
-                                \Illuminate\Support\Facades\Storage::disk('public')->delete($oldFileName);
+                            if (Storage::disk('public')->exists($oldFileName)) {
+                                Storage::disk('public')->delete($oldFileName);
                             }
                             $oldPublicImagePath = public_path('imagenes/perfiles/' . $oldFileName);
-                            if (\Illuminate\Support\Facades\File::exists($oldPublicImagePath)) {
-                                \Illuminate\Support\Facades\File::delete($oldPublicImagePath);
+                            if (File::exists($oldPublicImagePath)) {
+                                File::delete($oldPublicImagePath);
                             }
                             $oldPublicFlatImagePath = public_path('imagenes/' . $oldFileName);
-                            if (\Illuminate\Support\Facades\File::exists($oldPublicFlatImagePath)) {
-                                \Illuminate\Support\Facades\File::delete($oldPublicFlatImagePath);
+                            if (File::exists($oldPublicFlatImagePath)) {
+                                File::delete($oldPublicFlatImagePath);
                             }
-                            \Illuminate\Support\Facades\Log::info('Foto antigua eliminada', ['filename' => $oldFileName]);
+                            Log::info('Foto antigua eliminada', ['filename' => $oldFileName]);
                         } catch (\Exception $delEx) {
-                            \Illuminate\Support\Facades\Log::warning('No se pudo borrar foto antigua', ['err' => $delEx->getMessage()]);
+                            Log::warning('No se pudo borrar foto antigua', ['err' => $delEx->getMessage()]);
                         }
                     }
                 }
@@ -205,8 +240,9 @@ class ProfileController extends Controller
                     $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 }
 
-                \Illuminate\Support\Facades\Log::info('Intentando guardar foto', [
+                Log::info('Intentando guardar foto', [
                     'filename' => $filename,
+                    'destination' => 'storage/app/public/profiles/' . $filename,
                 ]);
 
                 // Candidatos en orden de preferencia, asegurando permisos laxos para que funcione en Docker
@@ -240,15 +276,17 @@ class ProfileController extends Controller
                     throw new \RuntimeException('No se pudo almacenar la imagen. Falló file_put_contents. Detalles: ' . implode(' | ', $storageErrors));
                 }
                 
-                \Illuminate\Support\Facades\Log::info('Foto guardada exitosamente', [
+                Log::info('Foto guardada exitosamente', [
                     'path' => $storedPath,
+                    'full_url' => '/api/profile/photo/' . $filename,
                 ]);
                 
                 $validated['foto_perfil'] = $filename;
                 unset($validated['foto_perfil_base64']);
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Error al guardar foto', [
+                Log::error('Error al guardar foto', [
                     'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
                 ]);
                 return response()->json([
                     'message' => 'Error al guardar la imagen: ' . $e->getMessage()
@@ -285,12 +323,12 @@ class ProfileController extends Controller
 
         $validated = $request->validate([
             'current_password' => ['required', 'string'],
-            'new_password' => ['required', 'string', 'min:8', 'max:15', 'confirmed'],
+            'new_password' => ['required', 'string', 'min:6', 'max:20', 'confirmed'],
         ], [
             'current_password.required' => 'La contraseña actual es requerida.',
             'new_password.required' => 'La nueva contraseña es requerida.',
-            'new_password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
-            'new_password.max' => 'La nueva contraseña no puede tener más de 15 caracteres.',
+            'new_password.min' => 'La nueva contraseña debe tener al menos 6 caracteres.',
+            'new_password.max' => 'La nueva contraseña no puede tener más de 20 caracteres.',
             'new_password.confirmed' => 'Las contraseñas no coinciden.',
         ]);
 
@@ -317,16 +355,5 @@ class ProfileController extends Controller
             'message' => 'Contraseña actualizada correctamente.'
         ]);
     }
-
-    /**
-     * Eliminar la cuenta del usuario autenticado
-     */
-    public function destroy(Request $request): JsonResponse
-    {
-        $user = $request->user();
-        $user->delete();
-        return response()->json([
-            'message' => 'Cuenta eliminada exitosamente.'
-        ]);
-    }
 }
+

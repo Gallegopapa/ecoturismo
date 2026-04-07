@@ -60,6 +60,7 @@ class PlaceController extends Controller
         return response()->json($places);
     }
 
+
     /**
      * Obtener horarios disponibles para un lugar en una fecha específica
      */
@@ -156,6 +157,50 @@ class PlaceController extends Controller
     }
 
     /**
+     * Crear un nuevo lugar
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255', new NoProfanity()],
+            'description' => ['nullable', 'string', new NoProfanity()],
+            'location' => ['nullable', 'string', 'max:255', new NoProfanity()],
+            'image' => 'nullable|string|max:500',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
+            'ecohoteles' => 'nullable|array',
+            'ecohoteles.*' => 'exists:ecohotels,id',
+        ], [
+            'name.required' => 'El nombre del lugar es requerido.',
+            'categories.array' => 'Las categorías deben ser un array.',
+            'categories.*.exists' => 'Una o más categorías no existen.',
+            'ecohoteles.array' => 'Los ecohoteles deben ser un array.',
+            'ecohoteles.*.exists' => 'Uno o más ecohoteles no existen.',
+        ]);
+
+        $ecohoteles = $data['ecohoteles'] ?? null;
+        unset($data['ecohoteles']);
+
+        $place = Place::create($data);
+
+        // Asociar categorías si se proporcionan
+        if (isset($data['categories'])) {
+            $place->categories()->sync($data['categories']);
+        }
+        // Asociar ecohoteles si se proporcionan
+        if ($ecohoteles !== null) {
+            $place->ecohoteles()->sync($ecohoteles);
+        }
+
+        $place->load(['categories', 'ecohoteles']);
+
+        return response()->json([
+            'message' => 'Lugar creado correctamente.',
+            'place' => $place
+        ], 201);
+    }
+
+    /**
      * Obtener un lugar específico (público) con sus horarios
      */
     public function show(Request $request, Place $place): JsonResponse
@@ -236,5 +281,57 @@ class PlaceController extends Controller
             'future_reservations' => $futureReservations,
             'ecohotels' => $place->ecohoteles,
         ]);
+    }
+
+    /**
+     * Actualizar un lugar
+     */
+    public function update(Request $request, Place $place): JsonResponse
+    {
+        dd($request->all());
+
+        $data = $request->validate([
+            'name' => ['sometimes', 'string', 'max:255', new NoProfanity()],
+            'description' => ['nullable', 'string', new NoProfanity()],
+            'location' => ['nullable', 'string', 'max:255', new NoProfanity()],
+            'image' => 'nullable|string|max:500',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
+            'ecohoteles' => 'nullable|array',
+            'ecohoteles.*' => 'exists:ecohotels,id',
+        ], [
+            'categories.array' => 'Las categorías deben ser un array.',
+            'categories.*.exists' => 'Una o más categorías no existen.',
+            'ecohoteles.array' => 'Los ecohoteles deben ser un array.',
+            'ecohoteles.*.exists' => 'Uno o más ecohoteles no existen.',
+        ]);
+
+        $ecohoteles = $data['ecohoteles'] ?? [];
+        unset($data['ecohoteles']);
+
+        $place->update($data);
+
+        // Actualizar categorías si se proporcionan
+        if (isset($data['categories'])) {
+            $place->categories()->sync($data['categories']);
+        }
+        // Sincronizar ecohoteles SIEMPRE (array o vacío)
+        $place->ecohotels()->sync($ecohoteles);
+
+        $place->load(['categories', 'ecohoteles']);
+
+        return response()->json([
+            'message' => 'Lugar actualizado correctamente.',
+            'place' => $place
+        ]);
+    }
+
+    /**
+     * Eliminar un lugar
+     */
+    public function destroy(Place $place): JsonResponse
+    {
+        $place->delete();
+        return response()->json(['message' => 'Lugar eliminado correctamente'], 200);
     }
 }

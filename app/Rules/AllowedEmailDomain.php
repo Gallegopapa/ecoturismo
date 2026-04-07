@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace App\Rules;
 
@@ -21,7 +21,7 @@ class AllowedEmailDomain implements ValidationRule
 
         // Validar que tenga exactamente 2 partes (usuario@dominio)
         if (count($emailParts) !== 2 || $emailParts[0] === '' || $emailParts[1] === '') {
-            $fail('El correo electr├│nico debe ser v├ílido.');
+            $fail('El correo electrónico debe ser válido.');
             return;
         }
 
