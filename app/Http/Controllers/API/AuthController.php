@@ -14,7 +14,10 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'unique:usuarios,name',
-            'email' => 'unique:usuarios,email',
+            'email' => [
+                'unique:usuarios,email',
+                'regex:/^.+@gmail\.com$/'
+            ],
         ]);
 
         if ($validator->fails()) {
