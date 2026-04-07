@@ -110,7 +110,7 @@ const EcohotelsPage = () => {
                   <Link to={`/ecohoteles/${ecohotel.id}`}>
                     <div className="lugar-image">
                       <img
-                        src={resolveEcohotelImageUrl(ecohotel.image, ECOHOTEL_IMAGE_FALLBACK)}
+                        src={resolveEcohotelImageUrl(ecohotel.image || ecohotel.imagen, ECOHOTEL_IMAGE_FALLBACK)}
                         alt={ecohotel.name}
                         onError={(e) => {
                           e.target.onerror = null;

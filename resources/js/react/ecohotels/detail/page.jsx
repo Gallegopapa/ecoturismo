@@ -160,7 +160,7 @@ const EcohotelDetailPage = () => {
             <div className="ecohotel-detail-left">
               <div className="detail-image">
                 <img
-                  src={resolveEcohotelImageUrl(ecohotel.image, ECOHOTEL_IMAGE_FALLBACK)}
+                  src={resolveEcohotelImageUrl(ecohotel.image || ecohotel.imagen, ECOHOTEL_IMAGE_FALLBACK)}
                   alt={ecohotel.name}
                   onError={(e) => {
                     e.target.onerror = null;
@@ -457,7 +457,7 @@ const EcohotelDetailPage = () => {
                         >
                           <div className="related-card-image-wrapper">
                             <img
-                              src={resolveEcohotelImageUrl(place.image, ECOHOTEL_IMAGE_FALLBACK)}
+                              src={resolveEcohotelImageUrl(place.image || place.imagen, ECOHOTEL_IMAGE_FALLBACK)}
                               alt={place.name}
                               className="related-card-image"
                               onError={e => {
