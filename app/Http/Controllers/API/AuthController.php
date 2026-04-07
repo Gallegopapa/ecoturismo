@@ -58,6 +58,17 @@ class AuthController extends Controller
         ], 201);
     public function login(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         // AC1: Correct credentials -> Returns 200 + token + user
         $user = Usuarios::where('email', $request->email)->first();
 
