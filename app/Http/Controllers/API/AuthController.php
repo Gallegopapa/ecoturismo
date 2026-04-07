@@ -82,5 +82,12 @@ class AuthController extends Controller
                 'message' => 'Credenciales incorrectas'
             ], 401);
         }
+
+        // AC4: Password incorrect -> Returns 401
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Credenciales incorrectas'
+            ], 401);
+        }
     }
 }
