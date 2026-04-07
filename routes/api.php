@@ -10,6 +10,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/password/forgot', [PasswordResetController::class, 'sendResetLink']);
 Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
 
+// Rutas públicas de perfil (AC7 helper)
+Route::get('/profile/photo', [ProfileController::class, 'photoByQuery']);
+Route::get('/profile/photo/{filename}', [ProfileController::class, 'photo']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/logout-all', [AuthController::class, 'logoutAll']);
