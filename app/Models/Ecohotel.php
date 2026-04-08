@@ -58,25 +58,32 @@ class Ecohotel extends Model
             return $value;
         }
 
-        // Si comienza con /storage/ o storage/
+        // Si comienza con /imagenes/ecohotels/ (nuevo sistema - directo en public)
+        if (strpos($value, '/imagenes/ecohotels/') === 0 || strpos($value, 'imagenes/ecohotels/') === 0) {
+            $clean = ltrim(str_replace('imagenes/ecohotels/', '', $value), '/');
+            return '/imagenes/ecohotels/' . $clean;
+        }
+
+        // Si comienza con /storage/ o storage/ (sistema legado)
         if (strpos($value, '/storage/') === 0 || strpos($value, 'storage/') === 0) {
-            $cleanPath = str_replace(['storage/', '/storage/'], '', $value);
+            $cleanPath = str_replace(['/storage/', 'storage/'], '', $value);
             return '/storage/' . ltrim($cleanPath, '/');
         }
 
-        // Si comienza con /imagenes/ o imagenes/
+        // Si comienza con /imagenes/ o imagenes/ (genérico)
         if (strpos($value, '/imagenes/') === 0 || strpos($value, 'imagenes/') === 0) {
-            return '/imagenes/' . ltrim(str_replace('/imagenes/', '', $value), '/');
+            $clean = ltrim(str_replace('/imagenes/', '', $value), '/');
+            return '/imagenes/' . $clean;
         }
 
-        // Si es una ruta relativa de ecohoteles (ej: ecohotels/foo.jpg)
+        // Si es una ruta relativa de ecohoteles (ej: ecohotels/foo.jpg) - legado
         if (strpos($value, 'ecohotels/') === 0) {
             return '/storage/' . ltrim($value, '/');
         }
 
         // Fallback: Si no tiene barra inicial, asumir /imagenes/
         if (!str_contains($value, '/')) {
-            return '/imagenes/' . ltrim($value, '/');
+            return '/imagenes/' . $value;
         }
 
         return $value;

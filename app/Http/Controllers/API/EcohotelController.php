@@ -8,6 +8,7 @@ use App\Rules\NoProfanity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class EcohotelController extends Controller
 {
@@ -85,8 +86,12 @@ class EcohotelController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('ecohotels', $filename, 'public');
-            $data['image'] = '/storage/' . $path;
+            $destDir = public_path('imagenes/ecohotels');
+            if (!File::exists($destDir)) {
+                File::makeDirectory($destDir, 0755, true);
+            }
+            $image->move($destDir, $filename);
+            $data['image'] = '/imagenes/ecohotels/' . $filename;
         }
 
         $categories = $data['categories'] ?? null;
@@ -185,21 +190,34 @@ class EcohotelController extends Controller
         // Manejar actualización de imagen
         if ($request->hasFile('image')) {
             // Eliminar imagen anterior si existe física
-            if ($ecohotel->getRawOriginal('image')) {
-                $oldPath = $ecohotel->getRawOriginal('image');
-                $oldFileName = basename(parse_url($oldPath, PHP_URL_PATH));
-                if ($oldFileName && Storage::disk('public')->exists('ecohotels/' . $oldFileName)) {
-                    Storage::disk('public')->delete('ecohotels/' . $oldFileName);
+            $oldRaw = $ecohotel->getRawOriginal('image');
+            if ($oldRaw) {
+                // Borrar imagen antigua en /imagenes/ecohotels/
+                if (strpos($oldRaw, '/imagenes/ecohotels/') !== false) {
+                    $oldFile = public_path(ltrim($oldRaw, '/'));
+                    if (File::exists($oldFile)) {
+                        File::delete($oldFile);
+                    }
+                }
+                // También intentar borrar imagen antigua en /storage/ecohotels/ (legado)
+                if (strpos($oldRaw, '/storage/ecohotels/') !== false || strpos($oldRaw, 'ecohotels/') !== false) {
+                    $oldFileName = basename(parse_url($oldRaw, PHP_URL_PATH));
+                    if ($oldFileName && Storage::disk('public')->exists('ecohotels/' . $oldFileName)) {
+                        Storage::disk('public')->delete('ecohotels/' . $oldFileName);
+                    }
                 }
             }
 
             $image = $request->file('image');
             $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('ecohotels', $filename, 'public');
-            $data['image'] = '/storage/' . $path;
+            $destDir = public_path('imagenes/ecohotels');
+            if (!File::exists($destDir)) {
+                File::makeDirectory($destDir, 0755, true);
+            }
+            $image->move($destDir, $filename);
+            $data['image'] = '/imagenes/ecohotels/' . $filename;
         } else {
             // Si no se subió una nueva, quitamos 'image' del array para no sobreescribir con null
-            // a menos que explícitamente se quiera borrar (pero en este panel suele ser persistente)
             unset($data['image']);
         }
 
