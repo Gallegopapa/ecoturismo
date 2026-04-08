@@ -1,7 +1,12 @@
 *.log
 .DS_Store
+# Archivos temporales y backups
 *_backup.*
 *_backup/
+tmp_*
+temp_*
+*_temp.*
+*_utf8.*
 .env
 .env.backup
 .env.production
