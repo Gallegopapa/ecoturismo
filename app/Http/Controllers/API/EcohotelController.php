@@ -86,12 +86,18 @@ class EcohotelController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $destDir = public_path('imagenes/ecohotels');
-            if (!File::exists($destDir)) {
-                File::makeDirectory($destDir, 0755, true);
+            try {
+                $destDir = public_path('imagenes/ecohotels');
+                if (!File::exists($destDir)) {
+                    File::makeDirectory($destDir, 0755, true);
+                }
+                $image->move($destDir, $filename);
+                $data['image'] = '/imagenes/ecohotels/' . $filename;
+            } catch (\Exception $e) {
+                // Fallback: usar storage disk public si public/imagenes no es escribible
+                $path = $image->storeAs('ecohotels', $filename, 'public');
+                $data['image'] = '/storage/' . $path;
             }
-            $image->move($destDir, $filename);
-            $data['image'] = '/imagenes/ecohotels/' . $filename;
         }
 
         $categories = $data['categories'] ?? null;
@@ -192,32 +198,35 @@ class EcohotelController extends Controller
             // Eliminar imagen anterior si existe física
             $oldRaw = $ecohotel->getRawOriginal('image');
             if ($oldRaw) {
-                // Borrar imagen antigua en /imagenes/ecohotels/
-                if (strpos($oldRaw, '/imagenes/ecohotels/') !== false) {
-                    $oldFile = public_path(ltrim($oldRaw, '/'));
-                    if (File::exists($oldFile)) {
-                        File::delete($oldFile);
+                try {
+                    if (strpos($oldRaw, '/imagenes/ecohotels/') !== false) {
+                        $oldFile = public_path(ltrim($oldRaw, '/'));
+                        if (File::exists($oldFile)) File::delete($oldFile);
                     }
-                }
-                // También intentar borrar imagen antigua en /storage/ecohotels/ (legado)
-                if (strpos($oldRaw, '/storage/ecohotels/') !== false || strpos($oldRaw, 'ecohotels/') !== false) {
-                    $oldFileName = basename(parse_url($oldRaw, PHP_URL_PATH));
-                    if ($oldFileName && Storage::disk('public')->exists('ecohotels/' . $oldFileName)) {
-                        Storage::disk('public')->delete('ecohotels/' . $oldFileName);
+                    if (strpos($oldRaw, '/storage/ecohotels/') !== false || strpos($oldRaw, 'ecohotels/') !== false) {
+                        $oldFileName = basename(parse_url($oldRaw, PHP_URL_PATH));
+                        if ($oldFileName && Storage::disk('public')->exists('ecohotels/' . $oldFileName)) {
+                            Storage::disk('public')->delete('ecohotels/' . $oldFileName);
+                        }
                     }
-                }
+                } catch (\Exception $ignored) {}
             }
 
             $image = $request->file('image');
             $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $destDir = public_path('imagenes/ecohotels');
-            if (!File::exists($destDir)) {
-                File::makeDirectory($destDir, 0755, true);
+            try {
+                $destDir = public_path('imagenes/ecohotels');
+                if (!File::exists($destDir)) {
+                    File::makeDirectory($destDir, 0755, true);
+                }
+                $image->move($destDir, $filename);
+                $data['image'] = '/imagenes/ecohotels/' . $filename;
+            } catch (\Exception $e) {
+                // Fallback: usar storage disk public si public/imagenes no es escribible
+                $path = $image->storeAs('ecohotels', $filename, 'public');
+                $data['image'] = '/storage/' . $path;
             }
-            $image->move($destDir, $filename);
-            $data['image'] = '/imagenes/ecohotels/' . $filename;
         } else {
-            // Si no se subió una nueva, quitamos 'image' del array para no sobreescribir con null
             unset($data['image']);
         }
 
