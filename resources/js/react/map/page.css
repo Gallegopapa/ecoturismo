@@ -1,0 +1,150 @@
+.map-page-container {
+  width: 100%;
+  height: calc(100vh - 80px);
+  margin-top: 80px;
+  /* Evita que el navbar fijo lo cubra */
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-page-notification {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+  /* Oculto al fondo cuando no está activo */
+  background: rgba(46, 204, 113, 0.85);
+  /* Green gradient with transparency */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: whitesmoke;
+  padding: 12px 24px;
+  border-radius: 50px;
+  /* Pill shape */
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s ease, z-index 0s 0.5s;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.map-page-notification.show {
+  top: 20px;
+  opacity: 1;
+  z-index: 9999;
+  /* Por encima de la barra de navegación y todo */
+  transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s ease, z-index 0s 0s;
+}
+
+.map-page-notification h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.map-page-notification p {
+  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.map-warning-container {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  width: 90%;
+  max-width: 500px;
+}
+
+.map-warning {
+  padding: 15px;
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.map-warning p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2ecc71;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .map-page-notification {
+    padding: 10px 20px;
+    width: max-content;
+    max-width: 90%;
+    border-radius: 30px;
+  }
+
+  .map-page-notification h1 {
+    font-size: 1rem;
+  }
+
+  .map-page-notification p {
+    font-size: 0.8rem;
+  }
+
+  .map-page-container {
+    height: calc(100vh - 90px);
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-page-notification {
+    padding: 8px 20px;
+    width: max-content;
+    max-width: 95%;
+    border-radius: 40px;
+    top: 5px; /* Para que quede un poco más pegadito arriba y no cubra el search input */
+  }
+
+  .map-page-notification.show {
+    top: 5px; 
+  }
+
+  .map-page-notification h1 {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .map-page-notification p {
+    display: none; /* Se oculta para que quede en una sola línea tipo iPhone */
+  }
+
+  .map-page-container {
+    height: calc(100vh - 80px);
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,1307 @@
+.admin-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  margin-top: 100px !important;
+  margin-bottom: 100px !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    margin: 80px 0 100px 0;
+    padding: 12px;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-container {
+    margin: 70px 0 80px 0;
+    padding: 8px;
+  }
+}
+
+.admin-header {
+  margin-bottom: 20px;
+}
+
+.admin-header h1 {
+  margin: 0;
+  color: #1c1c1a;
+  font-size: 2rem;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.admin-tabs button {
+  padding: 12px 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6c6c68;
+  transition: all 0.3s;
+}
+
+.admin-tabs button:hover {
+  color: #1c1c1a;
+  background: #f5f5f5;
+}
+
+.admin-tabs button.active {
+  color: #0078d4;
+  border-bottom-color: #0078d4;
+  background: transparent;
+}
+
+.admin-content {
+  margin-top: 20px;
+}
+
+.admin-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.admin-message {
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.admin-message.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.admin-message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.admin-form-section,
+.admin-list-section {
+  margin-bottom: 100px !important;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .admin-form-section,
+  .admin-list-section {
+    margin-bottom: 50px !important;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-form-section,
+  .admin-list-section {
+    margin-bottom: 30px !important;
+    padding: 10px;
+  }
+}
+
+.admin-form-section h2,
+.admin-list-section h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1c1c1a;
+  font-size: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #1c1c1a;
+}
+
+.form-group .required {
+  color: #d7263d;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-edit,
+.btn-delete {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #24a148;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1e8e3e;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(36, 161, 72, 0.3);
+}
+
+.btn-secondary {
+  background: #6c6c68;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a5a56;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-schedule {
+  height: 32px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-edit {
+  background: #0078d4;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #006bb3;
+}
+
+.btn-delete {
+  background: #d7263d;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #b81e32;
+}
+
+.btn-schedule {
+  background: #28a745;
+  color: white;
+  gap: 4px;
+}
+
+.btn-schedule:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+/* Filtros para reservas */
+.btn-filter {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6c6c68;
+  transition: all 0.3s;
+}
+
+.btn-filter:hover {
+  background: #f5f5f5;
+  border-color: #0078d4;
+}
+
+.btn-filter.active {
+  background: #0078d4;
+  color: white;
+  border-color: #0078d4;
+}
+
+/* Badges de estado */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.upcoming {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-badge.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.confirmed {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+.status-badge.accepted {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.cancelled {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.status-badge.rejected {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.btn-contact {
+  background: #6f42c1;
+  color: white;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  margin: 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-contact:hover {
+  background: #5a2ea6;
+}
+
+.reason-cell {
+  max-width: 220px;
+  white-space: normal;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.contact-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.contact-modal {
+  background: #fff;
+  border-radius: 10px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.contact-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.contact-modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #1c1c1a;
+}
+
+.contact-modal-close {
+  border: none;
+  background: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #555;
+}
+
+.contact-modal-body {
+  padding: 16px 20px 20px;
+}
+
+.contact-modal-body p {
+  margin: 0 0 10px;
+  color: #444;
+}
+
+.contact-modal-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.contact-modal-actions .btn-primary,
+.contact-modal-actions .btn-secondary {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botón para volver a inicio */
+.btn-back-home {
+  padding: 10px 20px;
+  background: #2ecc71;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-back-home:hover {
+  background: #2ecc71;
+  transform: translateY(-1px);
+}
+
+/* Estilos para tabla de reservas responsive */
+.reservations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.reservations-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reservations-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reservations-table {
+  min-width: 1000px;
+}
+
+/* Celdas de usuario y lugar */
+.user-cell,
+.place-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.user-avatar,
+.user-avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.user-avatar-placeholder {
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+}
+
+.user-info,
+.place-cell {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name,
+.place-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email,
+.place-location {
+  font-size: 0.85rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.action-buttons-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* Formulario de edición inline */
+.editing-row {
+  background: #f8f9fa !important;
+}
+
+.edit-form-container {
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.edit-form-container h3 {
+  margin: 0 0 20px 0;
+  color: #1c1c1a;
+  font-size: 1.2rem;
+}
+
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-form-grid {
+    gap: 10px;
+  }
+}
+
+.edit-form-grid .form-group {
+  margin-bottom: 0;
+}
+
+.edit-form-grid .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.edit-form-grid .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #1c1c1a;
+  font-size: 0.9rem;
+}
+
+.edit-form-grid .form-group input,
+.edit-form-grid .form-group select,
+.edit-form-grid .form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.edit-form-grid .form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.edit-form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Responsive para tabla de reservas */
+@media (max-width: 1200px) {
+  .reservations-table {
+    min-width: 900px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+
+  .admin-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .btn-back-home {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    align-self: flex-start;
+  }
+
+  .admin-tabs {
+    gap: 5px;
+    margin-bottom: 15px;
+  }
+
+  .admin-tabs button {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .reservations-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reservations-filters {
+    width: 100%;
+  }
+
+  .reservations-filters .btn-filter {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .reservations-table {
+    min-width: 800px;
+  }
+
+  .user-cell,
+  .place-cell {
+    min-width: 150px;
+  }
+
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-form-actions {
+    flex-direction: column;
+  }
+
+  .edit-form-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+  }
+
+  .admin-table td {
+    display: block;
+    padding: 8px 0 8px 0;
+    border: none;
+    margin-bottom: 8px;
+  }
+
+  .admin-table td:before {
+    content: attr(data-label);
+    display: block;
+    font-weight: bold;
+    color: #666;
+    font-size: 0.7rem;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .admin-table td:last-child {
+    display: block;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+
+  .admin-table td:last-child:before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .admin-table td:last-child button {
+    display: block;
+    width: 100%;
+    padding: 6px 8px !important;
+    font-size: 0.7rem !important;
+    margin: 3px 0 !important;
+  }
+
+  .admin-tabs {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .admin-tabs button {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 15px;
+  }
+
+  .admin-header h1 {
+    margin: 0;
+  }
+
+  .btn-back-home {
+    width: 100%;
+    text-align: center;
+  }
+
+  .reservations-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reservations-filters {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reservations-filters .btn-filter {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .reservations-table {
+    min-width: 800px;
+  }
+
+  .user-cell,
+  .place-cell {
+    min-width: 150px;
+  }
+
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-form-actions {
+    flex-direction: column;
+  }
+
+  .edit-form-actions button {
+    width: 100%;
+  }
+
+  /* Tabla de usuarios responsive */
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table tbody {
+    display: block;
+  }
+
+  .admin-table tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px;
+    background: white;
+  }
+
+  .admin-table td {
+    display: block;
+    padding: 8px 0 !important;
+    border: none;
+    text-align: left !important;
+    margin-bottom: 8px;
+  }
+
+  .admin-table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #666;
+    display: inline-block;
+    width: 100px;
+    margin-right: 10px;
+  }
+
+  .admin-table td:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 12px !important;
+    border-top: 1px solid #eee;
+    margin-top: 12px;
+  }
+
+  .admin-table td:last-child button {
+    flex: 1;
+    min-width: 100px;
+    padding: 8px 10px !important;
+    font-size: 0.75rem !important;
+    margin: 0 !important;
+  }
+
+  .admin-table .btn-primary,
+  .admin-table .btn-delete {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 480px) {
+  .reservations-table {
+    min-width: 700px;
+  }
+
+  .action-buttons-cell {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .action-buttons-cell button {
+    width: 100%;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+
+  .admin-tabs {
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+
+  .admin-tabs button {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .admin-tabs button.active {
+    padding: 6px 10px;
+  }
+
+  /* Optimizar tablas admin para pantallas muy pequeñas */
+  .admin-table {
+    display: block;
+    overflow-x: visible;
+  }
+
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    background: #fff;
+  }
+
+  .admin-table td {
+    display: block;
+    text-align: left;
+    padding: 8px 0 8px 0;
+    border: none;
+    margin-bottom: 8px;
+  }
+
+  .admin-table td:first-child {
+    margin-top: 0;
+  }
+
+  .admin-table td:before {
+    content: attr(data-label);
+    display: block;
+    font-weight: bold;
+    color: #666;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  .admin-table td:last-child {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+
+  .admin-table td:last-child button {
+    display: block;
+    width: 100%;
+    padding: 6px 8px !important;
+    font-size: 0.65rem !important;
+    margin: 3px 0 !important;
+  }
+
+  .admin-table td:last-child button:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+/* Alinear botones de acción en la tabla */
+.admin-table td:last-child {
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.admin-table td:last-child button {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+}
+
+.admin-table td:last-child > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  min-height: 36px;
+}
+
+/* Contenedor para botones de acción */
+.admin-table .action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.admin-table th {
+  background: #f9f9f9;
+  font-weight: 600;
+  color: #6c6c68;
+}
+
+.admin-table tr:hover {
+  background: #f5f5f5;
+}
+
+.thumb {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.no-image {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 15px;
+  }
+
+  .admin-tabs {
+    flex-direction: column;
+  }
+
+  .admin-tabs button {
+    width: 100%;
+    text-align: left;
+  }
+
+  .admin-table {
+    font-size: 0.85rem;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table tr {
+    display: block;
+    margin-bottom: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 8px;
+    display: block;
+    text-align: left;
+    border-bottom: none;
+    position: relative;
+  }
+
+  .admin-table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 4px;
+  }
+
+  .admin-table td:last-child {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 12px;
+    margin-top: 8px;
+  }
+
+  .admin-table td:last-child > div {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .btn-edit,
+  .btn-delete,
+  .btn-schedule {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    height: auto;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 10px;
+  }
+
+  .admin-table {
+    font-size: 0.75rem;
+  }
+
+  .admin-table td {
+    padding: 6px;
+  }
+
+  .admin-table td:before {
+    font-size: 0.75rem;
+  }
+
+  .thumb {
+    width: 60px;
+    height: 45px;
+  }
+
+  .btn-edit,
+  .btn-delete,
+  .btn-schedule {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+}
+
+/* Estilos para categorías */
+.categories-checkboxes {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.categories-empty-message {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  font-style: italic;
+}
+
+.category-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fafafa;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.category-checkbox-label:hover {
+  background-color: #f0f0f0;
+  border-color: #2ecc71;
+}
+
+.category-checkbox-label:has(.category-checkbox:checked) {
+  background-color: #e8f5e9;
+  border-color: #2ecc71;
+  border-width: 2px;
+}
+
+.category-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #2ecc71;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.category-checkbox-text {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+  flex: 1;
+}
+
+.category-checkbox-label:has(.category-checkbox:checked) .category-checkbox-text {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* Scrollbar personalizado para categorías */
+.categories-checkboxes::-webkit-scrollbar {
+  width: 8px;
+}
+
+.categories-checkboxes::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.categories-checkboxes::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 4px;
+}
+
+.categories-checkboxes::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* Responsive para categorías */
+@media (max-width: 768px) {
+  .categories-checkboxes {
+    grid-template-columns: 1fr;
+    max-height: 250px;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .category-checkbox-label {
+    padding: 8px 10px;
+  }
+
+  .category-checkbox-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories-checkboxes {
+    grid-template-columns: 1fr;
+    max-height: 200px;
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .category-checkbox-label {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+
+  .category-checkbox-text {
+    font-size: 0.8rem;
+  }
+
+  .category-checkbox {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Extra small devices (320px and below) */
+@media (max-width: 320px) {
+  .admin-tabs {
+    gap: 2px;
+    margin-bottom: 10px;
+  }
+
+  .admin-tabs button {
+    padding: 5px 8px;
+    font-size: 0.7rem;
+  }
+
+  .admin-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .btn-back-home {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .admin-table td {
+    padding: 6px 0 !important;
+  }
+
+  .admin-table td:before {
+    min-width: 70px;
+    font-size: 0.65rem !important;
+  }
+
+  .admin-table td:last-child button {
+    padding: 4px 6px !important;
+    font-size: 0.65rem !important;
+    margin: 2px 0 !important;
+  }
+
+  .admin-table tr {
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
+  .modal-content {
+    margin: 10px;
+  }
+
+  .admin-header {
+    padding: 10px;
+  }
+
+  .btn-primary,
+  .btn-delete {
+    padding: 6px 10px !important;
+    font-size: 0.7rem !important;
+  }
+}

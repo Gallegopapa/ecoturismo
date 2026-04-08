@@ -1,0 +1,107 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Ecohotel extends Model
+{
+    use HasFactory;
+
+    /**
+     * Reseñas directas de ecohotel
+     */
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\Review::class, 'ecohotel_id');
+    }
+
+    protected $fillable = [
+        'name',
+        'description',
+        'location',
+        'image',
+        'latitude',
+        'longitude',
+        'telefono',
+        'email',
+        'sitio_web',
+    ];
+
+    protected $casts = [
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
+    ];
+
+    /**
+     * Accessor para image - devuelve ruta normalizada y validada
+     * Prioridad: /imagenes/ > /storage/ecohotels/ > null
+     */
+    public function getImageAttribute($value)
+    {
+        if (!$value) {
+            return null;
+        }
+
+        $value = trim((string) $value);
+        if (empty($value)) {
+            return null;
+        }
+
+        // Si ya es una URL completa (http/https)
+        if (preg_match('/^https?:\/\//', $value)) {
+            $path = parse_url($value, PHP_URL_PATH) ?: '';
+            if (strpos($path, '/imagenes/') === 0 || strpos($path, '/storage/') === 0) {
+                return $path;
+            }
+            return $value;
+        }
+
+        // Si comienza con /imagenes/ecohotels/ (nuevo sistema - directo en public)
+        if (strpos($value, '/imagenes/ecohotels/') === 0 || strpos($value, 'imagenes/ecohotels/') === 0) {
+            $clean = ltrim(str_replace('imagenes/ecohotels/', '', $value), '/');
+            return '/imagenes/ecohotels/' . $clean;
+        }
+
+        // Si comienza con /storage/ o storage/ (sistema legado)
+        if (strpos($value, '/storage/') === 0 || strpos($value, 'storage/') === 0) {
+            $cleanPath = str_replace(['/storage/', 'storage/'], '', $value);
+            return '/storage/' . ltrim($cleanPath, '/');
+        }
+
+        // Si comienza con /imagenes/ o imagenes/ (genérico)
+        if (strpos($value, '/imagenes/') === 0 || strpos($value, 'imagenes/') === 0) {
+            $clean = ltrim(str_replace('/imagenes/', '', $value), '/');
+            return '/imagenes/' . $clean;
+        }
+
+        // Si es una ruta relativa de ecohoteles (ej: ecohotels/foo.jpg) - legado
+        if (strpos($value, 'ecohotels/') === 0) {
+            return '/storage/' . ltrim($value, '/');
+        }
+
+        // Fallback: Si no tiene barra inicial, asumir /imagenes/
+        if (!str_contains($value, '/')) {
+            return '/imagenes/' . $value;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Relación muchos a muchos con categorías
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_ecohotel');
+    }
+
+    /**
+     * Relación muchos a muchos con lugares turísticos
+     */
+    public function places()
+    {
+        return $this->belongsToMany(Place::class, 'ecohotel_place');
+    }
+}

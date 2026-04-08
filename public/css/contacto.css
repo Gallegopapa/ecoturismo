@@ -1,0 +1,419 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+body,input,textarea{
+    font-family: poppins;
+
+}
+.container{
+    position: relative;
+    width: 100%;
+    max-height: 100vh;
+    min-height: 100vh;
+    /* padding: 2rem; */
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.information a{
+  text-decoration: none;
+  color: #555;
+}
+.information a:hover{
+  color:#27ae60;
+  text-decoration: underline;
+}
+.form{
+    width: 100%;
+    max-width: 820px;
+    background-color:#fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.contact-form{
+    background-color: #27ae60;
+    position: relative;
+}
+
+body.grayscale-mode .contact-form,
+body.grayscale-mode .circle,
+body.grayscale-mode .contact-form:before {
+    background-color: #cccccc !important;
+    color: #222 !important;
+    border-color: #888 !important;
+}
+
+.circle{
+    border-radius: 50%;
+    background:linear-gradient(135deg,transparent 20%,#0f0f0f);
+    position: absolute;
+    
+
+}
+.circle.one{ /*circulos de fondo numero uno */
+    width: 130px;
+    height: 130px;
+    top: 130px;
+    right: -40px;
+    animation: subeybaja 2s infinite alternate;
+}
+.circle.two{ /* circulo numero dos */
+    width: 80px;
+    height: 80px;
+    top: 10px;
+    right: 30px;
+    animation: subeybaja 2s infinite alternate;
+}
+.contact-form:before{ /*parte del separador verde de la pagina  */
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    background-color:#27ae60;
+    transform: rotate(45deg);
+    top: 50px;
+    left: -13px;
+
+}
+form{
+    padding: 2.3rem 2.2rem;
+    z-index: 10;
+    overflow: hidden;
+    position: relative;
+}
+.tittle{
+    color: #0b0a0a;
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1;
+    margin-bottom: 0.7rem;
+
+}
+.input-container{
+    position: relative;
+    margin: 1rem 0;
+
+}
+
+.input{
+    width: 100%;
+    outline: none;
+    border: 2px solid #fafafa; 
+    background: none ;
+    padding: 0.6rem 1.2rem;
+    color: #fff;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    border-radius: 25px;
+    transition: 0.3s;
+}
+  .contact-form .input-container:not(.textarea) .input{
+    display: block;
+    height: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    padding: 0 1rem;
+    line-height: 42px;
+  }
+textarea.input{
+    padding: 0.8rem 1.2rem;
+    min-height: 130px;
+    border-radius: 22px;
+    resize: none;
+    overflow-y: auto;
+}
+.input-container label{
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    padding: 0 0.4rem;
+    color: #fafafa;
+    font-size: 0.9rem;
+    font-weight: 400;
+    pointer-events: none;
+    z-index: 1000;
+    transition: 0.5s;
+}
+.input-container.textarea label{
+    top: 1rem;
+    transform: translateY(0);
+}
+
+.btn{/*esto es el estio que le di al boton de enviar para que quede con ese color y ese borde*/
+    padding: 0.6rem 1.3rem;
+    background-color: #fff;
+    border: 2px solid #fafafa;
+    font-size: 0.95rem;
+    color: #2ecc71;
+    line-height: 1;
+    border-radius: 25px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 0;
+    margin-top: 25px;
+    margin-left: 10px;
+}
+.btn:hover{
+    transform: scale(1.1);
+    background-color: transparent;/*sirve para que el botton de enviar tenga su efecto y quede del mismo color */
+    color: #fff;
+}
+
+.input-container span{
+    position: absolute;
+    top: 0;
+    left: 25px;
+    transform: translateY(-50%);
+    font-size: 0.8rem;
+    padding: 0 0.4rem;
+    color: transparent;
+    pointer-events: none;
+    z-index: 500;
+
+
+    
+}
+/*esto es para poner poner los nombres en la parte de arriba de  los input*/
+
+.input-container span:before,
+.input-container span::after{
+    content: "";
+    position: absolute;
+    width: 10%;
+    opacity: 0;
+    transition: 0.3s;
+    height: 5px;
+    background-color: #27ae60;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.input-container span:before{/*esto sirve para que la linea donde estan los encabezados quede a la margen de el y no quede muy separado*/
+    left: 50%;
+}
+.input-container span:after{
+    right: 50%;
+}
+.input-container.focus label{
+    top: 0;
+    transform: translateY(-50%);
+    left: 25px;
+    font-size: 0.8rem;
+}
+
+.input-container.focus span:before,
+.input-container.focus span::after{
+    width: 50%;
+    opacity: 1;
+}
+
+
+/*parte de la imagenes o icones */
+
+.contact-info{
+    padding: 2.3rem 2.2rem;
+    position: relative;
+    margin-bottom: 20px;
+}
+.contact-info .tittle{
+    color: #2c6459;
+
+}
+.text{
+    color: #333;
+    margin: 1.5rem 0 2rem 0;
+
+}
+.information{
+    display: flex;
+    color: #555;
+    margin: 0.7rem 0 ;
+    align-items: center;
+    font-size: 0.95rem;
+
+}
+
+.icon{
+    width: 28px;
+    margin-right: 0.7rem;
+
+}
+.social-media{
+  position: relative;
+  margin-top: 34px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  
+}
+.social-icon{
+    display: flex;
+    margin-top: 50px;
+    justify-content: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.social-icon img:hover{
+    transform: scale(1.2);
+    transition: 0.3s;
+}
+#volver{
+  position: absolute;
+  justify-self: center;
+  margin-top: 97px;
+  margin-left:130px;
+  padding: 0.6rem 1.3rem;
+  background-color: black;
+  border: 2px solid #fafafa;
+  font-size: 0.95rem;
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.3s;
+  text-align: center;
+  position: relative;
+}
+#volver a{
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+}
+#volver:hover{
+  border: 1px solid black;
+  transform: scale(1.1);
+  background-color: rgb(255, 255, 255);
+  color: black;
+}
+#volver:hover a{
+  color: black;
+}
+.copyright{
+  color: #070707;
+  margin-top: 5px;
+  letter-spacing: 1px;
+}
+@keyframes subeybaja{
+    0%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-12px);
+    }
+    100%{
+        transform: translateX(-10px);
+    }
+    
+}
+/*RESPONSIVE*/
+@media (max-width: 850px) {
+  .container{
+    max-height: 300vh !important;
+  }
+    .form {
+      grid-template-columns: 1fr;
+    }
+  
+    .contact-info:before {
+      bottom: initial;
+      top: -75px;
+      right: 65px;
+      transform: scale(0.95);
+    }
+  
+    .contact-form:before {
+      top: -13px;
+      left: initial;
+      right: 70px;
+    }
+  
+  
+    .big-circle {
+      bottom: 75%;
+      transform: scale(0.9) translate(-40%, 30%);
+      right: 50%;
+    }
+  
+    .text {
+      margin: 1rem 0 1.5rem 0;
+    }
+  
+    .social-media {
+      padding: 1.5rem 0 0 0;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      padding: 1.5rem;
+      min-height: 100vh;
+      max-height: none;
+      overflow-y: auto;
+    }
+  
+    .contact-info:before {
+      display: none;
+    }
+  
+  
+    form,
+    .contact-info {
+      padding: 1.7rem 1.6rem;
+    }
+  
+    .text,
+    .information,
+    .social-media p {
+      font-size: 0.8rem;
+    }
+  
+    .title {
+      font-size: 1.15rem;
+    }
+  
+    .social-icons a {
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+    }
+  
+    .icon {
+      width: 23px;
+    }
+  
+    .input {
+      padding: 0.45rem 1.2rem;
+    }
+  
+    .btn {
+      padding: 0.45rem 1.2rem;
+    }
+
+    #volver {
+      margin-top: 20px;
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+@media (min-width: 851px){
+  .contact-info{
+    margin-bottom: 20px;
+  }
+  #volver{
+    position: relative;
+    bottom: 50px;
+  }
+}

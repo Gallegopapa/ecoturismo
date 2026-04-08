@@ -1,0 +1,15 @@
+﻿486e9a74 feat(reservations): implementation of US-RES-03 - user reservation deletion endpoint and frontend confirmation flow
+372f036d feat(reservations): implementation of US-RES-02 - view my reservations frontend using backend endpoints
+14775317 feat(reservations): implementation of US-RES-01 - create reservation modal frontend and store endpoint, along with models hydration
+d20bb910 feat(ecohotels): implementation of US-PLCS-03 - explore ecohotels with public index and show endpoints
+4354c579 feat(places): implementation of US-PLCS-02 - view place detail endpoint, available schedules and reviews
+92a79e01 chore(frontend): remove future feature components (reservations, reviews) accidentally included in early sync
+7d8968b2 feat(places): implementation of US-PLCS-01 - retrieve and filter ecotourism places alongside frontend exploration components
+6236e792 sync(frontend): bring base React configuration and Auth/Profile components from project-backup
+a6ce90fc feat(profile): implementation of US-PROF-04 - delete user account endpoint and route
+2035fc99 feat(profile): implementation of US-PROF-03 - change password endpoint with granular validations
+e04878df feat(profile): implementation of AC6 and AC7 - profile image upload via base64 or multipart logic with robust fallback directories
+42dc088f feat(profile): implementation of AC3, AC4, and AC5 - email validation, custom domain rule and phone validation
+e1d4e631 feat(profile): implementation of AC1 and AC2 - username uniqueness and pattern validation
+0ea4aba8 feat(profile): implementation of AC1, AC2, and AC3 - view own profile endpoint
+1ba08ae1 feat(auth): implementation of AC1 and AC2 - token verification returns user context or 401

@@ -1,0 +1,596 @@
+/* ============================================
+   ESTILOS GLOBALES DE ACCESIBILIDAD
+   ============================================
+   
+   IMPORTANTE: Estos estilos SOLO se aplican cuando
+   el usuario activa las opciones en el panel.
+   
+   Las clases NUNCA están presentes por defecto.
+   
+   Clases aplicadas dinámicamente:
+   - font-large: Aumenta el tamaño base del texto
+   - font-extra-large: Aumenta el tamaño base más aún
+   - high-contrast: Modo de alto contraste
+   - underline-links: Subraya todos los enlaces
+   - grayscale-mode: Escala de grises
+   - line-spacing-relaxed: Espaciado de líneas relajado
+   - line-spacing-very-relaxed: Espaciado de líneas muy relajado
+   - reduce-motion: Reducir animaciones
+*/
+
+/* ============================================
+   TAMAÑO DE TEXTO
+   Solo aplica si la clase está presente
+   ============================================ */
+
+body.font-large {
+  font-size: 101% !important;
+}
+
+
+body.font-extra-large {
+  font-size: 102% !important;
+}
+
+/* Nota: no forzar tamaños por elemento aquí — dejar que los rem y reglas específicas prevalezcan */
+
+/* Mantener solo aumentos globales y evitar overrides que rompan layout */
+body.font-large {
+  font-size: 104% !important;
+}
+
+body.font-extra-large {
+  font-size: 108% !important;
+}
+
+/* Restablecer crecimiento selectivo para elementos interactivos y contenido
+   (botones, enlaces, filtros, tarjetas) pero sin tocar los títulos del header
+   o los H1 principales. */
+body.font-large button,
+body.font-large .btn,
+body.font-large a,
+body.font-large .navbar a,
+body.font-large .filtro-btn,
+body.font-large .ubicacion,
+body.font-large .lugar-info h3,
+body.font-large .lugar-info p,
+body.font-large .lugar-card h3,
+body.font-large .lugar-card p,
+body.font-large .category-tag {
+  font-size: 1.02em !important;
+}
+
+body.font-extra-large button,
+body.font-extra-large .btn,
+body.font-extra-large a,
+body.font-extra-large .navbar a,
+body.font-extra-large .filtro-btn,
+body.font-extra-large .ubicacion,
+body.font-extra-large .lugar-info h3,
+body.font-extra-large .lugar-info p,
+body.font-extra-large .lugar-card h3,
+body.font-extra-large .lugar-card p,
+body.font-extra-large .category-tag {
+  font-size: 1.04em !important;
+}
+
+/* Escalar header y enlaces cuando se activa accesibilidad */
+body.font-large .titulos h2,
+body.font-large .navbar a,
+body.font-large .nav-link {
+  font-size: 1.04em !important;
+}
+
+body.font-extra-large .titulos h2,
+body.font-extra-large .navbar a,
+body.font-extra-large .nav-link {
+  font-size: 1.08em !important;
+}
+
+/* Escalar menú de perfil y header de no logueados */
+body.font-large .user-dropdown,
+body.font-large .user-menu-btn,
+body.font-large .user-avatar,
+body.font-large .user-name,
+body.font-large .user-menu {
+  font-size: 1.04em !important;
+}
+
+body.font-extra-large .user-dropdown,
+body.font-extra-large .user-menu-btn,
+body.font-extra-large .user-avatar,
+body.font-extra-large .user-name,
+body.font-extra-large .user-menu {
+  font-size: 1.08em !important;
+}
+
+@media (max-width: 768px) {
+  body.font-large .titulos h2,
+  body.font-extra-large .titulos h2 {
+    font-size: 1.04em !important;
+  }
+
+  body.font-large .navbar a,
+  body.font-extra-large .navbar a,
+  body.font-large .nav-link,
+  body.font-extra-large .nav-link {
+    font-size: 1.04em !important;
+  }
+}
+
+/* ===================================================
+   Forzar escalado proporcional del título del header
+   usando las medidas base definidas en Header.css.
+   Esto evita que em/rems menores que el px original
+   reduzcan el tamaño del h2.
+   =================================================== */
+body.font-large .titulos h2 {
+  font-size: calc(18px * 1.04) !important;
+}
+
+body.font-extra-large .titulos h2 {
+  font-size: calc(18px * 1.08) !important;
+}
+
+/* Tablet breakpoint (Header.css usa 16px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  body.font-large .titulos h2 {
+    font-size: calc(16px * 1.04) !important;
+  }
+  body.font-extra-large .titulos h2 {
+    font-size: calc(16px * 1.08) !important;
+  }
+  body.font-large .navbar a {
+    font-size: calc(14px * 1.04) !important;
+  }
+  body.font-extra-large .navbar a {
+    font-size: calc(14px * 1.08) !important;
+  }
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  body.font-large .titulos h2 {
+    font-size: calc(16px * 1.04) !important;
+  }
+  body.font-extra-large .titulos h2 {
+    font-size: calc(16px * 1.08) !important;
+  }
+  body.font-large .navbar a {
+    font-size: calc(16px * 1.04) !important;
+  }
+  body.font-extra-large .navbar a {
+    font-size: calc(16px * 1.08) !important;
+  }
+}
+
+/* ============================================
+   ALTO CONTRASTE
+   SOLO aplica si la clase está presente
+   ============================================ */
+
+body.high-contrast {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+body.high-contrast {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+body.high-contrast p,
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast h4,
+body.high-contrast h5,
+body.high-contrast h6,
+body.high-contrast div,
+body.high-contrast section,
+body.high-contrast article,
+body.high-contrast main {
+  color: #000000 !important;
+  background-color: transparent !important;
+}
+
+body.high-contrast a {
+  color: #0000cc !important;
+  text-decoration: underline !important;
+}
+
+body.high-contrast a:visited {
+  color: #660066 !important;
+}
+
+body.high-contrast button,
+body.high-contrast input[type="button"],
+body.high-contrast input[type="submit"],
+body.high-contrast input[type="reset"],
+body.high-contrast .btn {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+body.high-contrast input,
+body.high-contrast textarea,
+body.high-contrast select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+body.high-contrast table {
+  border-collapse: collapse !important;
+  border: 2px solid #000000 !important;
+}
+
+body.high-contrast tr,
+body.high-contrast th,
+body.high-contrast td {
+  border: 1px solid #000000 !important;
+  color: #000000 !important;
+}
+
+body.high-contrast th {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* ============================================
+   SUBRAYAR ENLACES - MEJORADO
+   ============================================ */
+
+/* Subrayar todos los enlaces */
+body.underline-links a,
+body.underline-links button[role="link"],
+body.underline-links [role="link"] {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
+}
+
+/* Aumentar grosor en hover */
+body.underline-links a:hover,
+body.underline-links button[role="link"]:hover,
+body.underline-links [role="link"]:hover {
+  text-decoration-thickness: 3px !important;
+}
+
+/* Botones con apariencia de enlaces */
+body.underline-links .btn-link,
+body.underline-links [role="button"].link {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+}
+
+/* ============================================
+   ESCALA DE GRISES - MEJORADO
+   ============================================ */
+
+body.grayscale-mode {
+  filter: grayscale(100%) !important;
+  -webkit-filter: grayscale(100%) !important;
+}
+
+body.grayscale-mode * {
+  filter: grayscale(100%) !important;
+  -webkit-filter: grayscale(100%) !important;
+}
+
+/* Excepciones - Mantener color en elementos específicos */
+body.grayscale-mode .accessibility-floating-button,
+body.grayscale-mode .accessibility-panel,
+body.grayscale-mode .accessibility-overlay,
+body.grayscale-mode .alert-success,
+body.grayscale-mode .alert-danger,
+body.grayscale-mode .alert-warning,
+body.grayscale-mode .alert-info {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* ============================================
+   MEJORAS GENERALES DE ACCESIBILIDAD
+   ============================================ */
+
+/* Focus visible mejorado para todos los elementos interactivos */
+*:focus-visible {
+  outline: 3px solid #3498db !important;
+  outline-offset: 2px !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[role="link"]:focus-visible {
+  outline: 3px solid #4a90e2 !important;
+  outline-offset: 2px !important;
+}
+
+body.high-contrast *:focus-visible,
+body.high-contrast button:focus-visible,
+body.high-contrast a:focus-visible,
+body.high-contrast input:focus-visible {
+  outline: 3px solid #000000 !important;
+  outline-offset: 2px !important;
+  background-color: #ffff00 !important;
+}
+
+/* Mejorar contraste de selección de texto */
+::selection {
+  background-color: #4a90e2 !important;
+  color: #ffffff !important;
+}
+
+::-moz-selection {
+  background-color: #4a90e2 !important;
+  color: #ffffff !important;
+}
+
+body.high-contrast ::selection {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+}
+
+body.high-contrast ::-moz-selection {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+}
+
+/* ============================================
+   COMPATIBILIDAD CON PREFERS-REDUCED-MOTION
+   ============================================
+   
+   Respeta la preferencia del sistema del usuario
+   para reducir animaciones
+*/
+
+/* Reducción de movimiento personalizzada */
+body.reduce-motion,
+body.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Sistema nativo */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   ESPACIADO DE LÍNEAS
+   ============================================ */
+
+/* Espaciado relajado: 1.75 */
+body.line-spacing-relaxed,
+body.line-spacing-relaxed * {
+  line-height: 1.75 !important;
+}
+
+/* Espaciado muy relajado: 2 */
+body.line-spacing-very-relaxed,
+body.line-spacing-very-relaxed * {
+  line-height: 2 !important;
+}
+
+/* ============================================
+   REGLAS GENERALES PARA EVITAR DESCUADRES
+   Cuando el usuario aumenta la fuente, algunos
+   elementos con ancho fijo pueden desbordarse.
+   Añadimos reglas suaves para permitir reflujo y
+   evitar que el layout se rompa en tarjetas/headers
+   ============================================ */
+
+body.font-large .card,
+body.font-extra-large .card,
+body.font-large .place-card,
+body.font-extra-large .place-card,
+body.font-large .card *,
+body.font-extra-large .card *,
+body.font-large .place-card *,
+body.font-extra-large .place-card * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  word-wrap: break-word !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Asegurar imágenes y medias no rompan el layout */
+body.font-large img,
+body.font-extra-large img,
+body.font-large video,
+body.font-extra-large video {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Forzar que contenedores flex puedan hacer wrap */
+body.font-large .flex-row,
+body.font-extra-large .flex-row,
+body.font-large .cards-container,
+body.font-extra-large .cards-container {
+  flex-wrap: wrap !important;
+}
+
+/* ============================================
+   AJUSTES ESPECÍFICOS PARA HEADER Y BOTONES EN TARJETAS
+   Evitar que el header se solape y que botones absolutos
+   dentro de .card se salgan cuando la fuente aumenta.
+   ============================================ */
+
+body.font-large header,
+body.font-extra-large header {
+  min-height: 96px !important;
+}
+
+body.font-large .header-container,
+body.font-extra-large .header-container {
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+body.font-large .titulos h2,
+body.font-extra-large .titulos h2 {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.1 !important;
+}
+
+/* Permitir que el navbar haga wrap en casos de aumento de fuente */
+body.font-large .navbar,
+body.font-extra-large .navbar {
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+body.font-large .navbar a,
+body.font-extra-large .navbar a {
+  white-space: normal !important;
+  padding: 6px 10px !important;
+  font-size: 1rem !important;
+}
+
+/* Ajustes para tarjetas: permitir reflujo y dar espacio inferior */
+body.font-large .card,
+body.font-extra-large .card {
+  height: auto !important;
+  min-height: 420px !important;
+  padding-bottom: 80px !important;
+}
+
+/* Botones absolutos: permitir que el texto haga wrap y no desborde */
+body.font-large .card .ubicacion,
+body.font-extra-large .card .ubicacion,
+body.font-large .card .ubication-button,
+body.font-extra-large .card .ubication-button,
+body.font-large .card .favorito,
+body.font-extra-large .card .favorito {
+  max-width: 46% !important;
+  white-space: normal !important;
+  padding: 6px 10px !important;
+  box-sizing: border-box !important;
+}
+
+body.font-large .card p,
+body.font-extra-large .card p {
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* ============================================
+   MODO OSCURO DEL SISTEMA (Opcional)
+   ============================================
+   
+   Si el usuario tiene modo oscuro en el sistema,
+   aplicar un esquema oscuro básico
+*/
+
+@media (prefers-color-scheme: dark) {
+  body:not(.high-contrast) {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+  }
+
+  body:not(.high-contrast) a {
+    color: #4fc3f7;
+  }
+
+  body:not(.high-contrast) button,
+  body:not(.high-contrast) .btn {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    border-color: #444;
+  }
+
+  body:not(.high-contrast) input,
+  body:not(.high-contrast) textarea,
+  body:not(.high-contrast) select {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    border-color: #444;
+  }
+}
+
+/* ============================================
+   SOPORTE PARA NAVEGACIÓN POR TECLADO
+   ============================================ */
+
+/* Asegurar que los elementos interactivos sean accesibles */
+a,
+button,
+input,
+textarea,
+select,
+[tabindex],
+[role="button"],
+[role="link"] {
+  outline: none;
+}
+
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus,
+[role="button"]:focus,
+[role="link"]:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+body.high-contrast a:focus,
+body.high-contrast button:focus,
+body.high-contrast input:focus,
+body.high-contrast textarea:focus,
+body.high-contrast select:focus {
+  outline: 3px solid #000000;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   IMPRESIÓN
+   ============================================
+   
+   Asegurar que los estilos de accesibilidad
+   no afecten negativamente la impresión
+*/
+
+@media print {
+  body.font-large,
+  body.font-extra-large {
+    font-size: 12pt;
+  }
+
+  body.grayscale-mode {
+    filter: none;
+    -webkit-filter: none;
+  }
+
+  body.high-contrast,
+  body.high-contrast * {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  .accessibility-floating-button,
+  .accessibility-panel,
+  .accessibility-overlay {
+    display: none !important;
+  }
+}

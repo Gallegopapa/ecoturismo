@@ -1,0 +1,14 @@
+{
+    "id": 3,
+    "name": "casa campestre natural",
+    "description": "hospedaje cerca a las chorros de don lolo",
+    "location": "Santa rosa, Risaralda",
+    "image": "http:\/\/localhost:8000\/storage\/ecohotels\/1771309892_69940b445e078.png",
+    "latitude": "4.8818675",
+    "longitude": "-81.5879421",
+    "telefono": "322 5367890",
+    "email": "roooo@gmail.com",
+    "sitio_web": "https:\/\/micasaconstructora.com\/casas\/casa-campestre-176-m%C2%B2-modelo-natural\/",
+    "created_at": "2026-02-17T06:31:32.000000Z",
+    "updated_at": "2026-02-17T06:31:32.000000Z"
+}
